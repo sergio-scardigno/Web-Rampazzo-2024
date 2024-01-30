@@ -22,13 +22,14 @@ const notFound = () => {
           <p
             className={`md:text-[1.48vh] md:leading-[2.22vh] font-medium md:pb-[4.44vh]`}
           >
-            Упс! Произошла ошибка
+            ¡Ups! Se ha producido un error
           </p>
           <Link
             href="/"
             className="text-[#962C52] font-bold md:text-[1.66vh] md:leading-[2.22vh]"
           >
-            Перейти на главную страницу
+            Ir a la página de inicio
+
           </Link>
         </div>
       </div>

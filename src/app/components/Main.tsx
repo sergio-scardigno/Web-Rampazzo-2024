@@ -26,37 +26,37 @@ const Main = () => {
   };
   const mainArray = [
     {
-      title: "Юридические лица",
+      title: "Entidades legales",
       description:
-        "Сопровождение сделок, помощь в урегулировании правовых конфликтов и решении других юридических задач",
+        "Soporte de transacciones, asistencia para resolver conflictos legales y resolver otros problemas legales.",
       services: [
         {
-          title: "Юридическое сопровождение бизнеса (аутсорсинг)",
+          title: "Soporte legal para empresas (outsourcing)",
           link: "/outsourcing",
         },
         {
-          title: "Разрешение споров и медиация",
+          title: "Resolución de disputas y mediación",
           link: "/mediation",
         },
       ],
     },
     {
-      title: "Физические лица",
+      title: "Individuos",
       description:
-        "Консультации по правовым вопросам, сопровождение сделок, представление ваших интересов в суде",
+        "Asesoramiento legal, soporte en transacciones, representación de sus intereses en los tribunales.",
       services: [
         {
-          title: "Юридические услуги для частных лиц",
+          title: "Servicios legales para particulares.",
           link: "/support",
         },
       ],
     },
     {
-      title: "Банкротство",
-      description: "Представление интересов по делам о банкротстве",
+      title: "Bancarrota",
+      description: "Representación en casos de quiebra",
       services: [
         {
-          title: "Юридическое сопровождение банкротства",
+          title: "Apoyo legal en caso de quiebra",
           link: "/bankruptcy",
         },
       ],
@@ -107,11 +107,10 @@ const Main = () => {
             ))}
           </div>
           <h1 className="font-bold text-[32px] md:text-[7.40vh] leading-[32px] md:leading-[7.40vh] pb-7 md:pb-[4.44vh]">
-            Юрист для бизнеса
-            <br /> и частных лиц
-          </h1>
+          Jubilaciones, pensiones <br />y reajuste de haberes
+                      </h1>
           <div className="pb-[60px] md:pb-0" onClick={() => scrollToRef(feedbackRef)}>
-            <Button title="Записаться на консультацию" />
+            <Button title="Regístrese para una consulta" />
           </div>
         </div>
         <div className="col-span-3 md:col-span-2 md:mt-[7.40vh]">
