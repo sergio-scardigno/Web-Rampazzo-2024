@@ -26,17 +26,37 @@ const Main = () => {
   };
   const mainArray = [
     {
-      title: "Entidades legales",
+      title: "Jubilaciones",
       description:
-        "Soporte de transacciones, asistencia para resolver conflictos legales y resolver otros problemas legales.",
+        "Tengo más de 10 años ayudando a argentinos y argentinas, logrando que consigan jubilaciones y pensiones",
       services: [
         {
-          title: "Soporte legal para empresas (outsourcing)",
-          link: "/outsourcing",
+          title: "Jubilaciones",
+          link: "/jubilaciones",
         },
         {
-          title: "Resolución de disputas y mediación",
-          link: "/mediation",
+          title: "Reajuste de haberes",
+          link: "/jubilaciones",
+        },
+        {
+          title: "Pensión por fallecimiento",
+          link: "/jubilaciones",
+        },
+        {
+          title: "Rentas vitalicias",
+          link: "/jubilaciones",
+        },
+        {
+          title: "Reconocimiento de servicios",
+          link: "/jubilaciones",
+        },
+        {
+          title: "Retiro por invalidez",
+          link: "/jubilaciones",
+        },
+        {
+          title: "Tramites ante IPS",
+          link: "/jubilaciones",
         },
       ],
     },
@@ -66,7 +86,7 @@ const Main = () => {
   const objectPositionStyle = { objectPosition: "center 18%" };
 
   return (
-    <main className="bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD]">
+    <main className="bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD] bg-black">
       <div className="mx-4 md:mx-[12.5vw] grid gird-cols-3 md:grid-cols-6 md:gap-x-[1.25vw] text-[#1B1743] md:pb-[11.11vh]">
         <div className="md:col-span-2 col-span-3">
           <div className="md:relative">
@@ -90,13 +110,13 @@ const Main = () => {
                 onClick={() => handleItemClick(index)}
                 className={`border-[1.5px] md:border-[0.11vh] px-4 py-3 md:px-[0.83vw] md:py-[1.11vh] first:rounded-l-md last:rounded-r-md  ${
                   selectedItem === index
-                    ? "border-[#962C52]"
+                    ? "border-[#000000]"
                     : "border-[#D3D3E3]"
                 } cursor-pointer`}
               >
                 <p
                   className={` ${
-                    selectedItem === index ? "text-[#962C52]" : "text-[#D3D3E3]"
+                    selectedItem === index ? "text-[#fffff]" : "text-[#D3D3E3]"
                   } md:text-[1.48vh] md:leading-[2.22vh] font-semibold whitespace-nowrap ${
                     montserrat.className
                   }`}
@@ -106,7 +126,7 @@ const Main = () => {
               </div>
             ))}
           </div>
-          <h1 className="font-bold text-[32px] md:text-[7.40vh] leading-[32px] md:leading-[7.40vh] pb-7 md:pb-[4.44vh]">
+          <h1 className="font-bold text-black text-[32px] md:text-[7.40vh] leading-[32px] md:leading-[7.40vh] pb-7 md:pb-[4.44vh]">
           Jubilaciones, pensiones <br />y reajuste de haberes
                       </h1>
           <div className="pb-[60px] md:pb-0" onClick={() => scrollToRef(feedbackRef)}>
@@ -128,7 +148,7 @@ const Main = () => {
             <Link
               key={index}
               href={item.link}
-              className={`group transition-all duration-300 h-fit flex items-center md:px-[1.25vw] px-7 py-7 md:py-[2.22vh] bg-white hover:bg-[#962C52] hover:text-white border-[1px] border-[#F0F0F5] font-bold md:text-[1.66vh] text-base leading-[22px] md:leading-[2.22vh] rounded-md ${montserrat.className}`}
+              className={`group transition-all duration-300 h-fit flex items-center md:px-[1.25vw] px-7 py-7 md:py-[2.22vh] bg-white hover:bg-[#000000] hover:text-white border-[1px] border-[#F0F0F5] font-bold md:text-[1.66vh] text-base leading-[22px] md:leading-[2.22vh] rounded-md ${montserrat.className}`}
             >
               <div className="w-full flex justify-between">
                 <p>{item.title}</p>
