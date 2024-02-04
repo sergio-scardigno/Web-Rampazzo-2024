@@ -61,23 +61,52 @@ const Main = () => {
       ],
     },
     {
-      title: "Individuos",
+      title: "Laboral",
       description:
-        "Asesoramiento legal, soporte en transacciones, representación de sus intereses en los tribunales.",
+        "Esta sección legal aborda diversas áreas laborales, desde accidentes y despidos hasta trabajo en negro y enfermedades laborales. Ofrecemos defensa legal en sucesiones y divorcios laborales, así como asesoramiento integral a empresas en contratos y cumplimiento normativo.",
       services: [
         {
-          title: "Servicios legales para particulares.",
-          link: "/support",
+          title: "Accidentes laborales.",
+          link: "/laboral",
         },
+        {
+          title: "Despido.",
+          link: "/laboral",
+        },
+        {
+          title: "Trabajo en negro.",
+          link: "/laboral",
+        },
+        {
+          title: "Enfermedades laborales.",
+          link: "/laboral",
+        },
+
       ],
     },
     {
-      title: "Bancarrota",
-      description: "Representación en casos de quiebra",
+      title: "Servicios",
+      description: "Esta sección legal abarca una amplia variedad de servicios especializados. Ofrecemos asesoramiento y representación en accidentes laborales, despidos, trabajo no registrado, enfermedades laborales, sucesiones y divorcios. Además, brindamos defensas penales, asesoramiento a empresas en contratos y cumplimiento normativo, así como representación en casos de accidentes de tránsito laborales.",
       services: [
         {
-          title: "Apoyo legal en caso de quiebra",
-          link: "/bankruptcy",
+          title: "Sucesiones",
+          link: "/servicio",
+        },
+        {
+          title: "Divorcios",
+          link: "/servicio",
+        },
+        {
+          title: "Defensas Penales",
+          link: "/servicio",
+        },
+        {
+          title: "Asesorammiento a empresas / Constratos",
+          link: "/servicio",
+        },
+        {
+          title: "Accidente de Transito",
+          link: "/servicio",
         },
       ],
     },

@@ -13,7 +13,7 @@ import IconTelegram from "../../../public/icons/iconTelegram.svg";
 import IconWhatsapp from "../../../public/icons/iconWhatsapp.svg";
 import IconPin from "../../../public/icons/iconPin.svg";
 import PicFeedback from "../../../public/pics/picFeedback.jpg";
-import PicFeedbackClean from "../../../public/pics/picFeedbackClean.png";
+import PicFeedbackClean from "../../../public/pics/picFeedbackClean.jpg";
 import Link from "next/link";
 
 export const feedbackRef: RefObject<HTMLDivElement> = createRef();
@@ -60,19 +60,18 @@ const FeedbackForm = () => {
         <form
           id="username"
           onSubmit={handleSubmit(onSubmit)}
-          className={`col-span-3 md:col-span-2 bg-[#962C52] md:py-[2.22vh] py-6 md:px-[1.25vw] px-4 md:rounded-md text-white ${montserrat.className}`}
+          className={`col-span-3 md:col-span-2 bg-[black] md:py-[2.22vh] py-6 md:px-[1.25vw] px-4 md:rounded-md text-white ${montserrat.className}`}
         >
           <div className="md:pb-[4.44vh] pb-6">
             <h1
               className={`md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] pb-3 md:pb-[1.11vh] font-bold ${evolventa.className}`}
             >
-              Свяжитесь со мной
+              Formulario de contacto
             </h1>
             <p
               className={`md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium`}
             >
-              Перезвоню Вам в ближайшее время и подробно отвечу на все Ваши
-              вопросы
+              Te llamaré lo antes posible y responderé todas tus preguntas detalladamente.
             </p>
           </div>
           <div className="grid md:gap-y-[0.74vh] gap-y-2 md:pb-[1.11vh] pb-3">
@@ -80,12 +79,12 @@ const FeedbackForm = () => {
               htmlFor="usernameInput"
               className="md:text-[1.29vh] text-[12px] leading-5 md:leading-[1.85vh] font-normal"
             >
-              Имя
+              Nombre
             </label>
             <input
               id="usernameInput"
               type="text"
-              placeholder="Ваше Имя"
+              placeholder="Su nombre"
               required
               className="px-5 py-3 text-sm leading-5 md:px-[1.04vw] md:py-[1.11vh] rounded-md text-[#1B1743] text-[1.48vh] md:placeholder:text-[1.48vh] placeholder:leading-[2.22vh] placeholder:font-medium placeholder:text-[#D3D3E3]"
               {...register("name")}
@@ -96,7 +95,7 @@ const FeedbackForm = () => {
               htmlFor="usernphoneInput"
               className="md:text-[1.29vh] text-[12px] leading-5 md:leading-[1.85vh] font-normal"
             >
-              Номер
+              Número
             </label>
             <input
               id="usernphoneInput"
@@ -108,13 +107,13 @@ const FeedbackForm = () => {
             />
           </div>
           <p className="text-xs leading-5 font-medium pb-3 md:pb-[1.11vh] md:text-[1.29vh] md:leading-[1.85vh] md:font-normal">
-            Нажимая кнопку «Отправить», я даю своё согласие на <span> <Link href="/privacy_policy" className=" underline">обработку персональных</Link></span> &nbsp;данных
+          Al hacer clic en el botón "Enviar", doy mi consentimiento para <span> <Link href="/privacy_policy" className=" underline">procesamiento de datos personales</Link></span> &nbsp;datos
           </p>
           <button
             disabled={isSubmitting}
             className="bg-white text-[#1B1743] md:py-[1.48vh] py-4 md:px-[1.25vw] px-6 rounded-md md:text-[1.48vh] text-base leading-6 md:leading-[2.22vh] font-semibold hover:shadow-md active:scale-[97%] transition-all"
           >
-            Отправить
+            Enviar
           </button>
         </form>
         <div
@@ -123,12 +122,12 @@ const FeedbackForm = () => {
           } ${"bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD] md:from-transparent md:to-transparent lg:from-transparent lg:to-transparent"}`}
         >
           <div className="md:text-[1.48vh] text-base leading-6 md:leading-[2.22vh] pb-5 md:pb-[1.85vh] font-semibold">
-            <a href="mailto:oa.drapeko@gmail.com">oa.drapeko@gmail.com</a>
+            <a href="mailto:oa.drapeko@gmail.com">estudiorampazzo@gmail.com</a>
           </div>
           <div
             className={`text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] pb-5 md:pb-[1.85vh] font-bold ${evolventa.className}`}
           >
-            <a href="tel:+79233413266">+7 923 341 32 66</a>
+            <a href="tel:+541147091266">+54 11 4709-1266</a>
           </div>
 
           <div className="flex md:gap-x-[0.41vw] gap-x-2 items-center pb-7 md:pb-[5.55vh]">
@@ -157,10 +156,10 @@ const FeedbackForm = () => {
             />
             <div className="">
               <p className="pb-3 md:pb-[1.11vh] text-base md:text-[1.66vh] leading-[22px] md:leading-[2.22vh] font-bold">
-                г. Красноярск
+                Rampazzo
               </p>
               <p className="text-base md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
-                Работаю удаленно по всей России
+              Trabajo de forma remota en todo Argentina.
               </p>
             </div>
           </div>

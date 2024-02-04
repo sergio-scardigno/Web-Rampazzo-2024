@@ -25,7 +25,7 @@ const Footer = () => {
   const pathname = usePathname();
   const menuArray = [
     {
-      title: "Обо мне",
+      title: "Quien es Fernando Rampazzo",
       OnClick: (e: any) => {
         e.preventDefault();
         if (pathname == "/") {
@@ -37,13 +37,13 @@ const Footer = () => {
     },
   ];
   const services = [
-    { title: "Физическим лицам", link: "/support" },
-    { title: "Юридическим лицам", link: "/corporation" },
-    { title: "Банкротство", link: "/bankruptcy" },
+    { title: "Jubilaciones", link: "/jubilaciones" },
+    { title: "Laboral", link: "/laboral" },
+    { title: "Servicios", link: "/servicio" },
   ];
   const socialArray = [
-    { src: IconTelegram, alt: "Telegram", link: "https://t.me/olga_drapeko" },
-    { src: IconWhatsapp, alt: "Whatsapp", link: "https://wa.me/79233413266" },
+    { src: IconTelegram, alt: "Telegram", link: "#" },
+    { src: IconWhatsapp, alt: "Whatsapp", link: "https://api.whatsapp.com/send?phone=+5491121914149&text=Contacto%20WEB%20-%20Estoy%20Interesado%20en%20las%20jubilaciones%20y%20reajustes" },
   ];
   return (
     <footer className="border-t-[0.09vh] border-[#F0F0F5] bg-white">
@@ -51,11 +51,11 @@ const Footer = () => {
         <div className="hidden md:block md:col-span-2">
           <div className="flex items-center md:pb-[14.07vh]">
             <div>
-              <p className="text-[#962C52] md:text-[1.11vh] md:leading-[1.38vh] ">
-                Юрист
+              <p className="text-[#FFD700] md:text-[1.11vh] md:leading-[1.38vh] ">
+              Abogado
               </p>
               <p className=" font-bold md:text-[2.03vh] md:leading-[2.59vh]">
-                Ольга Драпеко
+                Fernando Rampazzo
               </p>
             </div>
           </div>
@@ -64,7 +64,7 @@ const Footer = () => {
               <p
                 className={`md:text-[1.48vh] md:leading-[2.22vh] ${montserrat.className} font-medium text-[#807D9B]`}
               >
-                  Политика конфиденциальности
+                  política de privacidad
               </p>
             </Link>
           </div>
@@ -72,14 +72,14 @@ const Footer = () => {
           <p
             className={`md:text-[1.48vh] md:leading-[2.22vh] ${montserrat.className} font-medium text-[#807D9B]`}
           >
-            © 2024 Юридические услуги Ольга Драпеко
+            © 2024 Servicios jurídicos Fernando Rampazzo
           </p>
         </div>
         <div
           className={`mx-3 pt-6 md:pt-0 col-span-3 md:col-span-1 ${montserrat.className}`}
         >
-          <p className="hidden md:block md:text-[1.48vh] md:leading-[2.22vh] md:pb-[1.85vh] font-medium text-[#962C52]">
-            Услуги
+          <p className="hidden md:block md:text-[1.48vh] md:leading-[2.22vh] md:pb-[1.85vh] font-medium text-[black]">
+          Servicios
           </p>
           <div className="grid gap-y-2 md:gap-y-[0.74vh] pb-6 md:pb-0 ">
             {services.map((item, index) => (
@@ -110,12 +110,12 @@ const Footer = () => {
           className={`mx-3 md:mx-0 col-span-3 md:col-span-2 md:col-start-5 ${montserrat.className}`}
         >
           <div className="md:text-[1.48vh] text-base leading-6 md:leading-[2.22vh] pb-5 md:pb-[1.85vh] font-semibold select-text">
-            <a href="mailto:oa.drapeko@gmail.com">oa.drapeko@gmail.com</a>
+            <a href="mailto:estudiorampazzo@gmail.com">estudiorampazzo@gmail.com</a>
           </div>
           <div
             className={`md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] pb-5 md:pb-[1.85vh] font-bold ${evolventa.className} select-text`}
           >
-            <a href="tel:+79233413266">+7 923 341 32 66</a>
+            <a href="tel:+5491121914149">+549 11 2191 4149</a>
           </div>
 
           <div className="flex gap-x-2 md:gap-x-[0.41vw] items-center pb-6 md:pb-[5.55vh]">
@@ -143,39 +143,39 @@ const Footer = () => {
             />
             <div>
               <p className="pb-2 md:pb-[1.11vh] text-[18px] md:text-[1.66vh] leading-6 md:leading-[2.22vh] font-bold">
-                г. Красноярск
+                Fernando Rampazzo
               </p>
               <p className="text-base md:text-[1.48vh] leading-6 md:leading-[2.22vh] font-medium">
-                Работаю удаленно по всей России
+              Trabajo de forma remota en todo Argentina
               </p>
             </div>
           </div>
         </div>
         <div className="block md:hidden col-span-3 mx-3 pb-6">
           <p className=" text-xs leading-[14px] font-normal text-[#962C52]">
-            Юрист
+          Abogado
           </p>
           <p className="text-[22px] leading-7 font-bold text-[#1B1743] pb-6">
-            Ольга Драпеко
+            Fernando Rampazzo
           </p>
           <div
             className={`pb-3 text-xs leading-5 text-[#807D9B] font-medium ${montserrat.className}`}
           >
-            <Link href="/privacy_policy">Политика конфиденциальности</Link>
+            <Link href="/privacy_policy">política de privacidad</Link>
           </div>
           <p
             className={`text-xs leading-5 text-[#807D9B] font-medium ${montserrat.className}`}
           >
-            © 2024 Юридические услуги Ольга Драпеко
+            © 2024 Servicios jurídicos Fernando Rampazzo
           </p>
         </div>
       </div>
       <div
         className={`hidden bg-[#F0F0F5] md:py-[2.22vh] md:flex justify-center md:gap-[1.25vw] md:text-[1.29vh] md:leading-[1.85vh] font-normal text-[#807D9B] ${montserrat.className}`}
       >
-        <Link href="https://qualitywebsites.notion.site/9899e34041594f8484214ce6f6edd259" target="_blank">Сайт создали</Link>
-        <p>/</p>
-        <Link href="/photo_contributor">Автор фотоматериала</Link>
+        <Link href="https://cv-sergio-scardigno.vercel.app" target="_blank">El sitio fue creado Sergio Scardigno</Link>
+        <p>/ 2024</p>
+        {/* <Link href="/photo_contributor">Автор фотоматериала</Link> */}
       </div>
     </footer>
   );

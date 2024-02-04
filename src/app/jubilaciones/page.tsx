@@ -38,11 +38,10 @@ const outsourcing = () => {
           <h1
             className={`md:pb-[1.48vh] text-[32px] leading-[32px] md:text-[7.4vh] md:leading-[7.4vh] font-bold `}
           >
-            Юридическое
-            <br /> сопровождение бизнеса
+            Jubilaciones
           </h1>
           <p className="hidden md:block md:text-[1.48vh] md:leading-[2.22vh] font-medium">
-            (Юридический аутсорсинг)
+            (Derecho Previcional)
           </p>
         </div>
       </div>
@@ -80,13 +79,14 @@ const outsourcing = () => {
             <h1
               className={`mx-3 md:mx-0 text-2xl leading-[26px] pb-4 md:col-span-4 md:pb-[1.85vh] ${evolventa.className} md:text-[3.33vh] md:leading-[3.51vh] font-bold `}
             >
-              Юридическое сопровождение компании
-              <br /> с выполнением функций юридической службы
+              OBTENÉ TU JUBILACIÓN O REAJUSTE
+              
             </h1>
             <p className="mx-3 md:mx-0 text-sm leading-5 pb-10 md:pb-[5.55vh] md:text-[1.48vh] md:leading-[2.22vh] font-medium">
-              Одним из способов минимизации юридических рисков
-              <br className="hidden md:block" /> в деятельности компании
-              является юридический аутсорсинг
+            Tengo más de 10 años ayudando a argentinos y argentinas,
+
+
+              <br className="hidden md:block" /> logrando que consigan jubilaciones y pensiones
             </p>
             <div className="mx-3 md:mx-0 grid md:grid-cols-4 md:gap-x-[1.25vw] pb-10 md:pb-[4.44vh]">
               <div className="pb-10 md:pb-0 md:col-span-2">

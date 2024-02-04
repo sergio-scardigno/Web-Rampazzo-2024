@@ -304,7 +304,7 @@ const Header = () => {
                     setisDropdown(!isDropdown);
                   }}
                   className={`md:px-[0.62vw] md:py-[1.11vh] cursor-pointer flex gap-[0.62vw] rounded-md transition-all hover:bg-[#F8F6F7] ${
-                    isDropdown == false ? "" : " text-[#962C52]"
+                    isDropdown == false ? "" : " text-[#FFD700]"
                   }`}
                 >
                   <p className={``}>Servicios</p>

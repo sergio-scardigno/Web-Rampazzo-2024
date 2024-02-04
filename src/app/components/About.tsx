@@ -29,17 +29,21 @@ const About = () => {
           <h1
             className={`md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold pb-6 md:pb-[7.40vh] ${evolventa.className}`}
           >
-            Обо мне
+           ¿Quien es Fernando Rampazzo?
           </h1>
           <p className="md:pb-[4.44vh] pb-7">
-            Меня зовут
-            <span className="md:text-[1.66vh] text-base leading-[22px] font-bold">
+          Fernando Rampazzo, es abogado <span className="md:text-[1.66vh] text-base leading-[22px] font-bold">
               {" "}
-              Ольга Драпеко
-            </span>
+              especialista en jubilaciones
+            </span>, pensiones y reajuste de haberes. Asesora a adultos mayores para que logren su beneficio 
+          previsional y perciban el haber que realmente le corresponde a través de un <span className="md:text-[1.66vh] text-base leading-[22px] font-bold">
+              {" "}
+              juicio de reajuste
+            </span>. Desde hace cuatro años se encarga de difundir los 
+          derechos de los jubilados en los principales medios de comunicación del país.
           </p>
 
-          <p className="md:text-[1.66vh] text-base leading-[22px] md:leading-[2.22vh]  font-bold pb-2 md:pb-[0.74vh]">
+          {/* <p className="md:text-[1.66vh] text-base leading-[22px] md:leading-[2.22vh]  font-bold pb-2 md:pb-[0.74vh]">
             Образование
           </p>
           <p className="md:pb-[4.44vh] pb-7">
@@ -48,18 +52,18 @@ const About = () => {
             Федерального Университета по специальности
             <br className="hidden md:block" /> юриспруденция. В 2016 году
             получила степень магистра
-          </p>
-          <p className="md:text-[1.66vh] md:leading-[2.22vh] text-base leading-[22px] font-bold pb-2 md:pb-[0.74vh]">
+          </p> */}
+          {/* <p className="md:text-[1.66vh] md:leading-[2.22vh] text-base leading-[22px] font-bold pb-2 md:pb-[0.74vh]">
             Практика
-          </p>
-          <p className="md:pb-[4.44vh]">
+          </p> */}
+          {/* <p className="md:pb-[4.44vh]">
             Более 10 лет я занимаюсь юридической практикой и оказываю
             <br className="hidden md:block" /> правовую поддержку клиентам,
             представляю их интересы в <br className="hidden md:block" />
             судах и административных органах, сопровождаю сделки и&nbsp;
             <br className="hidden md:block" />
             консультирую по разным правовым вопросам
-          </p>
+          </p> */}
         </div>
       </div>
       <div className="bg-[#D8CACF] hidden md:block absolute right-0 top-0 bottom-0 h-full w-[23.95vw]"></div>
