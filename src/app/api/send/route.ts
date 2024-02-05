@@ -3,7 +3,7 @@ import { Resend } from 'resend';
 import * as React from 'react'
 import { NextRequest } from 'next/server';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.re_AfpmdQxn_24kecdbNERU6Yvwzm89Gh2y2);
 
 export async function POST(req: NextRequest) {
   const { name, phone } = await req.json();
