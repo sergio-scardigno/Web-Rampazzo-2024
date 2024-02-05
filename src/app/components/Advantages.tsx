@@ -13,18 +13,18 @@ import Link from "next/link";
 const advantagesArray = [
   {
     src: IconConvenience,
-    title: "Удобство",
-    text: "Сотрудничество без найма, отчетности, обязательных платежей и отчислений",
+    title: "Conveniencia",
+    text: "Cooperación sin contratación, informes, pagos obligatorios y deducciones.",
   },
   {
     src: IconExpert,
-    title: "Экспертный подход",
-    text: "Большой опыт работы юриста по спорам, вытекающим из различных областей права",
+    title: "Enfoque experto",
+    text: "Amplia experiencia como abogado en controversias derivadas de diversas áreas del derecho.",
   },
   {
     src: IconFlexability,
-    title: "Гибкость",
-    text: "Менее формализованный процесс без временных затрат на кадровую и административную работу",
+    title: "Flexibilidad",
+    text: "Proceso menos formalizado sin personal ni trabajo administrativo que consuma mucho tiempo.",
   },
 ];
 
@@ -33,8 +33,8 @@ const Advantages = () => {
     <section className="bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD] relative">
       <div className="md:px-[12.5vw] md:py-[11.11vh] grid grid-cols-6 md:gap-x-[1.25vw] text-[#1B1743]">
         <div className="col-span-4 col-start-3 md:text-[3.33vh] md:leading-[3.51vh] md:pb-[10.37vh] font-bold">
-          Преимущества юридического <br />
-          аутсорсинга
+        Ventajas del <br />legal
+           subcontratación
         </div>
         <div
           className={`col-span-2 ${montserrat.className} grid md:gap-y-[2.22vh]`}
@@ -64,20 +64,20 @@ const Advantages = () => {
           <div className="md:leading-[2.22vh]">
             <div className="md:pb-[2.59vh]">
               <h1 className="md:text-[1.66vh]  md:pb-[1.11vh] font-bold ">
-                Офлайн-консультации (Красноярск)
+               Consultas fuera de línea 
               </h1>
               <p className="md:text-[1.48vh] mr-[7vw] font-medium">
-                Подробное изучение документов, помогает быстрее понять специфику
-                ваших юридических потребностей
+              El estudio detallado de los documentos ayuda a comprender rápidamente los detalles.
+                 sus necesidades legales
               </p>
             </div>
             <div className="">
               <h1 className="md:text-[1.66vh] md:pb-[1.11vh] font-bold">
-                Онлайн-консультации
+              Consultas en línea
               </h1>
               <p className="md:text-[1.48vh] mr-[5vw] font-medium">
-                Позволяют обсуждать юридические вопросы, не выходя из дома,
-                своевременная и доступная юридическая помощь
+              Le permite discutir temas legales sin salir de casa,
+                 asistencia legal oportuna y accesible
               </p>
             </div>
           </div>

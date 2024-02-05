@@ -331,17 +331,17 @@ const Header = () => {
                 >
                   <div className="flex flex-col gap-[0.37vh]">
                     <Link
-                      href="/corporation"
+                      href="/jubilaciones"
                       onClick={() => setisDropdown(!isDropdown)}
                       className="md:py-[1.11vh] md:px-[0.62vw] md:text-[1.48vh] md:leading-[2.22vh] hover:bg-[#F8F6F7] rounded-md text-[#962C52] font-semibold transition-all"
                     >
-                      Entidades legales
+                      Jubilaciones
                     </Link>
-                    <div className="flex flex-col gap-[1.11vh] md:text-[1.48vh] md:leading-[2.22vh] text-[#1B1743] font-medium">
+                    {/* <div className="flex flex-col gap-[1.11vh] md:text-[1.48vh] md:leading-[2.22vh] text-[#1B1743] font-medium">
                       <Link
                         href="/outsourcing"
                         onClick={() => setisDropdown(!isDropdown)}
-                        className="hover:text-[#B65D7D] transition-all"
+                        className="hover:text-[black] transition-all"
                       >
                         Soporte legal de negocios (outsourcing)
                       </Link>
@@ -352,33 +352,31 @@ const Header = () => {
                       >
                         Resolución de disputas y mediación
                       </Link>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="flex flex-col gap-[0.37vh]">
-                    <p className="md:py-[1.11vh] md:px-[0.62vw]  md:text-[1.48vh] md:leading-[2.22vh] text-[#962C52] font-semibold">
-                    Para individuos
-                    </p>
                     <div className="flex flex-col gap-[1.11vh] md:text-[1.48vh] md:leading-[2.22vh] text-[#1B1743] font-medium">
                       <Link
-                        href="/support"
+                        href="/laboral"
                         onClick={() => setisDropdown(!isDropdown)}
                         className="hover:text-[#B65D7D] transition-all"
                       >
-                        Servicios legales para particulares.
+                                            <p className="md:py-[1.11vh] md:px-[0.62vw] md:text-[1.48vh] md:leading-[2.22vh] hover:bg-[#F8F6F7] rounded-md text-[#962C52] font-semibold transition-all">
+                      Laboral
+                    </p>
                       </Link>
                     </div>
                   </div>
                   <div className="flex flex-col gap-[0.37vh]">
-                    <p className="md:py-[1.11vh] md:px-[0.62vw]  md:text-[1.48vh] md:leading-[2.22vh] text-[#962C52] font-semibold">
-                    Bancarrota
-                    </p>
                     <div className="flex flex-col gap-[1.11vh] md:text-[1.48vh] md:leading-[2.22vh] text-[#1B1743] font-medium">
                       <Link
-                        href="/bankruptcy"
+                        href="/servicios"
                         onClick={() => setisDropdown(!isDropdown)}
-                        className="hover:text-[#FFD700] transition-all"
+                        className="hover:text-[#B65D7D] transition-all"
                       >
-                        Apoyo legal en caso de quiebra
+                                            <p className="md:py-[1.11vh] md:px-[0.62vw] md:text-[1.48vh] md:leading-[2.22vh] hover:bg-[#F8F6F7] rounded-md text-[#962C52] font-semibold transition-all">
+                      Servicios
+                    </p>
                       </Link>
                     </div>
                   </div>

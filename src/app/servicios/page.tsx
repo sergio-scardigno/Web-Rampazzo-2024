@@ -16,7 +16,7 @@ const bankruptcy = () => {
         <h1
           className={`mx-3 py-6 md:mx-[12.5vw] md:py-[5.55vh] text-[32px] leading-[32px] md:text-[7.4vh] md:leading-[7.4vh] font-bold text-[#1B1743]`}
         >
-          Юридическое сопровождение банкротства
+          Derecho Civil y de Familia
         </h1>
       </div>
       <section className="px-3 md:mx-[12.5vw] grid md:grid-cols-6 md:gap-x-[1.25vw] text-[#1B1743]">
@@ -34,7 +34,7 @@ const bankruptcy = () => {
             <p
               className={`${montserrat.className} md:text-[1.48vh] text-base leading-6 md:leading-[2.22vh] text-[#807D9B] font-semibold`}
             >
-              Назад
+              volver
             </p>
           </Link>
         </div>
@@ -52,17 +52,99 @@ const bankruptcy = () => {
           <h1
             className={`md:pb-[2.59vh] pb-4 ${evolventa.className} md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold `}
           >
-            Юридическая поддержка в ходе <br className="hidden md:block" />{" "}
-            банкротных процедур
+            Sucesiones
           </h1>
           <p className="md:pb-[5.55vh] pb-[60px] md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
-            Представляю интересы должников, кредиторов и других лиц
-            <br className="hidden md:block" /> по делам о банкротстве, а также
-            осуществляю правовое
-            <br className="hidden md:block" /> сопровождение деятельности
-            арбитражных управляющих
+          Brindamos la posibilidad de iniciar el tramite sucesorio de forma simple, rápida y responsable. Podemos lograr que inicie el tramite sucesorio en cualquier lugar de la Argentina.
+
+          Cuento con abogados especialistas en el tema que se pondrán en contacto con usted. Para asesorarlo y proseguir con todos los tramites correspondientes como tramites impositivos, administrativos o de sociedades, o sobre la planificación sucesoria.
+
+          Mis colaboradores son prácticos y resuelven todas tus dudas para que evites todo tipo de problemas.
           </p>
-          <div className="md:pb-[4.44vh] pb-10">
+          <br className="hidden md:block" />
+          
+
+          <h1
+            className={`md:pb-[2.59vh] pb-4 ${evolventa.className} md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold `}
+          >
+            Divorcios
+          </h1>
+          <p className="md:pb-[5.55vh] pb-[60px] md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
+          Cuando llega la disolución del vinculo conyugal entra en juego los divorcios. El más común y más aplicado con la nueva legislación es el divorcio express.
+
+          Es un tipo de divorcio previsto por el código civil argentino que permite divorciarse bastando solo la voluntad de uno de los cónyuges, sin tener nada que demostrar y tampoco requiriendo tiempo mínimo de sociedad conyugal.
+
+          Requisitos
+
+          DNI de ambos esposos
+          Libreta, acta o certificado de Matrimonio
+          Partida de nacimiento y DNI de los hijos matrimoniales si los hubiere
+          Fecha y lugar de la celebración del matrimonio y ultimo domicilio conyugal donde convivieron.
+          </p>
+          <br className="hidden md:block" />
+
+
+          <h1
+            className={`md:pb-[2.59vh] pb-4 ${evolventa.className} md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold `}
+          >
+            Defensas Penales
+
+          </h1>
+          <p className="md:pb-[5.55vh] pb-[60px] md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
+          Ante acusaciones o imputaciones de delitos o ante la eventualidad de convertirse en víctima, no hay tiempo que perder. Una acción inmediata para proteger uno de los derechos más importantes prima, el derecho a la libertar.
+
+          Mis colaboradores penalistas trabajan en equipo para representar los intereses de nuestros clientes.
+
+          Logramos en la mayoría de los casos la rápida libertad de nuestros representados, estamos al momento de la detención y durante todo el proceso, con asistencia y asesoramiento familiar.
+          </p>
+          <br className="hidden md:block" />
+
+
+          <h1
+            className={`md:pb-[2.59vh] pb-4 ${evolventa.className} md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold `}
+          >
+            Asesoramiento a empresas
+
+          </h1>
+          <p className="md:pb-[5.55vh] pb-[60px] md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
+          Mis colaboradores asesoran a empresas en orden legal en todas las etapas, para que pueda evitar contrariedades y usted solo se centre en gestionarla, procurando que su negocio prospere.
+
+          Ya sea cuando la empresa comienza, vendiéndola o retirándose, necesita asesoramiento legal previniendo futuras contrariedades.
+
+          Mi equipo trabaja de forma directa, con respuestas rápidas y con un enfoque personalizado, para garantizar tus derechos y el de tu empresa.
+
+          Manejamos todo tipo de cuestiones y casos, tanto extraordinarios o complejos.
+          </p>
+          <br className="hidden md:block" />
+
+
+          <h1
+            className={`md:pb-[2.59vh] pb-4 ${evolventa.className} md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold `}
+          >
+            Accidente de transito
+
+          </h1>
+          <p className="md:pb-[5.55vh] pb-[60px] md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
+          Los accidentes de transito no siembre ocurren arriba de un auto. Pueden ocurrir yendo en caminando, en bicicleta, moto, taxi o colectivo. Si sufrimos lesiones físicas o en nuestro patrimonio como consecuencia de un accidente de tránsito. Tenemos derechos a ser indemnizados.
+
+          Mis colaboradores se ocuparán de la defensa de tus derechos y de tus intereses frente al o los responsables del mismo, como también de la aseguradora.
+
+          Contamos con consultores médicos, psicológicos e ingenieros mecánicos, para abordar de punto de vista profesional, todos y cada uno de los daños sufridos en el siniestro.
+
+          Te representaremos en todas las etapas del proceso, actuando de acuerdo a tus intereses.
+
+          Accidente de transito
+          Accidente en trasporte publico
+          Accidente en motocicleta
+          Accidentes como peatón</p>
+          <br className="hidden md:block" />
+
+
+
+
+
+
+          {/* <div className="md:pb-[4.44vh] pb-10">
             <p className="md:pb-[1.85vh] pb-4 md:text-[1.66vh] text-base leading-5 md:leading-[2.22vh] font-bold">
               Имею опыт сопровождения процедур банкротства со стороны
               <br className="hidden md:block" /> арбитражного управляющего и
@@ -130,7 +212,7 @@ const bankruptcy = () => {
             <p className="md:text-[1.29vh] md:leading-[1.85vh] font-normal">
               Стоимость определяется индивидуально в каждой ситуации
             </p>
-          </div>
+          </div> */}
         </div>
       </section>
       <div

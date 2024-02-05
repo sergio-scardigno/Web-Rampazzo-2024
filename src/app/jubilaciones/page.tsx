@@ -14,18 +14,18 @@ import IconFlexability from "../../../public/icons/iconFlexability.svg";
 const advantagesArray = [
   {
     src: IconConvenience,
-    title: "Удобство",
-    text: "Сотрудничество без найма, отчетности, обязательных платежей и отчислений",
+    title: "Conveniencia",
+    text: "Cooperación sin contratación, informes, pagos obligatorios y deducciones.",
   },
   {
     src: IconExpert,
-    title: "Экспертный подход",
-    text: "Большой опыт работы юриста по спорам, вытекающим из различных областей права",
+    title: "Enfoque experto",
+    text: "Amplia experiencia como abogado en controversias derivadas de diversas áreas del derecho.",
   },
   {
     src: IconFlexability,
-    title: "Гибкость",
-    text: "Менее формализованный процесс без временных затрат на кадровую и административную работу",
+    title: "Flexibilidad",
+    text: "Proceso menos formalizado sin personal ni trabajo administrativo que consuma mucho tiempo.",
   },
 ];
 
@@ -60,7 +60,7 @@ const outsourcing = () => {
             <p
               className={`${montserrat.className} md:text-[1.48vh] text-base leading-6 md:leading-[2.22vh] text-[#807D9B] font-semibold`}
             >
-              Назад
+              volver
             </p>
           </Link>
         </div>
@@ -68,7 +68,7 @@ const outsourcing = () => {
           <div className="absolute left-[-2.55vw]">
             <Image
               src={PicAdvantages}
-              alt="Bunkruptcy"
+              alt="jubilacion"
               height={1000}
               className="md:h-[46.48vh] md:w-[27.13vw] object-contain"
             />
@@ -88,31 +88,49 @@ const outsourcing = () => {
             </p>
             <div className="mx-3 md:mx-0 grid md:grid-cols-4 md:gap-x-[1.25vw] pb-10 md:pb-[4.44vh]">
               <div className="pb-10 md:pb-0 md:col-span-2">
-                <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                  Услуги
-                </p>
                 <ul className="text-sm leading-5 ml-[16px] md:text-[1.48vh] md:leading-[2.22vh] list-disc box-content md:ml-[1.04vw] marker:text-[#D8CACF] font-medium">
+                <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
+                  Jubilaciones
+                </p>
                   <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                    Консультирование по юридическим вопросам, возникающим в
-                    процессе деятельности
+                  Evaluamos tu situación jubilatoria, realizamos los cálculos correspondientes, y realizamos las presentaciones ante ANSeS.
+                  Calculo haber inicial: a través de un software realizamos el cálculo de tu haber jubilatorio en base a los aportes que realizaste dentro de tus ultimas 120 remuneraciones.
                   </li>
+                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
+                  Pensión por fallecimiento
+                  </p>
                   <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                    Подготовка коммерческих контрактов и аудит уже имеющихся
-                    заключенных контрактов
+                  En caso de fallecer tu cónyuge, conviviente o ser hijo/a discapacitada o menor, podemos realizar la solicitud de pedido de pensión.
                   </li>
+                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
+                  Reajuste de haberes
+                  </p>
                   <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                    Досудебная работа с контрагентами
+                  Sos pensionado o jubilado de ANSeS, realizamos a través de un software, el cálculo de tu haber, para determinar si tenes derecho a realizar un reclamo judicial y mejorar tu ingreso mensual en relación al nivel de vida que tenías como trabajador/a en actividad.
                   </li>
+                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
+                  Rentas vitalicias
+                  </p>
                   <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                    Оценка применяемых типовых форм контрактов и договорных
-                    конструкций
+                  Sos beneficiario/a de una renta vitalicia, está cobrando menos de la mínima de ANSeS, podes reclamar mediante un amparo judicial, que te garanticen el haber mínimo.
                   </li>
+                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
+                  Reconocimiento de servicios
+                  </p>
                   <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                    Подготовка юридических заключений и оценка правовых рисков
-                    бизнес-решений
+                  No salen todos tus aportes por sistema de ANSeS, queres ir preparando tu situación jubilatoria, podemos iniciar un expediente.
                   </li>
+                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
+                  Retiro por invalidez
+                  </p>
                   <li className="md:pl-[0.62vw] pl-1">
-                    Оптимизация юридических процессов компании
+                  Si sos trabajador en relación de dependencia o autónomo y sufrís problemas de salud que te impiden poder desarrollar tu tarea habitual, podemos iniciar un trámite a los fines de obtener un beneficio previsional.
+                  </li>
+                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
+                  Tramites ante IPS
+                  </p>
+                  <li className="md:pl-[0.62vw] pl-1">
+                  Trabajas para Provincia de Buenos Aires, nos encargamos de realizar tu jubilación o reconocimiento de servicios.
                   </li>
                 </ul>
               </div>
@@ -144,15 +162,14 @@ const outsourcing = () => {
             >
               <div className="pb-2 md:pb-[1.11vh] flex items-center text-[#962C52]">
                 <p className="text-lg leading-6 md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                  от 20 000 ₽&nbsp;
+                Más de 10 años&nbsp;
                 </p>
                 <p className="text-sm leading-5 md:text-[1.29vh] md:leading-[1.85vh] font-normal">
-                  / в месяц
+                  ayudando a argentinos y argentinas, logrando que consigan jubilaciones y pensiones
                 </p>
               </div>
               <p className="text-sm leading-5 md:text-[1.29vh] md:leading-[1.85vh] font-normal">
-                Стоимость большего пакета услуг определяется индивидуально в
-                каждой ситуации
+                Comunicate cuanto antes
               </p>
             </div>
           </div>
