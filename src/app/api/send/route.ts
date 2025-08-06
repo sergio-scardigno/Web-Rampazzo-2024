@@ -20,8 +20,8 @@ export async function POST(req: NextRequest) {
     
     const mailOptions = {
       from: `"${process.env.EMAIL_FROM_NAME}" <${process.env.GMAIL_USER}>`,
-      // to: 'estudiorampazzofernando@gmail.com, sergioscardigno82@gmail.com',
-      to: 'sergioscardigno82@gmail.com',
+      to: 'estudiorampazzofernando@gmail.com, sergioscardigno82@gmail.com',
+      //to: 'sergioscardigno82@gmail.com',
       subject: 'Alguien acaba de dejar su contacto para que le devuelvan la llamada',
       html: `
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
