@@ -2,10 +2,13 @@
 
 import React, { RefObject, createRef, useRef } from "react";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { POST } from "../api/send/route";
 import { toast } from "react-hot-toast";
 import { usePathname } from "next/navigation";
+
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 import { montserrat } from "../fonts";
 import { evolventa } from "../fonts";
@@ -13,11 +16,21 @@ import IconTelegram from "../../../public/icons/iconTelegram.svg";
 import IconWhatsapp from "../../../public/icons/iconWhatsapp.svg";
 import IconPin from "../../../public/icons/iconPin.svg";
 
-
 import PicFeedback from "../../../public/pics/footer-inicio.jpg";
 import PicFeedbackClean from "../../../public/pics/footer-inicio.jpg";
 
 import Link from "next/link";
+
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const feedbackRef: RefObject<HTMLDivElement> = createRef();
 
@@ -25,9 +38,12 @@ const socialArray = [
   // { src: IconTelegram, alt: "Telegram", link: "https://t.me/olga_drapeko" },
   { src: IconWhatsapp, alt: "Whatsapp", link: "https://api.whatsapp.com/send?phone=+5491121914149&text=Contacto%20WEB%20-%20Estoy%20Interesado%20en%20las%20jubilaciones%20y%20reajustes" },
 ];
+
 type FormInput = {
   name: string;
   phone: string;
+  consultType: 'general' | 'asesoramiento' | 'jubilacion' | 'otro';
+  consulta?: string;
 };
 
 const FeedbackForm = () => {
@@ -35,26 +51,37 @@ const FeedbackForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    control,
+    formState: { isSubmitting, errors },
     reset,
-  } = useForm<FormInput>();
+    setValue,
+    watch,
+  } = useForm<FormInput>({
+    defaultValues: {
+      phone: '',
+      consultType: 'general',
+    },
+  });
+
+  const selectedConsultType = watch('consultType');
+
   async function onSubmit(formData: FormInput) {
     await fetch("/api/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-
-      body: JSON.stringify({
-        name: formData.name,
-        phone: formData.phone,
-      }),
+      body: JSON.stringify(formData),
     }).then(() => {
-      // Toast notification
       toast.success("¡Gracias! Nos comunicaremos con usted en breve.");
     });
 
-    reset();
+    reset({
+      name: '',
+      phone: '',
+      consultType: 'general',
+      consulta: '',
+    });
   }
 
   return (
@@ -63,7 +90,7 @@ const FeedbackForm = () => {
         <form
           id="username"
           onSubmit={handleSubmit(onSubmit)}
-          className={`col-span-3 md:col-span-2 bg-[black] md:py-[2.22vh] py-6 md:px-[1.25vw] px-4 md:rounded-md text-white ${montserrat.className}`}
+          className={`col-span-3 md:col-span-2 bg-black md:py-[2.22vh] py-6 md:px-[1.25vw] px-4 md:rounded-md text-white ${montserrat.className}`}
         >
           <div className="md:pb-[4.44vh] pb-6">
             <h1
@@ -77,48 +104,84 @@ const FeedbackForm = () => {
               Te llamaré lo antes posible y responderé todas tus preguntas detalladamente.
             </p>
           </div>
-          <div className="grid md:gap-y-[0.74vh] gap-y-2 md:pb-[1.11vh] pb-3">
-            <label
-              htmlFor="usernameInput"
-              className="md:text-[1.29vh] text-[12px] leading-5 md:leading-[1.85vh] font-normal"
-            >
-              Nombre
-            </label>
-            <input
-              id="usernameInput"
-              type="text"
-              placeholder="Su nombre"
-              required
-              className="px-5 py-3 text-sm leading-5 md:px-[1.04vw] md:py-[1.11vh] rounded-md text-[#1B1743] text-[1.48vh] md:placeholder:text-[1.48vh] placeholder:leading-[2.22vh] placeholder:font-medium placeholder:text-[#D3D3E3]"
-              {...register("name")}
-            />
+          <div className="grid gap-y-4 md:pb-[1.11vh] pb-3">
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="name">Nombre</Label>
+              <Input
+                id="name"
+                type="text"
+                {...register('name', { required: 'Este campo es obligatorio' })}
+                placeholder="Tu nombre"
+                className="bg-zinc-900 text-white"
+              />
+              {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
+            </div>
+
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="phone">Teléfono</Label>
+              <Controller
+                name="phone"
+                control={control}
+                rules={{ required: 'El teléfono es obligatorio' }}
+                render={({ field }) => (
+                  <PhoneInput
+                    {...field}
+                    id="phone"
+                    defaultCountry="AR"
+                    international
+                    placeholder="Tu teléfono"
+                    className="phone-input-custom"
+                  />
+                )}
+              />
+              {errors.phone && <p className="text-red-500 text-xs">{errors.phone.message}</p>}
+            </div>
+
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="consultType">Tipo de consulta</Label>
+              <Controller
+                control={control}
+                name="consultType"
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <SelectTrigger id="consultType" className="bg-zinc-900 text-white">
+                      <SelectValue placeholder="Selecciona un tipo" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-black text-white">
+                      <SelectItem value="general" className="text-white">Consulta general</SelectItem>
+                      <SelectItem value="asesoramiento" className="text-white">Asesoramiento</SelectItem>
+                      <SelectItem value="jubilacion" className="text-white">Jubilación</SelectItem>
+                      <SelectItem value="otro" className="text-white">Otro</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </div>
+
+            {selectedConsultType === 'otro' && (
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="consulta">Tu consulta</Label>
+                <Input
+                  id="consulta"
+                  {...register('consulta')}
+                  placeholder="Escribe tu consulta aquí..."
+                  className="bg-zinc-900 text-white"
+                />
+              </div>
+            )}
           </div>
-          <div className="grid md:gap-y-[0.74vh] gap-y-2 md:pb-[2.59vh] pb-7">
-            <label
-              htmlFor="usernphoneInput"
-              className="md:text-[1.29vh] text-[12px] leading-5 md:leading-[1.85vh] font-normal"
-            >
-              Número
-            </label>
-            <input
-              id="usernphoneInput"
-              type="text"
-              placeholder="+54 999 9999"
-              required
-              className="px-5 py-3 text-sm leading-5 md:px-[1.04vw] md:py-[1.11vh] rounded-md text-[#1B1743] text-[1.48vh] md:placeholder:text-[1.48vh] placeholder:leading-[2.22vh] placeholder:font-medium placeholder:text-[#D3D3E3]"
-              {...register("phone")}
-            />
-          </div>
-          <p className="text-xs leading-5 font-medium pb-3 md:pb-[1.11vh] md:text-[1.29vh] md:leading-[1.85vh] md:font-normal">
+
+          <p className="text-xs md:text-[1.2vh] leading-5 md:leading-[1.9vh] font-medium text-[#969696] md:pb-[2.22vh] pb-4">
             Al hacer clic en el botón &quot;Enviar&quot;, doy mi consentimiento para <span> <Link href="/privacy_policy" className=" underline">procesamiento de datos personales</Link></span> &nbsp;datos
           </p>
 
-          <button
+          <Button
             disabled={isSubmitting}
-            className="bg-white text-[#1B1743] md:py-[1.48vh] py-4 md:px-[1.25vw] px-6 rounded-md md:text-[1.48vh] text-base leading-6 md:leading-[2.22vh] font-semibold hover:shadow-md active:scale-[97%] transition-all"
+            type="submit"
+            className="w-full bg-white text-[#1B1743] hover:bg-gray-200"
           >
-            Enviar
-          </button>
+            {isSubmitting ? 'Enviando...' : 'Enviar'}
+          </Button>
         </form>
         <div
           className={`hidden md:block px-3 md:px-0 pt-[48px] md:pt-0 pb-[60px] md:pb-0 col-span-3 md:col-span-2 ${

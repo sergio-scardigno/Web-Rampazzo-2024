@@ -12,15 +12,16 @@ const createTransporter = () => {
 };
 
 export async function POST(req: NextRequest) {
-  const { name, phone } = await req.json();
-  console.log('Datos recibidos:', { name, phone });
+  const { name, phone, consultType, consulta } = await req.json();
+  console.log('Datos recibidos:', { name, phone, consultType, consulta });
   
   try {
     const transporter = createTransporter();
     
     const mailOptions = {
       from: `"${process.env.EMAIL_FROM_NAME}" <${process.env.GMAIL_USER}>`,
-      to: 'estudiorampazzofernando@gmail.com, sergioscardigno82@gmail.com',
+      // to: 'estudiorampazzofernando@gmail.com, sergioscardigno82@gmail.com',
+      to: 'sergioscardigno82@gmail.com',
       subject: 'Alguien acaba de dejar su contacto para que le devuelvan la llamada',
       html: `
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
@@ -35,6 +36,10 @@ export async function POST(req: NextRequest) {
               <p style="font-size: 18px; margin-bottom: 10px;">
                 <strong>Teléfono:</strong> <span style="color: #3b82f6; font-weight: bold;">${phone}</span>
               </p>
+              <p style="font-size: 18px; margin-bottom: 10px;">
+                <strong>Tipo de consulta:</strong> <span style="color: #3b82f6; font-weight: bold;">${consultType || '-'}</span>
+              </p>
+              ${consulta ? `<p style="font-size: 18px; margin-bottom: 10px;"><strong>Consulta:</strong> <span style="color: #3b82f6; font-weight: bold;">${consulta}</span></p>` : ''}
             </div>
             <div style="font-size: 16px; color: #666;">
               <p><strong>Para:</strong> Fernando Rampazzo</p>
