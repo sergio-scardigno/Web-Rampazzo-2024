@@ -1,6 +1,8 @@
 import nodemailer from 'nodemailer';
 import { NextRequest } from 'next/server';
 import clientPromise from '@/lib/mongodb';
+import { z } from 'zod';
+import xss from 'xss';
 
 const createTransporter = () => {
   return nodemailer.createTransport({
@@ -12,9 +14,45 @@ const createTransporter = () => {
   });
 };
 
+// ─── Regex para detectar URLs ─────────────────────────
+const urlRegex = /(https?:\/\/|www\.)[\w\-]+(\.[\w\-]+)+\S*/i;
+
+// ─── Schema de validación ───────────────────────────
+const contactSchema = z.object({
+  name: z.string().min(1).max(100),
+  phone: z.string().regex(/^\+?\d{7,15}$/),
+  consultType: z.enum(['general', 'asesoramiento', 'jubilacion', 'otro']),
+  consulta: z
+    .string()
+    .max(500)
+    .optional()
+    .refine((val) => !val || !urlRegex.test(val), {
+      message: 'No se permiten enlaces web en la consulta',
+    }),
+});
+
 export async function POST(req: NextRequest) {
-  const { name, phone, consultType, consulta } = await req.json();
-  console.log('Datos recibidos:', { name, phone, consultType, consulta });
+  // ─── Validación y sanitización ─────────────────────
+  let data;
+  try {
+    data = contactSchema.parse(await req.json());
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return Response.json({ success: false, error: 'Invalid input', details: err.issues }, { status: 400 });
+    }
+    throw err;
+  }
+
+  const clean = (str: string) => xss(str, { whiteList: {} });
+
+  const name = xss(data.name);
+  const phone = xss(data.phone);
+  const consultType = data.consultType;
+  //const consulta = data.consulta ? xss(data.consulta) : undefined;
+  const consulta = data.consulta ? clean(data.consulta) : undefined;
+
+
+  console.log('Datos recibidos sanitizados:', { name, phone, consultType, consulta });
   
   // ─── Guarda en MongoDB ───────────────────────────────
   let insertedId: string | undefined;
