@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { NextRequest } from 'next/server';
+import clientPromise from '@/lib/mongodb';
 
 const createTransporter = () => {
   return nodemailer.createTransport({
@@ -15,6 +16,24 @@ export async function POST(req: NextRequest) {
   const { name, phone, consultType, consulta } = await req.json();
   console.log('Datos recibidos:', { name, phone, consultType, consulta });
   
+  // ─── Guarda en MongoDB ───────────────────────────────
+  let insertedId: string | undefined;
+  try {
+    const client = await clientPromise;
+    const db = client.db(process.env.MONGODB_DB);
+    const result = await db.collection('contacts').insertOne({
+      name,
+      phone,
+      consultType,
+      consulta,
+      createdAt: new Date(),
+    });
+    insertedId = result.insertedId.toString();
+    console.log('Documento insertado con _id:', insertedId);
+  } catch (dbErr) {
+    console.error('Error guardando en MongoDB:', dbErr);
+  }
+
   try {
     const transporter = createTransporter();
     
@@ -57,7 +76,7 @@ export async function POST(req: NextRequest) {
 
     const info = await transporter.sendMail(mailOptions);
     console.log('Email enviado exitosamente:', info.messageId);
-    return Response.json({ success: true, messageId: info.messageId });
+    return Response.json({ success: true, messageId: info.messageId, insertedId });
   } catch (error) {
     console.error('Error enviando email:', error);
     const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
