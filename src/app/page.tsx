@@ -4,21 +4,20 @@ import About from "./components/About";
 // import Advantages from "./components/Advantages";
 import Clients from "./components/Clients";
 import FeedbackForm from "./components/FeedbackForm";
-
-
+import ServicesSection from "./components/ServicesSection";
 
 export default function Home() {
   return (
     <main className="">
       <div className="bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD] h-[144px] md:h-[12.8vh]"></div>
       <Main />
+      <ServicesSection />
       <About />
+      <br></br>
       {/* <Advantages /> */}
       <Clients />
       <FeedbackForm />
       <div className="md:h-[11.11vh] bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD]"></div>
-
-
     </main>
   );
 }
