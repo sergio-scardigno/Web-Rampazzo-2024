@@ -110,7 +110,7 @@ const Footer = () => {
           className={`mx-3 md:mx-0 col-span-3 md:col-span-2 md:col-start-5 ${montserrat.className}`}
         >
           <div className="md:text-[1.48vh] text-[white] text-base leading-6 md:leading-[2.22vh] pb-5 md:pb-[1.85vh] font-semibold select-text">
-            <a href="mailto:estudiorampazzof@gmail.com">estudiorampazzof@gmail.com</a>
+                            <a href="mailto:estudiorampazzofernando@gmail.com">estudiorampazzofernando@gmail.com</a>
           </div>
           {/* <div
             className={`md:text-[3.33vh] text-[white] text-[24px] leading-[26px] md:leading-[3.51vh] pb-5 md:pb-[1.85vh] font-bold ${evolventa.className} select-text`}

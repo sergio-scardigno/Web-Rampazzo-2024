@@ -1,254 +1,223 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import React from "react";
 import Link from "next/link";
-import FeedbackForm from "../components/FeedbackForm";
-
-import { FloatingWhatsApp } from 'react-floating-whatsapp';
-
-
 import { montserrat } from "../fonts";
 import { evolventa } from "../fonts";
-import IconArrowLeft from "../../../public/icons/iconArrowLeft.svg";
-import PicBankruptcy from "../../../public/pics/picBankruptcy.svg";
+import PageLayout from "../components/PageLayout";
+import { FaBalanceScale, FaCarCrash, FaUserTie, FaPassport, FaLandmark, FaHandshake, FaArrowRight } from 'react-icons/fa';
 
-const bankruptcy = () => {
+const services = [
+  {
+    id: 'despidos',
+    icon: <FaBalanceScale className="w-8 h-8 text-[#962C52]" />,
+    title: "Despidos",
+    description: "Asesoramiento y representación legal para trabajadores despedidos injustamente.",
+    content: [
+      "Evaluación integral de tu caso",
+      "Reclamo de indemnizaciones",
+      "Cobro de sueldos adeudados",
+      "Diferencias salariales",
+      "Tramitación ante el Ministerio de Trabajo"
+    ]
+  },
+  {
+    id: 'accidentes-laborales',
+    icon: <FaUserTie className="w-8 h-8 text-[#962C52]" />,
+    title: "Accidentes y Enfermedades Laborales",
+    description: "Reclamos ante la ART por accidentes de trabajo y enfermedades profesionales.",
+    content: [
+      "Asesoramiento integral ante la ART",
+      "Reclamos por incapacidad laboral",
+      "Enfermedades profesionales",
+      "Secuelas físicas y psicológicas",
+      "Máxima indemnización posible"
+    ]
+  },
+  {
+    id: 'accidentes-transito',
+    icon: <FaCarCrash className="w-8 h-8 text-[#962C52]" />,
+    title: "Accidente de Tránsito",
+    description: "Gestión de indemnizaciones por accidentes viales.",
+    content: [
+      "Asesoramiento integral",
+      "Reclamos a compañías de seguro",
+      "Daños materiales",
+      "Daños físicos",
+      "Pérdida de ingresos"
+    ]
+  },
+  {
+    id: 'defensas-penales',
+    icon: <FaLandmark className="w-8 h-8 text-[#962C52]" />,
+    title: "Defensas Penales",
+    description: "Defensa legal en causas penales de toda índole.",
+    content: [
+      "Defensa en todas las instancias",
+      "Acompañamiento en declaraciones",
+      "Medidas cautelares",
+      "Recursos y apelaciones",
+      "Defensa efectiva de tus derechos"
+    ]
+  },
+  {
+    id: 'ciudadania',
+    icon: <FaPassport className="w-8 h-8 text-[#962C52]" />,
+    title: "Ciudadanía Argentina",
+    description: "Tramitación de ciudadanía para extranjeros.",
+    content: [
+      "Asesoramiento integral",
+      "Armado de carpeta",
+      "Presentación judicial",
+      "Seguimiento del expediente",
+      "Obtención de la sentencia"
+    ]
+  },
+  {
+    id: 'sucesiones',
+    icon: <FaHandshake className="w-8 h-8 text-[#962C52]" />,
+    title: "Sucesiones",
+    description: "Tramitación de sucesiones en todo el país.",
+    content: [
+      "Tramitación completa",
+      "Inscripción de bienes",
+      "Cuentas bancarias",
+      "Propiedades",
+      "Asesoramiento a herederos"
+    ]
+  },
+  {
+    id: 'divorcios',
+    icon: <FaHandshake className="w-8 h-8 text-[#962C52]" />,
+    title: "Divorcios",
+    description: "Asesoramiento legal en procesos de divorcio y derecho de familia.",
+    content: [
+      "Divorcio express",
+      "División de bienes",
+      "Custodia de hijos",
+      "Acuerdos prenupciales",
+      "Mediación familiar"
+    ]
+  },
+  {
+    id: 'asesoramiento-empresas',
+    icon: <FaBalanceScale className="w-8 h-8 text-[#962C52]" />,
+    title: "Asesoramiento Empresarial",
+    description: "Servicios legales integrales para empresas y emprendedores.",
+    content: [
+      "Constitución de sociedades",
+      "Contratos comerciales",
+      "Derecho laboral empresarial",
+      "Propiedad intelectual",
+      "Cumplimiento normativo"
+    ]
+  },
+  {
+    id: 'trabajo-negro',
+    icon: <FaUserTie className="w-8 h-8 text-[#962C52]" />,
+    title: "Trabajo en Negro",
+    description: "Asesoramiento legal para trabajadores en situación irregular.",
+    content: [
+      "Regularización laboral",
+      "Reclamo de aportes",
+      "Indemnizaciones",
+      "Derechos laborales",
+      "Representación legal"
+    ]
+  }
+];
+
+const ServiciosPage = () => {
   return (
-    <main>
-      <div className="bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD] md:h-[10.74vh] h-[128px]"></div>
-      <div className={` bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD]`}>
-        <h1
-          className={`mx-3 py-6 md:mx-[12.5vw] md:py-[5.55vh] text-[32px] leading-[32px] md:text-[7.4vh] md:leading-[7.4vh] font-bold text-[#1B1743]`}
-        >
-          Derecho Civil y de Familia
-        </h1>
-      </div>
-      <section className="px-3 md:mx-[12.5vw] grid md:grid-cols-6 md:gap-x-[1.25vw] text-[#1B1743]">
+    <PageLayout
+      title="Nuestros Servicios Legales"
+      description="Asesoramiento legal integral y especializado para proteger tus derechos y resolver tus problemas legales de manera efectiva"
+      breadcrumbText="volver"
+      breadcrumbLink="/"
+    >
+      <div className="grid md:grid-cols-6 md:gap-x-[1.25vw] text-[#1B1743]">
         <div className="md:col-span-6">
-          <Link
-            href="/"
-            className="flex gap-3 md:gap-[0.62vw] w-fit md:pt-[1.85vh] pt-6 pb-6 md:pb-[4.44vh]"
-          >
-            <Image
-              src={IconArrowLeft}
-              alt={`IconArrowLeft`}
-              width={24}
-              className="md:h-[2.22vh] md:w-[1.25vw]"
-            />
-            <p
-              className={`${montserrat.className} md:text-[1.48vh] text-base leading-6 md:leading-[2.22vh] text-[#807D9B] font-semibold`}
-            >
-              volver
+          <div className="mb-[60px] md:mb-[5.55vh]">
+            <h1 className={`pb-4 md:pb-[2.59vh] text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] font-bold ${evolventa.className}`}>
+              Servicios Legales Integrales
+            </h1>
+            <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
+              En Estudio Rampazzo ofrecemos asesoramiento legal especializado en todas las áreas del derecho. 
+              Nuestro equipo de abogados con amplia experiencia está comprometido en proteger tus derechos 
+              y obtener los mejores resultados para tu caso.
             </p>
-          </Link>
-        </div>
-        <div className="md:col-span-2 md:relative hidden md:block">
-          <div className="absolute left-[-7.08vw] right-[-0.83vw]">
-            {/* <Image
-              src={PicBankruptcy}
-              alt="Bunkruptcy"
-              height={1000}
-              className="md:h-[57.68vh] md:w-[32.29vw] object-contain"
-            /> */}
           </div>
-        </div>
-        <div className={`md:col-span-4 ${montserrat.className}`}>
-          <h1
-            className={`md:pb-[2.59vh] pb-4 ${evolventa.className} md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold `}
-          >
-            Sucesiones
-          </h1>
-          <p className="md:pb-[5.55vh] pb-[60px] md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
-          Nuestro estudio brinda un servicio rápido y flexible para dar inicio al trámite sucesorio.
-          Según su preferencia, podrá coordinar una entrevista personal con uno de nuestros abogados o ser asesorado telefónicamente sobre cualquier duda respecto al juicio sucesorio.
-          Luego de interiorizarnos sobre las particularidades de su caso, le enviaremos un formulario con la documentación necesaria para dar comienzo al trámite.
-          </p>
-          <br className="hidden md:block" />
-          
 
-          <h1
-            className={`md:pb-[2.59vh] pb-4 ${evolventa.className} md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold `}
-          >
-            Divorcios
-          </h1>
-          <p className="md:pb-[5.55vh] pb-[60px] md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
-          Cuando llega la disolución del vinculo conyugal entra en juego los divorcios. El más común y más aplicado con la nueva legislación es el divorcio express.
-
-          Es un tipo de divorcio previsto por el código civil argentino que permite divorciarse bastando solo la voluntad de uno de los cónyuges, sin tener nada que demostrar y tampoco requiriendo tiempo mínimo de sociedad conyugal.
-
-          Requisitos
-
-          DNI de ambos esposos
-          Libreta, acta o certificado de Matrimonio
-          Partida de nacimiento y DNI de los hijos matrimoniales si los hubiere
-          Fecha y lugar de la celebración del matrimonio y ultimo domicilio conyugal donde convivieron.
-          </p>
-          <br className="hidden md:block" />
-
-
-          <h1
-            className={`md:pb-[2.59vh] pb-4 ${evolventa.className} md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold `}
-          >
-            Defensas Penales
-
-          </h1>
-          <p className="md:pb-[5.55vh] pb-[60px] md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
-          Ante acusaciones o imputaciones de delitos o ante la eventualidad de convertirse en víctima, no hay tiempo que perder. Una acción inmediata para proteger uno de los derechos más importantes prima, el derecho a la libertar.
-
-          Mis colaboradores penalistas trabajan en equipo para representar los intereses de nuestros clientes.
-
-          Logramos en la mayoría de los casos la rápida libertad de nuestros representados, estamos al momento de la detención y durante todo el proceso, con asistencia y asesoramiento familiar.
-          </p>
-          <br className="hidden md:block" />
-
-
-          <h1
-            className={`md:pb-[2.59vh] pb-4 ${evolventa.className} md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold `}
-          >
-            Asesoramiento a empresas
-
-          </h1>
-          <p className="md:pb-[5.55vh] pb-[60px] md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
-          Mis colaboradores asesoran a empresas en orden legal en todas las etapas, para que pueda evitar contrariedades y usted solo se centre en gestionarla, procurando que su negocio prospere.
-
-          Ya sea cuando la empresa comienza, vendiéndola o retirándose, necesita asesoramiento legal previniendo futuras contrariedades.
-
-          Mi equipo trabaja de forma directa, con respuestas rápidas y con un enfoque personalizado, para garantizar tus derechos y el de tu empresa.
-
-          Manejamos todo tipo de cuestiones y casos, tanto extraordinarios o complejos.
-          </p>
-          <br className="hidden md:block" />
-
-
-          <h1
-            className={`md:pb-[2.59vh] pb-4 ${evolventa.className} md:text-[3.33vh] text-[24px] leading-[26px] md:leading-[3.51vh] font-bold `}
-          >
-            Accidente de transito
-
-          </h1>
-          <p className="md:pb-[5.55vh] pb-[60px] md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
-          Los accidentes de transito no siembre ocurren arriba de un auto. Pueden ocurrir yendo en caminando, en bicicleta, moto, taxi o colectivo. Si sufrimos lesiones físicas o en nuestro patrimonio como consecuencia de un accidente de tránsito. Tenemos derechos a ser indemnizados.
-
-          Mis colaboradores se ocuparán de la defensa de tus derechos y de tus intereses frente al o los responsables del mismo, como también de la aseguradora.
-
-          Contamos con consultores médicos, psicológicos e ingenieros mecánicos, para abordar de punto de vista profesional, todos y cada uno de los daños sufridos en el siniestro.
-
-          Te representaremos en todas las etapas del proceso, actuando de acuerdo a tus intereses.
-
-          Accidente de transito
-          Accidente en trasporte publico
-          Accidente en motocicleta
-          Accidentes como peatón</p>
-          <br className="hidden md:block" />
-
-
-
-
-
-
-          {/* <div className="md:pb-[4.44vh] pb-10">
-            <p className="md:pb-[1.85vh] pb-4 md:text-[1.66vh] text-base leading-5 md:leading-[2.22vh] font-bold">
-              Имею опыт сопровождения процедур банкротства со стороны
-              <br className="hidden md:block" /> арбитражного управляющего и
-              представляю интересы:
+          <div className="h-fit px-4 py-4 md:px-[1.25vw] md:py-[2.22vh] bg-[#F8F6F7] border-[0.09vh] border-[#F0F0F5] rounded-md shadow-md mb-[60px] md:mb-[5.55vh]">
+            <p className="font-medium text-[#962C52]">
+              Más de 15 años de experiencia en el rubro legal nos permiten ofrecerte el mejor asesoramiento 
+              para que accedas a tus derechos de la manera más beneficiosa.
             </p>
-            <ul className=" text-sm leading-5 ml-[16px] md:text-[1.48vh] md:leading-[2.22vh] list-disc box-content md:ml-[1.04vw]  marker:text-[#D8CACF] font-medium">
-              <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                При оспаривании сомнительных сделок
-              </li>
-              <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                При привлечении контролирующих лиц к субсидиарной
-                ответственности
-                <br className="hidden md:block" /> и убыткам
-              </li>
-              <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                При проверке обоснованности требований кредиторов
-              </li>
-              <li className="md:pl-[0.62vw] pl-1">
-                Консультирую по иным вопросам
-              </li>
-            </ul>
           </div>
-          <div className="md:pb-[4.44vh] pb-10">
-            <p className="md:pb-[1.85vh] pb-4 md:text-[1.66vh] text-base leading-5 md:leading-[2.22vh] font-bold">
-              Представляю интересы кредиторов:
-            </p>
-            <ul className="md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] list-disc box-content md:ml-[1.04vw] ml-[16px] marker:text-[#D8CACF] font-medium">
-              <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                Инициирование дела о банкротстве
-              </li>
-              <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                Рассмотрение вопросов включения требований в реестр и
-                оспаривания
-                <br className="hidden md:block" /> требований недобросовестных
-                кредиторов
-              </li>
-              <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                Участие в собрании кредиторов
-              </li>
-              <li className="md:pl-[0.62vw] pl-1">
-                Противодействие недобросовестным должникам
-              </li>
-            </ul>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {services.map((service) => (
+              <Link 
+                key={service.id} 
+                href={`/servicios/${service.id}`}
+                className="group block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#962C52]"
+              >
+                <div className="flex items-center mb-4">
+                  <div className="p-2 bg-[#F8F6F7] rounded-full mr-4">
+                    {service.icon}
+                  </div>
+                  <h2 className="text-xl font-semibold text-[#1B1743] group-hover:text-[#962C52]">
+                    {service.title}
+                  </h2>
+                </div>
+                <p className="text-gray-600 mb-4 text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
+                  {service.description}
+                </p>
+                <div className="flex items-center text-[#962C52] font-medium">
+                  Ver más <FaArrowRight className="ml-2" />
+                </div>
+              </Link>
+            ))}
           </div>
-          <p className="md:pb-[4.44vh] pb-10 md:text-[1.48vh] text-sm leading-5 md:leading-[2.22vh] font-medium">
-            Консультирую руководителей и собственников бизнеса при банкротстве
-            компаний, представляю <br className="hidden md:block" /> интересы
-            при оспаривании сделок и привлечении к субсидиарной ответственности,
-            а также оказываю <br className="hidden md:block" />
-            правовую поддержку при защите от недобросовестных действий
-            кредиторов и арбитражных <br className="hidden md:block" />
-            управляющих
-          </p>
-          <div
-            className={`hidden md:block h-fit md:px-[1.25vw] md:py-[2.22vh] bg-[#F8F6F7] border-[0.09vh] border-[#F0F0F5]  rounded-md shadow-md`}
-          >
-            <div className="md:pb-[1.11vh] flex items-center text-[#962C52]">
-              <p className="md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                от 20 000 ₽&nbsp;
-              </p>
-              <p className="md:text-[1.29vh] md:leading-[1.85vh] font-normal">
-                / в месяц
-              </p>
+
+          <div className="mt-[60px] md:mt-[5.55vh]">
+            <h1 className={`pb-4 md:pb-[2.59vh] text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] font-bold ${evolventa.className}`}>
+              ¿Por qué elegirnos?
+            </h1>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                <h4 className="font-semibold text-[#1B1743] mb-2">Experiencia comprobada</h4>
+                <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
+                  Más de 15 años de experiencia en el rubro legal nos permiten ofrecerte el mejor asesoramiento.
+                </p>
+              </div>
+              
+              <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                <h4 className="font-semibold text-[#1B1743] mb-2">Atención personalizada</h4>
+                <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
+                  Cada caso es único y merece atención personalizada. Nos comprometemos a brindarte el mejor servicio.
+                </p>
+              </div>
+              
+              <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                <h4 className="font-semibold text-[#1B1743] mb-2">Resultados garantizados</h4>
+                <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
+                  Nuestro objetivo es obtener los mejores resultados para nuestros clientes, protegiendo siempre sus derechos.
+                </p>
+              </div>
+              
+              <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                <h4 className="font-semibold text-[#1B1743] mb-2">Compromiso total</h4>
+                <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
+                  Te acompañamos en cada paso del proceso legal con claridad, eficiencia y resultados concretos.
+                </p>
+              </div>
             </div>
-            <p className="md:text-[1.29vh] md:leading-[1.85vh] font-normal">
-              Стоимость определяется индивидуально в каждой ситуации
-            </p>
-          </div> */}
-        </div>
-      </section>
-      <div
-        className={` block md:hidden h-fit mb-[60px] bg-[#F8F6F7] border-[1px] border-[#F0F0F5]  rounded-md shadow-md ${montserrat.className}`}
-      >
-        {/* <div className="py-4 px-4">
-          <div className=" flex items-center text-[#962C52] pb-2">
-            <p className="text-base leading-[22px] font-bold">
-              от 20 000 ₽&nbsp;
-            </p>
-            <p className=" text-xs leading-5 font-normal">/ в месяц</p>
           </div>
-          <p className=" text-sm leading-5 font-normal">
-            Стоимость определяется индивидуально в каждой ситуации
-          </p>
-        </div> */}
+        </div>
       </div>
-      <FeedbackForm />
-
-      <FloatingWhatsApp
-      phoneNumber="+5491121914149" // Número de teléfono en formato internacional
-      accountName="Estudio Rampazzo" // Nombre de usuario de la cuenta
-      avatar={"/pics/logo.jpg"} // Opcional: URL o path de la imagen del avatar
-      statusMessage="Típicamente responde en 1 hora" // Opcional: Mensaje de estado
-      chatMessage="¡Hola! 👋 ¿En qué podemos ayudarte hoy?" // Opcional: Mensaje inicial en el chat
-      darkMode={false} // Opcional: Habilita el modo oscuro
-      allowClickAway={false} // Opcional: Cierra el chat al hacer clic fuera
-      allowEsc={false} // Opcional: Cierra el chat al presionar Esc
-      notification={true} // Opcional: Habilita notificaciones
-      notificationDelay={60} // Opcional: Retraso entre notificaciones en segundos
-      notificationSound={false} // Opcional: Habilita sonido de notificaciones
-      />
-    </main>
+    </PageLayout>
   );
 };
 
-export default bankruptcy;
+export default ServiciosPage;

@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
+import PageLayout from "../components/PageLayout";
 
-const photo_contributor = () => {
+const PhotoContributor = () => {
   const linksArray = [
     {
       title: "law-firm-concept-illustration_23672996",
@@ -22,28 +23,28 @@ const photo_contributor = () => {
   ];
 
   return (
-    <main className="">
-      <div className="bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD] h-[10.74vh]"></div>
-      <div className={` bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD]`}>
-        <div className="md:mx-[12.5vw] md:py-[5.55vh] text-[#1B1743]">
-          <h1 className={`md:text-[7.4vh] md:leading-[7.4vh] font-bold `}>
-            Автор фотоматериала
-          </h1>
-        </div>
-      </div>
-      <section className="md:mx-[12.5vw] md:mt-[5.55vh] md:mb-[16.48vh] flex flex-col gap-[1.85vh]">
+    <PageLayout
+      title="Créditos de Imágenes"
+      description="Agradecimientos a los autores de las ilustraciones utilizadas en este sitio web"
+      breadcrumbText="volver"
+      breadcrumbLink="/"
+      showBreadcrumb={true}
+    >
+      <div className="flex flex-col gap-[1.85vh]">
         {linksArray.map((item, index) => (
           <Link
             href={item.link}
             key={index}
-            className="md:text-[1.48vh] md:leading-[2.22vh] text-[#962C52] font-semibold"
+            className="md:text-[1.48vh] md:leading-[2.22vh] text-[#962C52] font-semibold hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             {item.title}
           </Link>
         ))}
-      </section>
-    </main>
+      </div>
+    </PageLayout>
   );
 };
 
-export default photo_contributor;
+export default PhotoContributor;

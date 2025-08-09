@@ -1,127 +1,94 @@
 import React from "react";
-
 import { montserrat } from "../fonts";
 import { evolventa } from "../fonts";
+import PageLayout from "../components/PageLayout";
 
-const privacy_policy = () => {
+const PrivacyPolicy = () => {
   return (
-    <div className="">
-      <div className="bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD] md:h-[10.74vh] h-[128px]"></div>
-      <div
-        className={`mx-4 py-6 md:my-[5.55vh] md:mx-[12.5vw] flex flex-col md:gap-y-[4.44vh] ${montserrat.className} gap-y-[40px] text-sm leading-5 md:text-[1.48vh] md:leading-[2.22vh] font-medium text-[#1B1743]`}
-      >
+    <PageLayout
+      title="Política de Privacidad"
+      description="Información sobre el tratamiento y protección de datos personales"
+      breadcrumbText="volver"
+      breadcrumbLink="/"
+      showBreadcrumb={true}
+    >
+      <div className={`flex flex-col md:gap-y-[4.44vh] gap-y-[40px] text-sm leading-5 md:text-[1.48vh] md:leading-[2.22vh] font-medium text-[#1B1743] ${montserrat.className}`}>
         <div>
-          <h1
-            className={`pb-2 text-2xl leading-[26px] md:pb-[1.48vh] md:text-[3.33vh] md:leading-[3.51vh] font-bold ${evolventa.className}`}
-          >
-            Политика обработки персональных данных
+          <h1 className={`pb-2 text-2xl leading-[26px] md:pb-[1.48vh] md:text-[3.33vh] md:leading-[3.51vh] font-bold ${evolventa.className}`}>
+            Política de Privacidad y Tratamiento de Datos Personales
           </h1>
           <p className="pb-4 md:pb-[2.22vh]">
-          Настоящая политика обработки персональных данных составлена в соответствии с требованиями Федерального закона от
-            27.07.2006 № 152-ФЗ «О персональных данных» и описывает, как мы
-            обрабатываем и обеспечиваем безопасность персональных данных
+            Esta política de privacidad describe cómo recopilamos, utilizamos y protegemos la información personal que nos proporciona a través de nuestro sitio web.
           </p>
           <p>
-            Оператором персональных данных является Драпеко Ольга Андреевна.{" "}
-            <br />
-            Понятия, определенные в статье 3 Федерального закона от 27.07.2006 №
-            152-ФЗ «О персональных данных», используются в Политике с
-            аналогичным значением
+            El responsable del tratamiento de datos personales es Estudio Rampazzo. Los términos utilizados en esta Política tienen el mismo significado que en la Ley de Protección de Datos Personales.
           </p>
         </div>
+        
         <div>
           <p className="text-base leading-[22px] pb-4 md:pb-[1.11vh] md:text-[1.66vh] font-bold">
-            Сбор и использование информации
+            Recopilación y uso de información
           </p>
           <p>
-            Мы собираем личные данные (ваше имя, номер телефона, адрес
-            электронной почты), только при вашем согласии и в целях
-            предоставления доступа к сервисам и информации, содержащейся на
-            сайте, а также для коммуникации. Мы используем эту информацию
-            исключительно для обработки вашего запроса на обратный звонок и
-            коммуникации с вами.
-            <br /> Мы обрабатываем персональные данные только в случае их
-            отправки вами через специальные формы, расположенные на сайте.
-            Заполняя и отправляя их, вы выражаете свое согласие на обработку
-            персональных данных в соответствии с Политикой
+            Recopilamos datos personales (su nombre, número de teléfono, dirección de correo electrónico) solo con su consentimiento y con el propósito de proporcionar acceso a servicios e información contenida en el sitio web, así como para comunicación. Utilizamos esta información exclusivamente para procesar su solicitud de contacto y comunicación con usted.
+            <br /> Procesamos datos personales solo en caso de que sean enviados por usted a través de formularios especiales ubicados en el sitio web. Al completar y enviar estos formularios, usted expresa su consentimiento para el procesamiento de datos personales de acuerdo con esta Política.
           </p>
         </div>
+        
         <div>
           <p className="text-base leading-[22px] pb-4 md:pb-[1.11vh] md:text-[1.66vh] font-bold">
-            Порядок обработки персональных данных
+            Procedimiento de procesamiento de datos personales
           </p>
           <p>
-            Безопасность персональных данных, которые мы обрабатываем,
-            обеспечивается путем реализации комплекса мер, необходимых для
-            выполнения требований действующего законодательства о персональных
-            данных. Мы обеспечиваем сохранность персональных данных и принимаем
-            все возможные меры, исключающие несанкционированный доступ к ним со
-            стороны третьих лиц. Ваши персональные данные никогда не будут
-            переданы третьим лицам, за исключением случаев, предусмотренных
-            действующим законодательством. В случае выявления неточностей в
-            персональных данных вы можете их актуализировать путем направления
-            уведомления на адрес электронной почты, указанный на сайте. Вы также
-            вправе запросить информацию о персональных данных, которые мы
-            обрабатываем. Срок обработки персональных данных является
-            неограниченным, но вы можете в любой момент отозвать свое согласие
-            на обработку персональных данных, направив соответствующее
-            уведомление на электронную почту, указанную на сайте, в этом случае
-            персональные данные подлежат уничтожению
+            La seguridad de los datos personales que procesamos se garantiza mediante la implementación de un conjunto de medidas necesarias para cumplir con los requisitos de la legislación vigente sobre datos personales. Garantizamos la confidencialidad de los datos personales y tomamos todas las medidas posibles para excluir el acceso no autorizado a ellos por parte de terceros. Sus datos personales nunca serán transferidos a terceros, excepto en los casos previstos por la legislación vigente. En caso de detectar inexactitudes en los datos personales, puede actualizarlos enviando una notificación a la dirección de correo electrónico indicada en el sitio web. También tiene derecho a solicitar información sobre los datos personales que procesamos. El período de procesamiento de datos personales es ilimitado, pero puede revocar su consentimiento para el procesamiento de datos personales en cualquier momento enviando la notificación correspondiente al correo electrónico indicado en el sitio web, en cuyo caso los datos personales están sujetos a destrucción.
           </p>
         </div>
+        
         <div>
           <p className="text-base leading-[22px] pb-4 md:pb-[1.11vh] md:text-[1.66vh] font-bold">
-            Куки и аналитика
+            Cookies y análisis
           </p>
           <p>
-            Наш сайт может использовать технологии, такие как куки (Cookie), для
-            сбора и обработки обезличенной информации о посетителях без
-            предоставления соответствующей информации самими пользователями с
-            целью улучшения качества сайта и его содержания. Вы можете отключить
-            использование куки в настройках вашего браузера
+            Nuestro sitio web puede utilizar tecnologías como cookies para recopilar y procesar información anónima sobre los visitantes sin proporcionar la información correspondiente por parte de los usuarios con el objetivo de mejorar la calidad del sitio web y su contenido. Puede deshabilitar el uso de cookies en la configuración de su navegador.
           </p>
         </div>
+        
         <div>
           <p className="text-base leading-[22px] pb-4 md:pb-[1.11vh] md:text-[1.66vh] font-bold">
-            Изменения в Политике
+            Cambios en la Política
           </p>
           <p>
-            Мы оставляем за собой право вносить изменения в Политику. Любые
-            изменения будут опубликованы на этой странице, и дата последнего
-            обновления будет обновлена
+            Nos reservamos el derecho de realizar cambios en esta Política. Cualquier cambio será publicado en esta página y la fecha de la última actualización será modificada.
           </p>
         </div>
+        
         <div>
           <p className="text-base leading-[22px] pb-4 md:pb-[1.11vh] md:text-[1.66vh] font-bold">
-            Контактная информация
+            Información de contacto
           </p>
           <p className="pb-4 md:pb-[1.11vh]">
-            Если у вас есть вопросы или замечания относительно Политики, <br className="hidden md:block"/>
-            свяжитесь с нами одним из следующих способов:
+            Si tiene preguntas o comentarios sobre esta Política, <br className="hidden md:block"/>
+            contáctenos de una de las siguientes maneras:
           </p>
           <p>
-            Электронная почта: oa.drapeko@gmail.com <br />
-            Телефон: +7-923-341-32-66
+                         Correo electrónico: estudiorampazzofernando@gmail.com <br />
+            Teléfono: +54 9 11 2191-4149
           </p>
         </div>
+        
         <div>
           <p className="text-base leading-[22px] pb-4 md:pb-[1.11vh] md:text-[1.66vh] font-bold">
-            Заключительные положения:
+            Disposiciones finales:
           </p>
           <p>
-            Принимая условия Политики, вы подтверждаете, что вам известны ваши
-            права и обязанности, предусмотренные действующим законодательством
-            Российской Федерации о персональных данных, в частности, право на
-            доступ к своим персональным данным и на отзыв своего согласия. Если
-            вы не намерены предоставлять персональные данные или не принимаете
-            условия Политики, то вы должны прекратить использование сайта, в
-            этом случае мы не сможем обеспечить вам использование сайта
+            Al aceptar los términos de esta Política, confirma que conoce sus derechos y obligaciones previstos por la legislación vigente de la República Argentina sobre datos personales, en particular, el derecho de acceso a sus datos personales y de revocar su consentimiento. Si no tiene la intención de proporcionar datos personales o no acepta los términos de esta Política, debe dejar de usar el sitio web, en cuyo caso no podremos garantizarle el uso del sitio web.
           </p>
         </div>
-        <p className="text-[#807D9B]">Дата изменений: 22.01.2024</p>
+        
+        <p className="text-[#807D9B]">Fecha de última modificación: 22.01.2024</p>
       </div>
-    </div>
+    </PageLayout>
   );
 };
 
-export default privacy_policy;
+export default PrivacyPolicy;

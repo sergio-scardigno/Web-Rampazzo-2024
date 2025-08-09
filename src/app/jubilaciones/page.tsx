@@ -1,173 +1,181 @@
-"use client";
-import Link from "next/link";
-import Image from "next/image";
 import React from "react";
-import FeedbackForm from "../components/FeedbackForm";
-import CalendlyEmbed from "../components/CalendlyEmbed";
-
-import { FloatingWhatsApp } from 'react-floating-whatsapp';
-
-
-
-import { evolventa } from "../fonts";
 import { montserrat } from "../fonts";
-import IconArrowLeft from "../../../public/icons/iconArrowLeft.svg";
-import PicAdvantages from "../../../public/pics/picAdvantages.svg";
-import IconConvenience from "../../../public/icons/iconConvenience.svg";
-import IconExpert from "../../../public/icons/iconExpert.svg";
-import IconFlexability from "../../../public/icons/iconFlexability.svg";
+import { evolventa } from "../fonts";
+import PageLayout from "../components/PageLayout";
 
+const services = [
+  {
+    title: 'Jubilaciones',
+    description: 'Tramitación de jubilaciones ante ANSES con evaluación de tus aportes y servicios computables.'
+  },
+  {
+    title: 'Pensión por fallecimiento',
+    description: 'Asesoramiento para familiares en la gestión de pensiones por fallecimiento.'
+  },
+  {
+    title: 'Reajuste de haberes',
+    description: 'Revisión de tu haber jubilatorio para mejoras salariales.'
+  },
+  {
+    title: 'Rentas vitalicias',
+    description: 'Asesoramiento sobre rentas vitalicias y su compatibilidad con el haber mínimo.'
+  },
+  {
+    title: 'Reconocimiento de servicios',
+    description: 'Gestión del reconocimiento de servicios no registrados.'
+  },
+  {
+    title: 'Retiro por invalidez',
+    description: 'Asesoramiento para el retiro por invalidez y su tramitación.'
+  },
+  {
+    title: 'Trámites ante IPS',
+    description: 'Gestión de jubilaciones para empleados de la Provincia de Buenos Aires.'
+  }
+];
 
-const outsourcing = () => {
+const processSteps = [
+  {
+    number: '01',
+    title: 'Evaluación inicial',
+    description: 'Análisis de tu situación previsional y requisitos.'
+  },
+  {
+    number: '02',
+    title: 'Revisión documental',
+    description: 'Verificación de aportes y servicios computables.'
+  },
+  {
+    number: '03',
+    title: 'Cálculo previsional',
+    description: 'Estimación de tu haber jubilatorio.'
+  },
+  {
+    number: '04',
+    title: 'Presentación formal',
+    description: 'Gestión del trámite ante ANSES o IPS.'
+  },
+  {
+    number: '05',
+    title: 'Seguimiento',
+    description: 'Acompañamiento durante todo el proceso.'
+  }
+];
+
+const faqItems = [
+  {
+    question: '¿Cuáles son los requisitos para jubilarme?',
+    answer: 'Los requisitos varían según el régimen previsional. Generalmente se consideran la edad y los años de aportes. Te asesoramos sobre tu situación particular.'
+  },
+  {
+    question: '¿Puedo jubilarme si no tengo todos los aportes?',
+    answer: 'Sí, existen moratorias y planes de pago que permiten regularizar la situación previsional. Analizamos tu caso en particular.'
+  },
+  {
+    question: '¿Cuánto tarda el trámite de jubilación?',
+    answer: 'El tiempo promedio es de 3 a 6 meses, dependiendo de la complejidad del caso y la documentación presentada.'
+  },
+  {
+    question: '¿Puedo trabajar estando jubilado?',
+    answer: 'Sí, pero existen topes de ingresos. Te asesoramos sobre las condiciones y restricciones vigentes.'
+  },
+  {
+    question: '¿Qué documentos necesito para iniciar el trámite?',
+    answer: 'DNI, partidas de nacimiento, matrimonio si corresponde, constancias de CUIL/CUIT y toda la documentación laboral que acredite tus aportes.'
+  },
+  {
+    question: '¿Puedo reclamar una jubilación por discapacidad?',
+    answer: 'Sí, si tenés una discapacidad que te impide trabajar, podés acceder a una jubilación por invalidez. Te guiamos en el proceso.'
+  }
+];
+
+export default function JubilacionesPage() {
   return (
-    <main className={``}>
-      <div className="bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD] md:h-[10.74vh] h-[128px]"></div>
-      <div className={` bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD]`}>
-        <div className="mx-3 py-6 md:mx-[12.5vw] md:py-[5.55vh] text-[#1B1743]">
-          <h1
-            className={`md:pb-[1.48vh] text-[32px] leading-[32px] md:text-[7.4vh] md:leading-[7.4vh] font-bold `}
-          >
-            Jubilaciones
+    <PageLayout
+      title="Jubilaciones y Pensiones"
+      description="Asesoramiento legal especializado en jubilaciones, pensiones y reajuste de haberes. Más de 15 años ayudando a argentinos a acceder a sus derechos previsionales."
+      breadcrumbText="volver"
+      breadcrumbLink="/"
+      defaultService="jubilacion"
+    >
+      <div className="grid md:grid-cols-6 md:gap-x-[1.25vw] text-[#1B1743]">
+        <div className="md:col-span-4">
+          <h1 className={`pb-4 md:pb-[2.59vh] text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] font-bold ${evolventa.className}`}>
+            Asesoramiento Integral en Derecho Previsional
           </h1>
-          <p className="hidden md:block md:text-[1.48vh] md:leading-[2.22vh] font-medium">
-            (Derecho Previcional)
+          
+          <p className="pb-[60px] md:pb-[5.55vh] text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
+            En Estudio Rampazzo nos especializamos en derecho previsional, acompañándote en cada paso del proceso para que puedas acceder a tu jubilación o pensión de manera segura y con el mejor asesoramiento legal.
           </p>
+
+          <div className="h-fit px-4 py-4 md:px-[1.25vw] md:py-[2.22vh] bg-[#F8F6F7] border-[0.09vh] border-[#F0F0F5] rounded-md shadow-md mb-[60px] md:mb-[5.55vh]">
+            <p className="font-medium text-[#962C52]">
+              Más de 15 años de experiencia en el rubro nos permiten ofrecerte el mejor asesoramiento para que accedas a tus derechos previsionales de la manera más beneficiosa.
+            </p>
+          </div>
+
+          <h1 className={`pb-4 md:pb-[2.59vh] text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] font-bold ${evolventa.className}`}>
+            Nuestros Servicios
+          </h1>
+          
+          <div className="grid md:grid-cols-2 gap-6 pb-[60px] md:pb-[5.55vh]">
+            {services.map((service, index) => (
+              <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                <h4 className="font-semibold text-[#1B1743] mb-2">{service.title}</h4>
+                <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">{service.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <h1 className={`pb-4 md:pb-[2.59vh] text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] font-bold ${evolventa.className}`}>
+            Nuestro Proceso de Trabajo
+          </h1>
+          
+          <div className="space-y-8 pb-[60px] md:pb-[5.55vh]">
+            {processSteps.map((step, index) => (
+              <div key={index} className="flex flex-col md:flex-row">
+                <div className="flex-shrink-0 w-16 h-16 bg-[#F8F6F7] rounded-full flex items-center justify-center text-[#962C52] text-xl font-bold mb-4 md:mb-0 md:mr-6">
+                  {step.number}
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold text-[#1B1743]">{step.title}</h4>
+                  <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">{step.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h1 className={`pb-4 md:pb-[2.59vh] text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] font-bold ${evolventa.className}`}>
+            Documentación Necesaria
+          </h1>
+          
+          <div className="bg-[#F8F6F7] p-6 rounded-xl mb-[60px] md:mb-[5.55vh]">
+            <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium mb-4">
+              Para iniciar tu trámite, necesitarás:
+            </p>
+            <ul className="text-sm leading-5 ml-[16px] md:text-[1.48vh] md:leading-[2.22vh] list-disc box-content md:ml-[1.04vw] marker:text-[#D8CACF] font-medium">
+              <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">DNI (frente y dorso)</li>
+              <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">Constancia de CUIL</li>
+              <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">Últimos 12 recibos de sueldo</li>
+              <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">Certificados de trabajo</li>
+              <li className="md:pl-[0.62vw] pl-1">Documentación que acredite servicios no registrados (si corresponde)</li>
+            </ul>
+          </div>
+
+          <h1 className={`pb-4 md:pb-[2.59vh] text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] font-bold ${evolventa.className}`}>
+            Preguntas Frecuentes
+          </h1>
+          
+          <div className="space-y-6">
+            {faqItems.map((faq, index) => (
+              <div key={index} className="border-b border-gray-100 pb-4">
+                <h2 className="font-medium text-[#1B1743] mb-2">{faq.question}</h2>
+                <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <section className="pb-[60px] md:pb-0 md:mx-[12.5vw] grid md:grid-cols-6 md:gap-x-[1.25vw] text-[#1B1743]">
-        <div className="mx-4 md:mx-0 md:col-span-6">
-          <Link
-            href="/"
-            className="flex md:gap-[0.62vw] gap-3 w-fit md:pt-[1.85vh] pt-6 pb-6 md:pb-[4.44vh]"
-          >
-            <Image
-              src={IconArrowLeft}
-              alt={`IconArrowLeft`}
-              width={24}
-              className="md:h-[2.22vh] md:w-[1.25vw]"
-            />
-            <p
-              className={`${montserrat.className} md:text-[1.48vh] text-base leading-6 md:leading-[2.22vh] text-[#807D9B] font-semibold`}
-            >
-              volver
-            </p>
-          </Link>
-        </div>
-        <div className="col-span-2 md:relative hidden md:block">
-          <div className="absolute left-[-2.55vw]">
-            {/* <Image
-              src={PicAdvantages}
-              alt="jubilacion"
-              height={1000}
-              className="md:h-[46.48vh] md:w-[27.13vw] object-contain"
-            /> */}
-          </div>
-        </div>
-        <div className={`md:col-span-4 ${montserrat.className}`}>
-          <div>
-            <h1
-              className={`mx-3 md:mx-0 text-2xl leading-[26px] pb-4 md:col-span-4 md:pb-[1.85vh] ${evolventa.className} md:text-[3.33vh] md:leading-[3.51vh] font-bold `}
-            >
-              OBTENÉ TU JUBILACIÓN O REAJUSTE
-              
-            </h1>
-            <p className="mx-3 md:mx-0 text-sm leading-5 pb-10 md:pb-[5.55vh] md:text-[1.48vh] md:leading-[2.22vh] font-medium">
-            Tengo más de 15 años ayudando a argentinos y argentinas,
-            <br className="hidden md:block" /> logrando que consigan jubilaciones y pensiones
-            </p>
-            <div className="mx-3 md:mx-0 grid md:grid-cols-4 md:gap-x-[1.25vw] pb-10 md:pb-[4.44vh]">
-              <div className="pb-10 md:pb-0 md:col-span-2">
-                <ul className="text-sm leading-5 ml-[16px] md:text-[1.48vh] md:leading-[2.22vh] list-disc box-content md:ml-[1.04vw] marker:text-[#D8CACF] font-medium">
-                <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                  Jubilaciones
-                </p>
-                  <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                  Evaluamos tu situación jubilatoria, realizamos los cálculos correspondientes, y realizamos las presentaciones ante ANSeS.
-                  Calculo haber inicial: a través de un software realizamos el cálculo de tu haber jubilatorio en base a los aportes que realizaste dentro de tus ultimas 120 remuneraciones.
-                  </li>
-                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                  Pensión por fallecimiento
-                  </p>
-                  <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                  En caso de fallecer tu cónyuge, conviviente o ser hijo/a discapacitada o menor, podemos realizar la solicitud de pedido de pensión.
-                  </li>
-                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                  Reajuste de haberes
-                  </p>
-                  <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                  Sos pensionado o jubilado de ANSeS, realizamos a través de un software, el cálculo de tu haber, para determinar si tenes derecho a realizar un reclamo judicial y mejorar tu ingreso mensual en relación al nivel de vida que tenías como trabajador/a en actividad.
-                  </li>
-                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                  Rentas vitalicias
-                  </p>
-                  <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                  Sos beneficiario/a de una renta vitalicia, está cobrando menos de la mínima de ANSeS, podes reclamar mediante un amparo judicial, que te garanticen el haber mínimo.
-                  </li>
-                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                  Reconocimiento de servicios
-                  </p>
-                  <li className="md:pb-[1.11vh] pb-2 md:pl-[0.62vw] pl-1">
-                  No salen todos tus aportes por sistema de ANSeS, queres ir preparando tu situación jubilatoria, podemos iniciar un expediente.
-                  </li>
-                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                  Retiro por invalidez
-                  </p>
-                  <li className="md:pl-[0.62vw] pl-1">
-                  Si sos trabajador en relación de dependencia o autónomo y sufrís problemas de salud que te impiden poder desarrollar tu tarea habitual, podemos iniciar un trámite a los fines de obtener un beneficio previsional.
-                  </li>
-                  <p className="text-base leading-[22px] pb-4 md:pb-[1.85vh] md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                  Tramites ante IPS
-                  </p>
-                  <li className="md:pl-[0.62vw] pl-1">
-                  Trabajas para Provincia de Buenos Aires, nos encargamos de realizar tu jubilación o reconocimiento de servicios.
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div
-              className={`h-fit py-6 px-3 md:px-[1.25vw] md:py-[2.22vh] bg-[#F8F6F7] border-[0.09vh] border-[#F0F0F5]  rounded-md shadow-md`}
-            >
-              <div className="pb-2 md:pb-[1.11vh] flex items-center text-[#962C52]">
-                <p className="text-lg leading-6 md:text-[1.66vh] md:leading-[2.22vh] font-bold">
-                Más de 15 años&nbsp;
-                </p>
-                <p className="text-sm leading-5 md:text-[1.29vh] md:leading-[1.85vh] font-normal">
-                  ayudando a argentinos y argentinas, logrando que consigan jubilaciones y pensiones
-                </p>
-              </div>
-              <p className="text-sm leading-5 md:text-[1.29vh] md:leading-[1.85vh] font-normal">
-                Comunicate cuanto antes
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div>
-      {/* <CalendlyEmbed /> */}
-    </div>
-
-      <FeedbackForm />
-
-      <FloatingWhatsApp
-      phoneNumber="+5491121914149" // Número de teléfono en formato internacional
-      accountName="Estudio Rampazzo" // Nombre de usuario de la cuenta
-      avatar={"/pics/logo.jpg"} // Opcional: URL o path de la imagen del avatar
-      statusMessage="Típicamente responde en 1 hora" // Opcional: Mensaje de estado
-      chatMessage="¡Hola! 👋 ¿En qué podemos ayudarte hoy?" // Opcional: Mensaje inicial en el chat
-      darkMode={false} // Opcional: Habilita el modo oscuro
-      allowClickAway={false} // Opcional: Cierra el chat al hacer clic fuera
-      allowEsc={false} // Opcional: Cierra el chat al presionar Esc
-      notification={true} // Opcional: Habilita notificaciones
-      notificationDelay={60} // Opcional: Retraso entre notificaciones en segundos
-      notificationSound={false} // Opcional: Habilita sonido de notificaciones
-      />
-
-      
-    </main>
-
-    
+    </PageLayout>
   );
-};
-
-export default outsourcing;
+}

@@ -42,11 +42,15 @@ const socialArray = [
 type FormInput = {
   name: string;
   phone: string;
-  consultType: 'general' | 'asesoramiento' | 'jubilacion' | 'otro';
+  consultType: 'general' | 'asesoramiento' | 'jubilacion' | 'despidos' | 'accidentes-laborales' | 'accidentes-transito' | 'defensas-penales' | 'ciudadania' | 'sucesiones' | 'divorcios' | 'asesoramiento-empresas' | 'trabajo-negro' | 'enfermedades-laborales' | 'mediacion' | 'personas-juridicas' | 'otro';
   consulta?: string;
 };
 
-const FeedbackForm = () => {
+interface FeedbackFormProps {
+  defaultService?: FormInput['consultType'];
+}
+
+const FeedbackForm: React.FC<FeedbackFormProps> = ({ defaultService = 'general' }) => {
   const pathname = usePathname();
   const {
     register,
@@ -59,7 +63,7 @@ const FeedbackForm = () => {
   } = useForm<FormInput>({
     defaultValues: {
       phone: '',
-      consultType: 'general',
+      consultType: defaultService,
     },
   });
 
@@ -79,7 +83,7 @@ const FeedbackForm = () => {
     reset({
       name: '',
       phone: '',
-      consultType: 'general',
+      consultType: defaultService,
       consulta: '',
     });
   }
@@ -151,6 +155,18 @@ const FeedbackForm = () => {
                       <SelectItem value="general" className="text-white">Consulta general</SelectItem>
                       <SelectItem value="asesoramiento" className="text-white">Asesoramiento</SelectItem>
                       <SelectItem value="jubilacion" className="text-white">Jubilación</SelectItem>
+                      <SelectItem value="despidos" className="text-white">Despidos</SelectItem>
+                      <SelectItem value="accidentes-laborales" className="text-white">Accidentes laborales</SelectItem>
+                      <SelectItem value="accidentes-transito" className="text-white">Accidentes de tránsito</SelectItem>
+                      <SelectItem value="defensas-penales" className="text-white">Defensas penales</SelectItem>
+                      <SelectItem value="ciudadania" className="text-white">Ciudadanía argentina</SelectItem>
+                      <SelectItem value="sucesiones" className="text-white">Sucesiones</SelectItem>
+                      <SelectItem value="divorcios" className="text-white">Divorcios</SelectItem>
+                      <SelectItem value="asesoramiento-empresas" className="text-white">Asesoramiento empresarial</SelectItem>
+                      <SelectItem value="trabajo-negro" className="text-white">Trabajo en negro</SelectItem>
+                      <SelectItem value="enfermedades-laborales" className="text-white">Enfermedades laborales</SelectItem>
+                      <SelectItem value="mediacion" className="text-white">Mediación</SelectItem>
+                      <SelectItem value="personas-juridicas" className="text-white">Personas jurídicas</SelectItem>
                       <SelectItem value="otro" className="text-white">Otro</SelectItem>
                     </SelectContent>
                   </Select>
@@ -184,51 +200,112 @@ const FeedbackForm = () => {
           </Button>
         </form>
         <div
-          className={`hidden md:block px-3 md:px-0 pt-[48px] md:pt-0 pb-[60px] md:pb-0 col-span-3 md:col-span-2 ${
+          className={`hidden md:block px-6 md:px-8 pt-[48px] md:pt-0 pb-[60px] md:pb-0 col-span-3 md:col-span-2 ${
             montserrat.className
-          } ${"bg-gradient-to-r from-[#EBECF1] to-[#FCFCFD] md:from-transparent md:to-transparent lg:from-transparent lg:to-transparent"}`}
+          } bg-gradient-to-b from-[#F8F9FA] to-[#FFFFFF] rounded-lg shadow-sm border border-gray-100`}
         >
-          <div className="md:text-[1.48vh] text-base leading-6 md:leading-[2.22vh] pb-5 md:pb-[1.85vh] font-semibold">
-            <a href="mailto:estudiorampazzof@gmail.com">estudiorampazzof@gmail.com</a>
-          </div>
-          {/* <div
-            className={`text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] pb-5 md:pb-[1.85vh] font-bold ${evolventa.className}`}
-          >
-            <a href="tel:+541147091266">+54 11 4709-1266</a>
-          </div> */}
+                     {/* Email Section */}
+           <div className="mb-8 md:mb-[3.7vh]">
+             <h3 className={`text-lg md:text-[1.85vh] font-semibold text-[#1B1743] mb-3 md:mb-[1.11vh] ${evolventa.className}`}>
+               Contacto Directo
+             </h3>
+             <div className="flex items-center p-3 md:p-[1.11vh] bg-white rounded-lg border border-gray-200 hover:border-[#962C52] transition-colors duration-300">
+               <Link
+                 href="mailto:estudiorampazzofernando@gmail.com"
+                 className="flex items-center gap-3 md:gap-[0.83vw] w-full"
+               >
+                 <div className="bg-[#962C52] p-2 md:p-[0.74vh] rounded-full">
+                   <svg 
+                     width="20" 
+                     height="20" 
+                     viewBox="0 0 24 24" 
+                     fill="none" 
+                     stroke="currentColor" 
+                     strokeWidth="2" 
+                     strokeLinecap="round" 
+                     strokeLinejoin="round"
+                     className="text-white md:h-[1.66vh] md:w-[0.93vw]"
+                   >
+                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                     <polyline points="22,6 12,13 2,6"/>
+                   </svg>
+                 </div>
+                 <span className="text-[#1B1743] font-medium">Enviar email</span>
+               </Link>
+             </div>
+           </div>
 
-          <div className="flex md:gap-x-[0.41vw] gap-x-2 items-center pb-7 md:pb-[5.55vh]">
-            {socialArray.map((item, index) => (
-              <Link
-                href={item.link}
-                target="_blank"
-                key={index}
-                className="bg-[#F8F6F7] h-fit rounded-md"
-              >
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  width={24}
-                  className="mx-3 md:mx-[0.62vw] my-3 md:my-[1.11vh] md:h-[2.22vh] md:w-[1.25vw] object-contain"
-                />
-              </Link>
-            ))}
-          </div>
-          <div className="flex md:gap-x-[0.62vw] gap-x-[12px] items-start">
-            <Image
-              src={IconPin}
-              alt={`IconPin`}
-              width={24}
-              className="md:h-[2.22vh] md:w-[1.25vw] object-contain"
-            />
-            <div className="">
-              <p className="pb-3 md:pb-[1.11vh] text-base md:text-[1.66vh] leading-[22px] md:leading-[2.22vh] font-bold">
-                Rampazzo
-              </p>
-              <p className="text-base md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
-              Trabajo de forma remota en todo Argentina.
-              </p>
+          {/* WhatsApp Section */}
+          <div className="mb-8 md:mb-[3.7vh]">
+            <h3 className={`text-lg md:text-[1.85vh] font-semibold text-[#1B1743] mb-3 md:mb-[1.11vh] ${evolventa.className}`}>
+              WhatsApp
+            </h3>
+            <div className="flex items-center p-3 md:p-[1.11vh] bg-white rounded-lg border border-gray-200 hover:border-[#962C52] transition-colors duration-300">
+              {socialArray.map((item, index) => (
+                <Link
+                  href={item.link}
+                  target="_blank"
+                  key={index}
+                  className="flex items-center gap-3 md:gap-[0.83vw] w-full"
+                >
+                  <div className="bg-[#25D366] p-2 md:p-[0.74vh] rounded-full">
+                    <Image
+                      src={item.src}
+                      alt={item.alt}
+                      width={20}
+                      className="md:h-[1.66vh] md:w-[0.93vw] object-contain"
+                    />
+                  </div>
+                  <span className="text-[#1B1743] font-medium">Chatear por WhatsApp</span>
+                </Link>
+              ))}
             </div>
+          </div>
+
+          {/* Location Section */}
+          <div className="mb-8 md:mb-[3.7vh]">
+            <h3 className={`text-lg md:text-[1.85vh] font-semibold text-[#1B1743] mb-3 md:mb-[1.11vh] ${evolventa.className}`}>
+              Ubicación
+            </h3>
+            <div className="flex items-start gap-3 md:gap-[0.83vw] p-3 md:p-[1.11vh] bg-white rounded-lg border border-gray-200">
+              <div className="bg-[#962C52] p-2 md:p-[0.74vh] rounded-full mt-1">
+                <Image
+                  src={IconPin}
+                  alt="IconPin"
+                  width={16}
+                  className="md:h-[1.29vh] md:w-[0.74vw] object-contain"
+                />
+              </div>
+              <div className="flex-1">
+                <p className={`text-[#1B1743] font-bold text-base md:text-[1.66vh] leading-[22px] md:leading-[2.22vh] mb-1 md:mb-[0.37vh] ${evolventa.className}`}>
+                  Estudio Rampazzo
+                </p>
+                <p className="text-[#6B7280] text-sm md:text-[1.29vh] leading-5 md:leading-[1.85vh] font-medium">
+                  Trabajo de forma remota en todo Argentina
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Info Box */}
+          <div className="bg-gradient-to-r from-[#962C52] to-[#7a2342] rounded-lg p-4 md:p-[1.48vh] text-white">
+            <h4 className={`text-base md:text-[1.48vh] font-semibold mb-2 md:mb-[0.74vh] ${evolventa.className}`}>
+              ¿Por qué elegirnos?
+            </h4>
+            <ul className="text-sm md:text-[1.29vh] space-y-1 md:space-y-[0.37vh]">
+              <li className="flex items-center gap-2">
+                <span className="text-[#FFD700]">✓</span>
+                Más de 15 años de experiencia
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-[#FFD700]">✓</span>
+                Atención personalizada
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="text-[#FFD700]">✓</span>
+                Resultados garantizados
+              </li>
+            </ul>
           </div>
         </div>
         {pathname == "/" ? (
