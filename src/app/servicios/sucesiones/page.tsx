@@ -64,7 +64,7 @@ export default function SucesionesPage() {
             </div>
             
             <div>
-              <h2 className="font-medium text-[#1B1743] mb-2">Resultados garantizados</h2>
+              <h2 className="font-medium text-[#1B1743] mb-2">Compromiso total</h2>
               <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
                 Nuestro objetivo es obtener los mejores resultados para nuestros clientes, protegiendo siempre sus derechos.
               </p>
