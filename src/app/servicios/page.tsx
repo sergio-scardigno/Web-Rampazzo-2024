@@ -200,7 +200,7 @@ const ServiciosPage = () => {
               </div>
               
               <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                <h4 className="font-semibold text-[#1B1743] mb-2">Resultados garantizados</h4>
+                <h4 className="font-semibold text-[#1B1743] mb-2">Compromiso total</h4>
                 <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
                   Nuestro objetivo es obtener los mejores resultados para nuestros clientes, protegiendo siempre sus derechos.
                 </p>

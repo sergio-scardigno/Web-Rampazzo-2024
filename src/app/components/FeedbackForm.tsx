@@ -303,7 +303,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ defaultService = 'general' 
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-[#FFD700]">✓</span>
-                Resultados garantizados
+                Compromiso total
               </li>
             </ul>
           </div>
