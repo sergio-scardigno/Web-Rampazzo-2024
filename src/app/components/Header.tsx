@@ -234,6 +234,21 @@ const Header = () => {
                                                 </p>
                                             </Link>
                                         </div>
+                                        <div className="pb-1">
+                                            <Link
+                                                href={`/indemnizacion`}
+                                                onClick={() =>
+                                                    setisClick(!isClick)
+                                                }
+                                                className=""
+                                            >
+                                                <p
+                                                    className={`py-2 font-semibold text-[#962C52]`}
+                                                >
+                                                    Calculadora Indemnización
+                                                </p>
+                                            </Link>
+                                        </div>
                                         <div className=" border-b-[1px] border-[#F0F0F5] mb-2">
                                             {/* <Link
                         href={`/outsourcing`}
@@ -445,6 +460,21 @@ const Header = () => {
                                             >
                                                 <p className="md:py-[1.11vh] md:px-[0.62vw] md:text-[1.48vh] md:leading-[2.22vh] hover:bg-[#F8F6F7] rounded-md text-[#962C52] font-semibold transition-all">
                                                     Servicios
+                                                </p>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-[0.37vh]">
+                                        <div className="flex flex-col gap-[1.11vh] md:text-[1.48vh] md:leading-[2.22vh] text-[#1B1743] font-medium">
+                                            <Link
+                                                href="/indemnizacion"
+                                                onClick={() =>
+                                                    setisDropdown(!isDropdown)
+                                                }
+                                                className="hover:text-[#B65D7D] transition-all"
+                                            >
+                                                <p className="md:py-[1.11vh] md:px-[0.62vw] md:text-[1.48vh] md:leading-[2.22vh] hover:bg-[#F8F6F7] rounded-md text-[#962C52] font-semibold transition-all">
+                                                    Calculadora Indemnización
                                                 </p>
                                             </Link>
                                         </div>
