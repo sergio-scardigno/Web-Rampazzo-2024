@@ -364,8 +364,15 @@ export default function IncapacidadPage() {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="ingresoBase">
+                                    <Label htmlFor="ingresoBase" className="flex items-center gap-2">
                                         Ingreso Base Mensual (VIB)
+                                        <div className="relative group">
+                                            <Info className="h-4 w-4 text-blue-500 cursor-help" />
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                                                Valor del Ingreso Base - salario promedio sobre el cual se calcula la prestación
+                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                                            </div>
+                                        </div>
                                     </Label>
                                     <Input
                                         id="ingresoBase"
@@ -379,11 +386,21 @@ export default function IncapacidadPage() {
                                             })
                                         }
                                     />
+                                    <p className="text-xs text-gray-600">
+                                        💰 <strong>VIB:</strong> Valor del Ingreso Base - salario promedio para el cálculo de la prestación
+                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="porcentajeIncapacidad">
+                                    <Label htmlFor="porcentajeIncapacidad" className="flex items-center gap-2">
                                         Porcentaje de Incapacidad (%)
+                                        <div className="relative group">
+                                            <Info className="h-4 w-4 text-blue-500 cursor-help" />
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                                                Grado de limitación funcional evaluado por la Junta Médica (0-100%)
+                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                                            </div>
+                                        </div>
                                     </Label>
                                     <Input
                                         id="porcentajeIncapacidad"
@@ -399,10 +416,22 @@ export default function IncapacidadPage() {
                                             })
                                         }
                                     />
+                                    <p className="text-xs text-gray-600">
+                                        🏥 <strong>Porcentaje:</strong> Evaluado por la Junta Médica - determina el tipo de ILP (Parcial ≤50%, 50-66%, Total ≥66%)
+                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="edad">Edad a la PMI</Label>
+                                    <Label htmlFor="edad" className="flex items-center gap-2">
+                                        Edad a la PMI
+                                        <div className="relative group">
+                                            <Info className="h-4 w-4 text-blue-500 cursor-help" />
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                                                Edad del trabajador en la fecha del PMI (Período de Mejoramiento de la Incapacidad)
+                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                                            </div>
+                                        </div>
+                                    </Label>
                                     <Input
                                         id="edad"
                                         type="number"
@@ -415,11 +444,21 @@ export default function IncapacidadPage() {
                                             })
                                         }
                                     />
+                                    <p className="text-xs text-gray-600">
+                                        📋 <strong>PMI:</strong> Período de Mejoramiento de la Incapacidad - fecha en que se considera que la incapacidad se estabilizó
+                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="tipoContingencia">
+                                    <Label htmlFor="tipoContingencia" className="flex items-center gap-2">
                                         Tipo de Contingencia
+                                        <div className="relative group">
+                                            <Info className="h-4 w-4 text-blue-500 cursor-help" />
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                                                Evento que causa la incapacidad (accidente laboral, enfermedad profesional, etc.)
+                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                                            </div>
+                                        </div>
                                     </Label>
                                     <Select
                                         value={formData.tipoContingencia}
@@ -444,11 +483,21 @@ export default function IncapacidadPage() {
                                             ))}
                                         </SelectContent>
                                     </Select>
+                                    <p className="text-xs text-gray-600">
+                                        ⚠️ <strong>Contingencia:</strong> Causa de la incapacidad - determina si aplica indemnización adicional del 20%
+                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="fechaContingencia">
+                                    <Label htmlFor="fechaContingencia" className="flex items-center gap-2">
                                         Fecha de Contingencia
+                                        <div className="relative group">
+                                            <Info className="h-4 w-4 text-blue-500 cursor-help" />
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                                                Día en que ocurrió el accidente o se diagnosticó la enfermedad
+                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                                            </div>
+                                        </div>
                                     </Label>
                                     <Input
                                         id="fechaContingencia"
@@ -462,11 +511,21 @@ export default function IncapacidadPage() {
                                             })
                                         }
                                     />
+                                    <p className="text-xs text-gray-600">
+                                        📅 <strong>Contingencia:</strong> Fecha del accidente o diagnóstico de la enfermedad
+                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="fechaPMI">
+                                    <Label htmlFor="fechaPMI" className="flex items-center gap-2">
                                         Fecha de PMI
+                                        <div className="relative group">
+                                            <Info className="h-4 w-4 text-blue-500 cursor-help" />
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                                                Fecha del Período de Mejoramiento de la Incapacidad - cuando se estabilizó
+                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                                            </div>
+                                        </div>
                                     </Label>
                                     <Input
                                         id="fechaPMI"
@@ -479,6 +538,9 @@ export default function IncapacidadPage() {
                                             })
                                         }
                                     />
+                                    <p className="text-xs text-gray-600">
+                                        📋 <strong>PMI:</strong> Período de Mejoramiento de la Incapacidad - fecha en que se considera que la incapacidad se estabilizó
+                                    </p>
                                 </div>
 
                                 <div className="flex gap-2 pt-4">
@@ -818,6 +880,46 @@ export default function IncapacidadPage() {
                                         <div>
                                             <strong>Fórmula:</strong> 53 × VIB ×
                                             % Incapacidad × (65/Edad)
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Glosario de Términos */}
+                        <Card className="shadow-lg">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <Info className="h-5 w-5" />
+                                    Glosario de Términos
+                                </CardTitle>
+                                <CardDescription>
+                                    Explicación de los términos técnicos utilizados
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="space-y-3 text-sm text-gray-700">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <div className="font-semibold text-blue-600">💰 VIB (Valor del Ingreso Base)</div>
+                                            <p className="text-gray-600">Salario promedio sobre el cual se calcula la prestación por incapacidad.</p>
+                                            
+                                            <div className="font-semibold text-blue-600">🏥 Porcentaje de Incapacidad</div>
+                                            <p className="text-gray-600">Grado de limitación funcional evaluado por la Junta Médica (0-100%).</p>
+                                            
+                                            <div className="font-semibold text-blue-600">📋 PMI</div>
+                                            <p className="text-gray-600">Período de Mejoramiento de la Incapacidad - fecha en que se considera que la incapacidad se estabilizó.</p>
+                                        </div>
+                                        
+                                        <div className="space-y-2">
+                                            <div className="font-semibold text-blue-600">⚠️ Contingencia</div>
+                                            <p className="text-gray-600">Evento que causa la incapacidad (accidente laboral, enfermedad profesional, etc.).</p>
+                                            
+                                            <div className="font-semibold text-blue-600">📅 Fechas Clave</div>
+                                            <p className="text-gray-600">Fecha de contingencia: día del accidente o diagnóstico. Fecha PMI: cuando se estabilizó la incapacidad.</p>
+                                            
+                                            <div className="font-semibold text-blue-600">🏷️ Tipos de ILP</div>
+                                            <p className="text-gray-600">Parcial ≤50%, 50-66%, Total ≥66% según el porcentaje de incapacidad.</p>
                                         </div>
                                     </div>
                                 </div>
