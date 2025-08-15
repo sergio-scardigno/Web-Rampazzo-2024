@@ -135,8 +135,8 @@ export async function POST(req: NextRequest) {
 
         const mailOptions = {
             from: `"Estudio Rampazzo - Contacto Web" <${process.env.GMAIL_USER}>`,
-            //to: 'estudiorampazzofernando@gmail.com, sergioscardigno82@gmail.com',
-            to: 'sergioscardigno82@gmail.com',
+            to: 'estudiorampazzofernando@gmail.com, sergioscardigno82@gmail.com',
+            //to: 'sergioscardigno82@gmail.com',
             subject: `Nuevo contacto - ${
                 consultTypeLabels[consultType] || consultType
             }`,
