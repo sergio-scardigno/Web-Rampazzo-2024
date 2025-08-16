@@ -35,6 +35,8 @@ import {
     Heart,
     Users,
 } from 'lucide-react';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 
 interface IndemnizacionResult {
     indemnizacionBasica: number;
@@ -929,18 +931,19 @@ export default function IndemnizacionPage() {
                                     <Label htmlFor="telefono">
                                         Número de Teléfono
                                     </Label>
-                                    <Input
-                                        id="telefono"
-                                        type="tel"
-                                        placeholder="Ej: +54 11 1234-5678"
-                                        value={contactData.telefono}
-                                        onChange={(e) =>
-                                            setContactData({
-                                                ...contactData,
-                                                telefono: e.target.value,
-                                            })
-                                        }
-                                    />
+                                                                            <PhoneInput
+                                            placeholder="Ingrese su número de teléfono"
+                                            value={contactData.telefono}
+                                            onChange={(value) =>
+                                                setContactData({
+                                                    ...contactData,
+                                                    telefono: value || '',
+                                                })
+                                            }
+                                            defaultCountry="AR"
+                                            international
+                                            className="h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                        />
                                 </div>
 
                                 <Separator className="my-4" />
