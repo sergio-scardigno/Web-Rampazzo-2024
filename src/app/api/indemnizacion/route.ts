@@ -24,39 +24,39 @@ const createTransporter = () => {
     });
 };
 
-// Schema de validación para los datos de indemnización
+// Schema de validación para los datos de indemnización (simplificado)
 const indemnizacionSchema = z.object({
     nombre: z.string().min(1).max(100),
     telefono: z.string().regex(/^\+?\d{7,15}$/),
     salario: z.number().positive(),
-    antiguedad: z.number().positive(),
     fechaIngreso: z.string(),
     fechaEgreso: z.string(),
-    rubro: z.string(),
-    motivoDespido: z.string(),
+    preaviso: z.boolean(),
     indemnizacionCalculada: z.number().positive(),
     quiereContacto: z.boolean(),
-    agravantes: z.object({
-        // Trabajo no registrado - Ley 24013
-        ley24013_intimacion: z.boolean(),
-        ley24013_art8: z.boolean(),
-        ley24013_art9: z.boolean(),
-        ley24013_art10: z.boolean(),
-        ley24013_art15: z.boolean(),
-        ley25323_art1: z.boolean(),
-        
-        // Otras infracciones
-        intimacionPago: z.boolean(),
-        certificadosArt80: z.boolean(),
-        
-        // Indemnizaciones agravadas
-        embarazoMaternidad: z.boolean(),
-        matrimonio: z.boolean(),
-        
-        // Estabilidad social
-        postulanteCandidato: z.boolean(),
-        electo: z.boolean(),
-    }),
+    agravantes: z
+        .object({
+            // Trabajo no registrado - Ley 24013
+            ley24013_intimacion: z.boolean().optional(),
+            ley24013_art8: z.boolean().optional(),
+            ley24013_art9: z.boolean().optional(),
+            ley24013_art10: z.boolean().optional(),
+            ley24013_art15: z.boolean().optional(),
+            ley25323_art1: z.boolean().optional(),
+
+            // Otras infracciones
+            intimacionPago: z.boolean().optional(),
+            certificadosArt80: z.boolean().optional(),
+
+            // Indemnizaciones agravadas
+            embarazoMaternidad: z.boolean().optional(),
+            matrimonio: z.boolean().optional(),
+
+            // Estabilidad social
+            postulanteCandidato: z.boolean().optional(),
+            electo: z.boolean().optional(),
+        })
+        .optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -82,19 +82,33 @@ export async function POST(req: NextRequest) {
 
         const clean = (str: string) => xss(str, { whiteList: {} });
 
+        // Normalizar agravantes (si no vienen, setear todo en false)
+        const agravantesNormalizados = {
+            ley24013_intimacion: data.agravantes?.ley24013_intimacion ?? false,
+            ley24013_art8: data.agravantes?.ley24013_art8 ?? false,
+            ley24013_art9: data.agravantes?.ley24013_art9 ?? false,
+            ley24013_art10: data.agravantes?.ley24013_art10 ?? false,
+            ley24013_art15: data.agravantes?.ley24013_art15 ?? false,
+            ley25323_art1: data.agravantes?.ley25323_art1 ?? false,
+            intimacionPago: data.agravantes?.intimacionPago ?? false,
+            certificadosArt80: data.agravantes?.certificadosArt80 ?? false,
+            embarazoMaternidad: data.agravantes?.embarazoMaternidad ?? false,
+            matrimonio: data.agravantes?.matrimonio ?? false,
+            postulanteCandidato: data.agravantes?.postulanteCandidato ?? false,
+            electo: data.agravantes?.electo ?? false,
+        };
+
         // Sanitizar datos
         const datosSanitizados = {
             nombre: clean(data.nombre),
             telefono: clean(data.telefono),
             salario: data.salario,
-            antiguedad: data.antiguedad,
             fechaIngreso: clean(data.fechaIngreso),
             fechaEgreso: clean(data.fechaEgreso),
-            rubro: clean(data.rubro),
-            motivoDespido: clean(data.motivoDespido),
+            preaviso: data.preaviso,
             indemnizacionCalculada: data.indemnizacionCalculada,
             quiereContacto: data.quiereContacto,
-            agravantes: data.agravantes,
+            agravantes: agravantesNormalizados,
             createdAt: new Date(),
         };
 
@@ -166,19 +180,13 @@ export async function POST(req: NextRequest) {
                 <strong>Salario:</strong> <span style="color: #d97706; font-weight: bold;">$${datosSanitizados.salario.toLocaleString('es-AR')}</span>
               </p>
               <p style="font-size: 16px; margin-bottom: 8px;">
-                <strong>Antigüedad:</strong> <span style="color: #d97706; font-weight: bold;">${datosSanitizados.antiguedad} años</span>
-              </p>
-              <p style="font-size: 16px; margin-bottom: 8px;">
                 <strong>Fecha de ingreso:</strong> <span style="color: #d97706; font-weight: bold;">${datosSanitizados.fechaIngreso}</span>
               </p>
               <p style="font-size: 16px; margin-bottom: 8px;">
                 <strong>Fecha de egreso:</strong> <span style="color: #d97706; font-weight: bold;">${datosSanitizados.fechaEgreso}</span>
               </p>
               <p style="font-size: 16px; margin-bottom: 8px;">
-                <strong>Rubro:</strong> <span style="color: #d97706; font-weight: bold;">${datosSanitizados.rubro}</span>
-              </p>
-              <p style="font-size: 16px; margin-bottom: 8px;">
-                <strong>Motivo de despido:</strong> <span style="color: #d97706; font-weight: bold;">${datosSanitizados.motivoDespido}</span>
+                <strong>Preaviso:</strong> <span style="color: #d97706; font-weight: bold;">${datosSanitizados.preaviso ? 'Sí' : 'No'}</span>
               </p>
             </div>
 

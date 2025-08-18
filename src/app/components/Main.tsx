@@ -170,8 +170,26 @@ const Main = () => {
             <div className="hidden md:block bg-[#D8CACF] md:absolute md:top-[1.85vh] md:left-[1.04vw] md:w-[20.72vw] md:h-[61.11vh] rounded-md "></div>
           </div>
         </div>
-        <div className="md:col-start-3 md:col-span-4 col-span-3 md:my-[14.6vh] overflow-hidden">
-          <div className="flex md:md:gap-x-[0.05vw] gap-x-[1px] pb-12 md:pb-[5.55vh] overflow-x-auto focus:overflow-x-scroll scrollbar-hide">
+        <div className="md:col-start-3 md:col-span-4 col-span-3 md:my-[8vh] overflow-hidden">
+          {/* Calculadora de Indemnización - Solo visible en Servicios Legales */}
+          {mainArray[selectedItem].title === "Servicios Legales" && (
+            <div className="mb-3 md:mb-[8vh] text-center relative z-[9999]">
+              <Link href="/indemnizacion" className="inline-block">
+                <Image
+                  src="/pics/calculadora-web.png"
+                  alt="Calculadora de Indemnización por Despido"
+                  width={300}
+                  height={150}
+                  className="w-auto h-[120px] md:h-[8.88vh] rounded-md shadow-lg hover:shadow-xl transition-all duration-300 mx-auto animate-bell relative z-[9999]"
+                  style={{
+                    animation: 'bell 3s ease-in-out infinite'
+                  }}
+                />
+              </Link>
+            </div>
+          )}
+
+          <div className="flex md:md:gap-x-[0.05vw] gap-x-[1px] pb-8 md:pb-[3vh] overflow-x-auto focus:overflow-x-scroll scrollbar-hide">
             {mainArray.map((item, index) => (
               <div
                 key={index}
@@ -236,6 +254,8 @@ const Main = () => {
               </div>
             </Link>
           ))}
+          
+
         </div>
       </div>
 

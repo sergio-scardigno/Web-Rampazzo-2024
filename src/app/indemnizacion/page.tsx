@@ -59,12 +59,10 @@ interface IndemnizacionResult {
 
 export default function IndemnizacionPage() {
     const [formData, setFormData] = useState({
-        salario: '',
-        antiguedad: '',
         fechaIngreso: '',
         fechaEgreso: '',
-        rubro: '',
-        motivoDespido: 'sin_causa',
+        salario: '',
+        preaviso: false,
     });
 
     const [agravantes, setAgravantes] = useState({
@@ -97,7 +95,6 @@ export default function IndemnizacionPage() {
     const [resultado, setResultado] = useState<IndemnizacionResult | null>(
         null
     );
-    const [mostrarInfo, setMostrarInfo] = useState(false);
     const [paso, setPaso] = useState<'calculadora' | 'contacto' | 'resultado'>(
         'calculadora'
     );
@@ -108,33 +105,72 @@ export default function IndemnizacionPage() {
         texto: string;
     } | null>(null);
 
-    const rubros = [
-        { id: 'comercio', nombre: 'Comercio', factor: 1 },
-        { id: 'industria', nombre: 'Industria', factor: 1 },
-        { id: 'construccion', nombre: 'Construcción', factor: 1.2 },
-        { id: 'servicios', nombre: 'Servicios', factor: 1 },
-        { id: 'transporte', nombre: 'Transporte', factor: 1.1 },
-        { id: 'salud', nombre: 'Salud', factor: 1.15 },
-        { id: 'educacion', nombre: 'Educación', factor: 1.05 },
-        { id: 'bancario', nombre: 'Bancario', factor: 1.25 },
-    ];
-
     const calcularIndemnizacion = () => {
         const salario = parseFloat(formData.salario);
-        const antiguedad = parseFloat(formData.antiguedad);
-        const rubroSeleccionado = rubros.find((r) => r.id === formData.rubro);
+        const fechaIngreso = new Date(formData.fechaIngreso);
+        const fechaEgreso = new Date(formData.fechaEgreso);
+        const preaviso = formData.preaviso;
 
-        if (!salario || !antiguedad || !rubroSeleccionado) {
-            alert('Por favor complete todos los campos');
+        if (!salario || !formData.fechaIngreso || !formData.fechaEgreso) {
+            alert('Por favor complete todos los campos obligatorios');
             return;
         }
 
-        // Cálculo según Ley de Contrato de Trabajo Argentina
-        const indemnizacionBasica = salario * 1; // 1 mes de salario por año de antigüedad
-        const indemnizacionAntiguedad =
-            salario * antiguedad * rubroSeleccionado.factor;
-        const indemnizacionVacaciones = (salario / 25) * 14; // 14 días de vacaciones
-        const indemnizacionSAC = salario / 12; // 1/12 del salario anual complementario
+        // Calcular antigüedad a partir de las fechas
+        const antiguedad = (fechaEgreso.getTime() - fechaIngreso.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+        const años = Math.floor(antiguedad);
+        const meses = Math.floor((antiguedad - años) * 12);
+
+        // 1) Antigüedad Art. 245: 1 mes por año + fracción mayor a 3 meses
+        // En tu ejemplo: 1 año 7 meses = 2 meses de salario
+        let indemnizacionAntiguedad;
+        if (meses >= 3) {
+            indemnizacionAntiguedad = salario * (años + 1); // +1 por los meses
+        } else {
+            indemnizacionAntiguedad = salario * años;
+        }
+
+        // 2) Sustitutiva de Preaviso: 1 mes si no hay preaviso
+        const sustitutivaPreaviso = preaviso ? 0 : salario;
+        
+        // 3) SAC sobre Preaviso: 1/12 del preaviso
+        const sacPreaviso = sustitutivaPreaviso / 12;
+
+        // 4) Días trabajados del mes: proporcional a los días trabajados
+        // En tu ejemplo: 18 días del mes de agosto (31 días) = $464.516,13
+        const diasTrabajadosMes = fechaEgreso.getDate();
+        const diasDelMesDespido = new Date(fechaEgreso.getFullYear(), fechaEgreso.getMonth() + 1, 0).getDate();
+        const diasTrabajadosMesIndemnizacion = (salario / diasDelMesDespido) * diasTrabajadosMes;
+        
+        // 5) Integración del mes de despido: salario - días trabajados
+        const integracionMesDespido = salario - diasTrabajadosMesIndemnizacion;
+        
+        // 6) SAC sobre integración del mes: 1/12 de la integración
+        const sacIntegracionMes = integracionMesDespido / 12;
+
+		// 7) SAC proporcional: por los días trabajados en el semestre
+		// Fórmula legal: (50% del mejor salario del semestre) × (días trabajados en el semestre / días totales del semestre)
+		const year = fechaEgreso.getFullYear();
+		const isSegundoSemestre = fechaEgreso.getMonth() >= 6; // Jul (6) a Dic (11)
+		const inicioSemestre = new Date(year, isSegundoSemestre ? 6 : 0, 1);
+		const finSemestre = new Date(year, isSegundoSemestre ? 11 : 5, isSegundoSemestre ? 31 : 30);
+		const msPorDia = 1000 * 60 * 60 * 24;
+		const diasTotalesSemestre = Math.floor((finSemestre.getTime() - inicioSemestre.getTime()) / msPorDia) + 1;
+		const diasTrabajadosSemestre = Math.floor((fechaEgreso.getTime() - inicioSemestre.getTime()) / msPorDia) + 1;
+		const sacProporcional = (salario / 2) * (diasTrabajadosSemestre / diasTotalesSemestre);
+
+		// 8) Vacaciones no gozadas: proporcionales al año del despido
+		// Días de vacaciones según antigüedad (hasta 5 años: 14 días)
+		const diasVacacionesAnuales = 14;
+		const inicioAnio = new Date(year, 0, 1);
+		const finAnio = new Date(year, 11, 31);
+		const diasTotalesAnio = Math.floor((finAnio.getTime() - inicioAnio.getTime()) / msPorDia) + 1; // 365 o 366
+		const diasTrabajadosAnio = Math.floor((fechaEgreso.getTime() - inicioAnio.getTime()) / msPorDia) + 1;
+		const diasVacacionesProporcionales = diasVacacionesAnuales * (diasTrabajadosAnio / diasTotalesAnio);
+		const vacacionesNoGozadas = (salario / 25) * diasVacacionesProporcionales;
+		
+		// 9) SAC sobre vacaciones no gozadas: 1/12 de las vacaciones
+		const sacVacacionesNoGozadas = vacacionesNoGozadas / 12;
 
         // Cálculo de agravantes
         let agravantesTotal = 0;
@@ -156,7 +192,7 @@ export default function IndemnizacionPage() {
             agravantesDetalle.trabajoNoRegistrado += salario * 0.25; // 1/4 de remuneraciones
         }
         if (agravantes.ley24013_art15) {
-            agravantesDetalle.trabajoNoRegistrado += (indemnizacionBasica + indemnizacionAntiguedad) * 2; // Duplicación
+            agravantesDetalle.trabajoNoRegistrado += (indemnizacionAntiguedad + sustitutivaPreaviso) * 2; // Duplicación
         }
         if (agravantes.ley25323_art1) {
             agravantesDetalle.trabajoNoRegistrado += indemnizacionAntiguedad; // 100% adicional
@@ -164,10 +200,13 @@ export default function IndemnizacionPage() {
 
         // Otras infracciones
         if (agravantes.intimacionPago) {
-            agravantesDetalle.otrasInfracciones += salario * 2; // Art. 2 Ley 25323
+            // Art. 2 Ley 25323: 50% de la sumatoria de Antigüedad + pre-aviso + integración del mes de despido
+            const baseParaMulta = indemnizacionAntiguedad + sustitutivaPreaviso + integracionMesDespido;
+            agravantesDetalle.otrasInfracciones += baseParaMulta * 0.5;
         }
         if (agravantes.certificadosArt80) {
-            agravantesDetalle.otrasInfracciones += salario * 3; // Art. 45 Ley 25345
+            // Art. 80 LCT: multiplicar por 3 el haber denunciado por la persona
+            agravantesDetalle.otrasInfracciones += salario * 3;
         }
 
         // Indemnizaciones agravadas
@@ -189,32 +228,75 @@ export default function IndemnizacionPage() {
         agravantesTotal = Object.values(agravantesDetalle).reduce((sum, value) => sum + value, 0);
 
         const total =
-            indemnizacionBasica +
             indemnizacionAntiguedad +
-            indemnizacionVacaciones +
-            indemnizacionSAC +
+            sustitutivaPreaviso +
+            sacPreaviso +
+            diasTrabajadosMesIndemnizacion +
+            integracionMesDespido +
+            sacIntegracionMes +
+            sacProporcional +
+            vacacionesNoGozadas +
+            sacVacacionesNoGozadas +
             agravantesTotal;
+
+		console.log('DEBUG conceptos', {
+			antiguedad: indemnizacionAntiguedad,
+			preaviso: sustitutivaPreaviso,
+			sacPreaviso: sacPreaviso,
+			diasTrabMes: diasTrabajadosMesIndemnizacion,
+			integracionMes: integracionMesDespido,
+			sacIntegracionMes: sacIntegracionMes,
+			sacProporcional: sacProporcional,
+			vacacionesNoGozadas: vacacionesNoGozadas,
+			sacVacNoGozadas: sacVacacionesNoGozadas,
+			total: total,
+		});
 
         const desglose = [
             {
-                concepto: 'Indemnización Básica',
-                monto: indemnizacionBasica,
-                descripcion: '1 mes de salario por año de antigüedad',
-            },
-            {
-                concepto: 'Indemnización por Antigüedad',
+                concepto: 'Antigüedad Art. 245',
                 monto: indemnizacionAntiguedad,
-                descripcion: `${antiguedad} años × salario × factor ${rubroSeleccionado.factor}`,
+                descripcion: `${años} año${años !== 1 ? 's' : ''} y ${meses} mes${meses !== 1 ? 'es' : ''} × salario`,
             },
             {
-                concepto: 'Vacaciones no Gozadas',
-                monto: indemnizacionVacaciones,
-                descripcion: '14 días de vacaciones proporcionales',
+                concepto: 'Sustitutiva de Preaviso',
+                monto: sustitutivaPreaviso,
+                descripcion: preaviso ? 'Con preaviso (sin indemnización)' : 'Sin preaviso (1 mes de salario)',
+            },
+            {
+                concepto: 'SAC Preaviso',
+                monto: sacPreaviso,
+                descripcion: 'SAC sobre preaviso (1/12)',
+            },
+            {
+                concepto: 'Días Trabajados del Mes',
+                monto: diasTrabajadosMesIndemnizacion,
+                descripcion: `${diasTrabajadosMes} días del mes de despido`,
+            },
+            {
+                concepto: 'Integración Mes de Despido',
+                monto: integracionMesDespido,
+                descripcion: 'Salario - días trabajados del mes',
+            },
+            {
+                concepto: 'SAC Integración Mes de Despido',
+                monto: sacIntegracionMes,
+                descripcion: 'SAC sobre integración del mes (1/12)',
             },
             {
                 concepto: 'SAC Proporcional',
-                monto: indemnizacionSAC,
-                descripcion: '1/12 del sueldo anual complementario',
+                monto: sacProporcional,
+                descripcion: `SAC proporcional por ${diasTrabajadosSemestre} días del semestre`,
+            },
+            {
+                concepto: 'Vacaciones No Gozadas',
+                monto: vacacionesNoGozadas,
+                descripcion: 'Vacaciones no gozadas del año anterior',
+            },
+            {
+                concepto: 'SAC Vacaciones No Gozadas',
+                monto: sacVacacionesNoGozadas,
+                descripcion: 'SAC sobre vacaciones no gozadas (1/12)',
             },
         ];
 
@@ -249,10 +331,10 @@ export default function IndemnizacionPage() {
         }
 
         setResultado({
-            indemnizacionBasica,
-            indemnizacionAntiguedad,
-            indemnizacionVacaciones,
-            indemnizacionSAC,
+            indemnizacionBasica: indemnizacionAntiguedad,
+            indemnizacionAntiguedad: indemnizacionAntiguedad,
+            indemnizacionVacaciones: vacacionesNoGozadas,
+            indemnizacionSAC: sacProporcional + sacPreaviso + sacIntegracionMes + sacVacacionesNoGozadas,
             agravantes: agravantesDetalle,
             total,
             desglose,
@@ -264,12 +346,10 @@ export default function IndemnizacionPage() {
 
     const limpiarFormulario = () => {
         setFormData({
-            salario: '',
-            antiguedad: '',
             fechaIngreso: '',
             fechaEgreso: '',
-            rubro: '',
-            motivoDespido: 'sin_causa',
+            salario: '',
+            preaviso: false,
         });
         setAgravantes({
             ley24013_intimacion: false,
@@ -306,14 +386,12 @@ export default function IndemnizacionPage() {
                 nombre: contactData.nombre,
                 telefono: contactData.telefono,
                 salario: parseFloat(formData.salario),
-                antiguedad: parseFloat(formData.antiguedad),
                 fechaIngreso: formData.fechaIngreso,
                 fechaEgreso: formData.fechaEgreso,
-                rubro: formData.rubro,
-                motivoDespido: formData.motivoDespido,
+                preaviso: formData.preaviso,
                 indemnizacionCalculada: resultado.total,
                 quiereContacto: quiereContacto,
-                agravantes: agravantes, // Incluir agravantes en los datos guardados
+                agravantes: agravantes,
             };
 
             const response = await fetch('/api/indemnizacion', {
@@ -478,12 +556,12 @@ export default function IndemnizacionPage() {
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="salario">
-                                        Salario Mensual (ARS)
+                                        Mejor Sueldo Bruto (ARS)
                                     </Label>
                                     <Input
                                         id="salario"
                                         type="number"
-                                        placeholder="Ingrese su salario mensual"
+                                        placeholder="Ingrese su mejor sueldo bruto mensual"
                                         value={formData.salario}
                                         onChange={(e) =>
                                             setFormData({
@@ -492,25 +570,9 @@ export default function IndemnizacionPage() {
                                             })
                                         }
                                     />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="antiguedad">
-                                        Años de Antigüedad
-                                    </Label>
-                                    <Input
-                                        id="antiguedad"
-                                        type="number"
-                                        step="0.1"
-                                        placeholder="Ej: 5.5"
-                                        value={formData.antiguedad}
-                                        onChange={(e) =>
-                                            setFormData({
-                                                ...formData,
-                                                antiguedad: e.target.value,
-                                            })
-                                        }
-                                    />
+                                    <p className="text-xs text-gray-600">
+                                        💰 Sueldo bruto más alto del último año
+                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
@@ -528,11 +590,14 @@ export default function IndemnizacionPage() {
                                             })
                                         }
                                     />
+                                    <p className="text-xs text-gray-600">
+                                        📅 Fecha en que comenzó a trabajar
+                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
                                     <Label htmlFor="fechaEgreso">
-                                        Fecha de Egreso
+                                        Fecha de Despido
                                     </Label>
                                     <Input
                                         id="fechaEgreso"
@@ -545,65 +610,54 @@ export default function IndemnizacionPage() {
                                             })
                                         }
                                     />
+                                    <p className="text-xs text-gray-600">
+                                        📅 Fecha en que fue despedido
+                                    </p>
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label htmlFor="rubro">
-                                        Rubro de Actividad
+                                    <Label className="text-base font-medium">
+                                        ¿Hubo Preaviso?
                                     </Label>
-                                    <Select
-                                        value={formData.rubro}
-                                        onValueChange={(value) =>
-                                            setFormData({
-                                                ...formData,
-                                                rubro: value,
-                                            })
-                                        }
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Seleccione el rubro" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {rubros.map((rubro) => (
-                                                <SelectItem
-                                                    key={rubro.id}
-                                                    value={rubro.id}
-                                                >
-                                                    {rubro.nombre}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label htmlFor="motivoDespido">
-                                        Motivo del Despido
-                                    </Label>
-                                    <Select
-                                        value={formData.motivoDespido}
-                                        onValueChange={(value) =>
-                                            setFormData({
-                                                ...formData,
-                                                motivoDespido: value,
-                                            })
-                                        }
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Seleccione el motivo" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="sin_causa">
-                                                Sin causa (Art. 245)
-                                            </SelectItem>
-                                            <SelectItem value="con_causa">
-                                                Con causa justificada
-                                            </SelectItem>
-                                            <SelectItem value="reduccion_personal">
-                                                Reducción de personal
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                    <div className="flex gap-3">
+                                        <Button
+                                            variant={
+                                                formData.preaviso === true
+                                                    ? 'default'
+                                                    : 'outline'
+                                            }
+                                            onClick={() =>
+                                                setFormData({
+                                                    ...formData,
+                                                    preaviso: true,
+                                                })
+                                            }
+                                            className="flex-1"
+                                        >
+                                            <CheckCircle className="h-4 w-4 mr-2" />
+                                            Sí, hubo preaviso
+                                        </Button>
+                                        <Button
+                                            variant={
+                                                formData.preaviso === false
+                                                    ? 'default'
+                                                    : 'outline'
+                                            }
+                                            onClick={() =>
+                                                setFormData({
+                                                    ...formData,
+                                                    preaviso: false,
+                                                })
+                                            }
+                                            className="flex-1"
+                                        >
+                                            <XCircle className="h-4 w-4 mr-2" />
+                                            No, no hubo preaviso
+                                        </Button>
+                                    </div>
+                                    <p className="text-xs text-gray-600">
+                                        ⚠️ Si no hubo preaviso, se calcula 1 mes adicional
+                                    </p>
                                 </div>
 
                                 {/* Sección de Agravantes */}
@@ -619,172 +673,11 @@ export default function IndemnizacionPage() {
                                         <Info className="h-4 w-4 text-blue-600" />
                                         <AlertDescription className="text-blue-800 text-xs">
                                             <strong>Importante:</strong> Los agravantes se aplican según la normativa vigente. 
-                                            Para que procedan las indemnizaciones de la Ley 24.013, debe haber intimación previa 
-                                            y notificación a la AFIP. Consulte con un abogado laboral para casos específicos.
+                                            Consulte con un abogado laboral para casos específicos.
                                         </AlertDescription>
                                     </Alert>
                                     
-                                    {/* Trabajo no registrado - Ley 24013 */}
-                                    <div className="space-y-3 p-4 bg-orange-50 rounded-lg border border-orange-200">
-                                        <div className="flex items-center gap-2">
-                                            <Shield className="h-4 w-4 text-orange-600" />
-                                            <Label className="text-sm font-medium text-orange-800">
-                                                Trabajo no registrado
-                                            </Label>
-                                        </div>
-                                        <div className="space-y-2 text-xs text-orange-700">
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="ley24013_intimacion"
-                                                    checked={agravantes.ley24013_intimacion}
-                                                    onChange={(e) =>
-                                                        setAgravantes({
-                                                            ...agravantes,
-                                                            ley24013_intimacion: e.target.checked,
-                                                        })
-                                                    }
-                                                    className="rounded border-orange-300 text-orange-600 focus:ring-orange-500"
-                                                />
-                                                <label htmlFor="ley24013_intimacion">
-                                                    Ley 24013. Intimó antes del distrato la regularización con las formalidades del art. 11, Ley 24013 y cursó inmediatamente copia a la AFIP
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="ley24013_art8"
-                                                    checked={agravantes.ley24013_art8}
-                                                    onChange={(e) =>
-                                                        setAgravantes({
-                                                            ...agravantes,
-                                                            ley24013_art8: e.target.checked,
-                                                        })
-                                                    }
-                                                    className="rounded border-orange-300 text-orange-600 focus:ring-orange-500"
-                                                />
-                                                <label htmlFor="ley24013_art8">
-                                                    Art. 8, Ley 24013 - No registrar relación laboral
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="ley24013_art9"
-                                                    checked={agravantes.ley24013_art9}
-                                                    onChange={(e) =>
-                                                        setAgravantes({
-                                                            ...agravantes,
-                                                            ley24013_art9: e.target.checked,
-                                                        })
-                                                    }
-                                                    className="rounded border-orange-300 text-orange-600 focus:ring-orange-500"
-                                                />
-                                                <label htmlFor="ley24013_art9">
-                                                    Art. 9, Ley 24013 - Fecha de ingreso posterior a la real
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="ley24013_art10"
-                                                    checked={agravantes.ley24013_art10}
-                                                    onChange={(e) =>
-                                                        setAgravantes({
-                                                            ...agravantes,
-                                                            ley24013_art10: e.target.checked,
-                                                        })
-                                                    }
-                                                    className="rounded border-orange-300 text-orange-600 focus:ring-orange-500"
-                                                />
-                                                <label htmlFor="ley24013_art10">
-                                                    Art. 10, Ley 24013 - Remuneración menor a la real
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="ley24013_art15"
-                                                    checked={agravantes.ley24013_art15}
-                                                    onChange={(e) =>
-                                                        setAgravantes({
-                                                            ...agravantes,
-                                                            ley24013_art15: e.target.checked,
-                                                        })
-                                                    }
-                                                    className="rounded border-orange-300 text-orange-600 focus:ring-orange-500"
-                                                />
-                                                <label htmlFor="ley24013_art15">
-                                                    Art. 15, Ley 24013 - Despido dentro de 2 años de intimación
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="ley25323_art1"
-                                                    checked={agravantes.ley25323_art1}
-                                                    onChange={(e) =>
-                                                        setAgravantes({
-                                                            ...agravantes,
-                                                            ley25323_art1: e.target.checked,
-                                                        })
-                                                    }
-                                                    className="rounded border-orange-300 text-orange-600 focus:ring-orange-500"
-                                                />
-                                                <label htmlFor="ley25323_art1">
-                                                    Art. 1, Ley 25323 - Incremento del 100% en indemnización por antigüedad
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Otras infracciones */}
-                                    <div className="space-y-3 p-4 bg-red-50 rounded-lg border border-red-200">
-                                        <div className="flex items-center gap-2">
-                                            <AlertTriangle className="h-4 w-4 text-red-600" />
-                                            <Label className="text-sm font-medium text-red-800">
-                                                Otras infracciones
-                                            </Label>
-                                        </div>
-                                        <div className="space-y-2 text-xs text-red-700">
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="intimacionPago"
-                                                    checked={agravantes.intimacionPago}
-                                                    onChange={(e) =>
-                                                        setAgravantes({
-                                                            ...agravantes,
-                                                            intimacionPago: e.target.checked,
-                                                        })
-                                                    }
-                                                    className="rounded border-red-300 text-red-600 focus:ring-red-500"
-                                                />
-                                                <label htmlFor="intimacionPago">
-                                                    Se intimó al pago de indemnizaciones de los arts. 232, 233 y 245, LCT? - Art. 2 Ley 25323
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="certificadosArt80"
-                                                    checked={agravantes.certificadosArt80}
-                                                    onChange={(e) =>
-                                                        setAgravantes({
-                                                            ...agravantes,
-                                                            certificadosArt80: e.target.checked,
-                                                        })
-                                                    }
-                                                    className="rounded border-red-300 text-red-600 focus:ring-red-500"
-                                                />
-                                                <label htmlFor="certificadosArt80">
-                                                    Intimación y falta de entrega de los certificados del art. 80, LCT - Art. 45, Ley 25345
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Indemnizaciones agravadas */}
+                                    {/* Indemnizaciones agravadas - Solo embarazo/maternidad */}
                                     <div className="space-y-3 p-4 bg-pink-50 rounded-lg border border-pink-200">
                                         <div className="flex items-center gap-2">
                                             <Heart className="h-4 w-4 text-pink-600" />
@@ -807,70 +700,36 @@ export default function IndemnizacionPage() {
                                                     className="rounded border-pink-300 text-pink-600 focus:ring-pink-500"
                                                 />
                                                 <label htmlFor="embarazoMaternidad">
-                                                    Embarazo / Maternidad
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="matrimonio"
-                                                    checked={agravantes.matrimonio}
-                                                    onChange={(e) =>
-                                                        setAgravantes({
-                                                            ...agravantes,
-                                                            matrimonio: e.target.checked,
-                                                        })
-                                                    }
-                                                    className="rounded border-pink-300 text-pink-600 focus:ring-pink-500"
-                                                />
-                                                <label htmlFor="matrimonio">
-                                                    Matrimonio
+                                                    Embarazo / Maternidad - Art. 2 LCT
                                                 </label>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Estabilidad social */}
-                                    <div className="space-y-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                    {/* Otras infracciones - Solo Art. 80 */}
+                                    <div className="space-y-3 p-4 bg-red-50 rounded-lg border border-red-200">
                                         <div className="flex items-center gap-2">
-                                            <Users className="h-4 w-4 text-blue-600" />
-                                            <Label className="text-sm font-medium text-blue-800">
-                                                Estabilidad social
+                                            <AlertTriangle className="h-4 w-4 text-red-600" />
+                                            <Label className="text-sm font-medium text-red-800">
+                                                Otras infracciones
                                             </Label>
                                         </div>
-                                        <div className="space-y-2 text-xs text-blue-700">
+                                        <div className="space-y-2 text-xs text-red-700">
                                             <div className="flex items-center gap-2">
                                                 <input
                                                     type="checkbox"
-                                                    id="postulanteCandidato"
-                                                    checked={agravantes.postulanteCandidato}
+                                                    id="certificadosArt80"
+                                                    checked={agravantes.certificadosArt80}
                                                     onChange={(e) =>
                                                         setAgravantes({
                                                             ...agravantes,
-                                                            postulanteCandidato: e.target.checked,
+                                                            certificadosArt80: e.target.checked,
                                                         })
                                                     }
-                                                    className="rounded border-blue-300 text-blue-600 focus:ring-blue-500"
+                                                    className="rounded border-red-300 text-red-600 focus:ring-red-500"
                                                 />
-                                                <label htmlFor="postulanteCandidato">
-                                                    Postulante o candidato
-                                                </label>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                <input
-                                                    type="checkbox"
-                                                    id="electo"
-                                                    checked={agravantes.electo}
-                                                    onChange={(e) =>
-                                                        setAgravantes({
-                                                            ...agravantes,
-                                                            electo: e.target.checked,
-                                                        })
-                                                    }
-                                                    className="rounded border-blue-300 text-blue-600 focus:ring-blue-500"
-                                                />
-                                                <label htmlFor="electo">
-                                                    Electo
+                                                <label htmlFor="certificadosArt80">
+                                                    Intimación y falta de entrega de los certificados del art. 80, LCT - Art. 45, Ley 25345
                                                 </label>
                                             </div>
                                         </div>
@@ -1224,174 +1083,6 @@ export default function IndemnizacionPage() {
                                             Nueva Consulta
                                         </Button>
                                     </div>
-                                </CardContent>
-                            </Card>
-                        )}
-
-                        {/* Información Legal - Mostrar en todos los pasos */}
-                        {(paso === 'calculadora' || paso === 'contacto') && (
-                            <Card className="shadow-lg">
-                                <CardHeader>
-                                    <CardTitle className="flex items-center gap-2">
-                                        <FileText className="h-5 w-5" />
-                                        Información Legal
-                                    </CardTitle>
-                                    <CardDescription>
-                                        Base legal de la indemnización
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent>
-                                    <div className="space-y-3 text-sm text-gray-700">
-                                        <div className="flex items-start gap-2">
-                                            <Info className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                                            <div>
-                                                <strong>Art. 245 LCT:</strong>{' '}
-                                                Indemnización por despido sin
-                                                causa justificada
-                                            </div>
-                                        </div>
-                                        <div className="flex items-start gap-2">
-                                            <Info className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                                            <div>
-                                                <strong>Art. 232 LCT:</strong>{' '}
-                                                Sueldo anual complementario
-                                                proporcional
-                                            </div>
-                                        </div>
-                                        <div className="flex items-start gap-2">
-                                            <Info className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                                            <div>
-                                                <strong>Art. 170 LCT:</strong>{' '}
-                                                Vacaciones no gozadas
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Información sobre agravantes */}
-                                        <Separator className="my-3" />
-                                        <div className="text-xs text-gray-600">
-                                            <div className="font-medium mb-2">Agravantes aplicables:</div>
-                                            <div className="space-y-1">
-                                                <div><strong>Ley 24.013:</strong> Trabajo no registrado (Arts. 8, 9, 10, 15)</div>
-                                                <div><strong>Ley 25.323:</strong> Falta de pago de indemnizaciones (Art. 1, 2)</div>
-                                                <div><strong>Ley 25.345:</strong> Falta de entrega de certificados (Art. 45)</div>
-                                                <div><strong>Protecciones especiales:</strong> Embarazo, maternidad, matrimonio</div>
-                                                <div><strong>Estabilidad social:</strong> Postulantes, candidatos y electos</div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="w-full mt-4"
-                                        onClick={() =>
-                                            setMostrarInfo(!mostrarInfo)
-                                        }
-                                    >
-                                        {mostrarInfo
-                                            ? 'Ocultar'
-                                            : 'Ver más información'}
-                                    </Button>
-                                    
-                                    <div className="mt-4 p-3 bg-gray-50 rounded-lg text-xs text-gray-600">
-                                        <div className="font-medium mb-2">Enlaces a normativa:</div>
-                                        <div className="space-y-1">
-                                            <a 
-                                                href="https://www.argentina.gob.ar/normativa/nacional/ley-24013-285" 
-                                                target="_blank" 
-                                                rel="noopener noreferrer"
-                                                className="text-blue-600 hover:text-blue-800 underline block"
-                                            >
-                                                📋 Ley 24.013 - Ley Nacional de Empleo
-                                            </a>
-                                            <a 
-                                                href="https://www.argentina.gob.ar/normativa/nacional/ley-25323-285" 
-                                                target="_blank" 
-                                                rel="noopener noreferrer"
-                                                className="text-blue-600 hover:text-blue-800 underline block"
-                                            >
-                                                📋 Ley 25.323 - Incremento de indemnizaciones laborales
-                                            </a>
-                                            <a 
-                                                href="https://www.argentina.gob.ar/normativa/nacional/ley-25345-285" 
-                                                target="_blank" 
-                                                rel="noopener noreferrer"
-                                                className="text-blue-600 hover:text-blue-800 underline block"
-                                            >
-                                                📋 Ley 25.345 - Prevención de la evasión fiscal (Art. 45)
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    {mostrarInfo && (
-                                        <div className="mt-4 p-4 bg-blue-50 rounded-lg text-sm text-blue-800">
-                                            <h4 className="font-semibold mb-2">
-                                                Consideraciones importantes:
-                                            </h4>
-                                            <ul className="space-y-1 list-disc list-inside">
-                                                <li>
-                                                    La indemnización se calcula
-                                                    sobre el mejor salario del
-                                                    último año
-                                                </li>
-                                                <li>
-                                                    Se incluyen todos los
-                                                    conceptos remunerativos
-                                                </li>
-                                                <li>
-                                                    Los montos están sujetos a
-                                                    actualizaciones por
-                                                    inflación
-                                                </li>
-                                                <li>
-                                                    Consulte con un abogado
-                                                    laboral para casos
-                                                    específicos
-                                                </li>
-                                            </ul>
-                                            
-                                            <Separator className="my-3" />
-                                            
-                                            <h4 className="font-semibold mb-2 mt-4">
-                                                Detalle de Agravantes:
-                                            </h4>
-                                            <div className="space-y-2 text-xs">
-                                                <div className="p-2 bg-orange-100 rounded border-l-4 border-orange-400">
-                                                    <strong className="text-orange-800">Ley 24.013 - Trabajo No Registrado:</strong>
-                                                    <ul className="mt-1 space-y-1 text-orange-700">
-                                                        <li>• <strong>Art. 8:</strong> ¼ de remuneraciones por no registrar relación laboral</li>
-                                                        <li>• <strong>Art. 9:</strong> ¼ de remuneraciones por fecha de ingreso posterior</li>
-                                                        <li>• <strong>Art. 10:</strong> ¼ de remuneraciones por salario menor al real</li>
-                                                        <li>• <strong>Art. 15:</strong> Duplicación si despido dentro de 2 años de intimación</li>
-                                                    </ul>
-                                                </div>
-                                                
-                                                <div className="p-2 bg-red-100 rounded border-l-4 border-red-400">
-                                                    <strong className="text-red-800">Ley 25.323 - Infracciones Adicionales:</strong>
-                                                    <ul className="mt-1 space-y-1 text-red-700">
-                                                        <li>• <strong>Art. 1:</strong> 100% adicional en indemnización por antigüedad</li>
-                                                        <li>• <strong>Art. 2:</strong> 2 meses de salario por falta de pago de indemnizaciones</li>
-                                                    </ul>
-                                                </div>
-                                                
-                                                <div className="p-2 bg-pink-100 rounded border-l-4 border-pink-400">
-                                                    <strong className="text-pink-800">Protecciones Especiales:</strong>
-                                                    <ul className="mt-1 space-y-1 text-pink-700">
-                                                        <li>• <strong>Embarazo/Maternidad:</strong> 6 meses de salario</li>
-                                                        <li>• <strong>Matrimonio:</strong> 3 meses de salario</li>
-                                                    </ul>
-                                                </div>
-                                                
-                                                <div className="p-2 bg-blue-100 rounded border-l-4 border-blue-400">
-                                                    <strong className="text-blue-800">Estabilidad Social:</strong>
-                                                    <ul className="mt-1 space-y-1 text-blue-700">
-                                                        <li>• <strong>Postulante/Candidato:</strong> 12 meses de salario</li>
-                                                        <li>• <strong>Electo:</strong> 24 meses de salario</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
                                 </CardContent>
                             </Card>
                         )}
