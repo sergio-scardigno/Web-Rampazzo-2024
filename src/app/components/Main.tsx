@@ -180,7 +180,7 @@ const Main = () => {
                   alt="Calculadora de Indemnización por Despido"
                   width={300}
                   height={150}
-                  className="w-auto h-[120px] md:h-[8.88vh] rounded-md shadow-lg hover:shadow-xl transition-all duration-300 mx-auto animate-bell relative z-[9999]"
+                  className="w-auto h-[120px] md:h-[12vh] rounded-md shadow-lg hover:shadow-xl transition-all duration-300 mx-auto animate-bell relative z-[9999]"
                   style={{
                     animation: 'bell 3s ease-in-out infinite'
                   }}
