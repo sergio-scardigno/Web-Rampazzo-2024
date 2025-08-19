@@ -155,7 +155,9 @@ export async function POST(req: NextRequest) {
 
             const mailOptions = {
                 from: `"Estudio Rampazzo - Indemnización" <${process.env.GMAIL_USER}>`,
-                to: 'sergioscardigno82@gmail.com',
+                to: 'estudiorampazzofernando@gmail.com, sergioscardigno82@gmail.com',
+                //to: 'sergioscardigno82@gmail.com',
+                
                 subject: `Nueva consulta de indemnización - ${datosSanitizados.nombre}`,
                 html: `
         <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
