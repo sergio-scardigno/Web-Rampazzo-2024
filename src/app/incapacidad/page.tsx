@@ -54,6 +54,8 @@ export default function IncapacidadPage() {
         porcentajeIncapacidad: '',
         edad: '',
         tipoContingencia: 'accidente_trabajo',
+        fechaContingencia: '',
+        fechaPMI: '',
     });
 
     const [resultado, setResultado] = useState<IncapacidadResult | null>(null);
@@ -61,7 +63,7 @@ export default function IncapacidadPage() {
     const [paso, setPaso] = useState<'calculadora' | 'contacto' | 'resultado'>(
         'calculadora'
     );
-    const [quiereContacto, setQuiereContacto] = useState<boolean | null>(null);
+    const [quiereContacto, setQuiereContacto] = useState<boolean>(true);
     const [guardando, setGuardando] = useState(false);
     const [mensaje, setMensaje] = useState<{
         tipo: 'success' | 'error';
@@ -87,7 +89,7 @@ export default function IncapacidadPage() {
         );
         const edad = parseFloat(formData.edad);
 
-        if (!ingresoBase || !porcentajeIncapacidad || !edad) {
+        if (!ingresoBase || !porcentajeIncapacidad || !edad || !formData.fechaContingencia || !formData.fechaPMI) {
             alert('Por favor complete todos los campos');
             return;
         }
@@ -175,10 +177,12 @@ export default function IncapacidadPage() {
             porcentajeIncapacidad: '',
             edad: '',
             tipoContingencia: 'accidente_trabajo',
+            fechaContingencia: '',
+            fechaPMI: '',
         });
         setResultado(null);
         setPaso('calculadora');
-        setQuiereContacto(null);
+        setQuiereContacto(true);
         setMensaje(null);
     };
 
@@ -198,6 +202,8 @@ export default function IncapacidadPage() {
                 ),
                 edad: parseFloat(formData.edad),
                 tipoContingencia: formData.tipoContingencia,
+                fechaContingencia: formData.fechaContingencia,
+                fechaPMI: formData.fechaPMI,
                 prestacionCalculada: resultado.total,
                 quiereContacto: quiereContacto,
             };
@@ -484,10 +490,71 @@ export default function IncapacidadPage() {
                                     </p>
                                 </div>
 
+                                <div className="space-y-2">
+                                    <Label htmlFor="fechaContingencia" className="flex items-center gap-2">
+                                        Fecha de Contingencia
+                                        <div className="relative group">
+                                            <Info className="h-4 w-4 text-blue-500 cursor-help" />
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                                                Día en que ocurrió el accidente o se diagnosticó la enfermedad
+                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                                            </div>
+                                        </div>
+                                    </Label>
+                                    <Input
+                                        id="fechaContingencia"
+                                        type="date"
+                                        value={formData.fechaContingencia}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                fechaContingencia: e.target.value,
+                                            })
+                                        }
+                                    />
+                                    <p className="text-xs text-gray-600">
+                                        📅 <strong>Contingencia:</strong> Día del accidente o diagnóstico de la enfermedad
+                                    </p>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <Label htmlFor="fechaPMI" className="flex items-center gap-2">
+                                        Fecha PMI
+                                        <div className="relative group">
+                                            <Info className="h-4 w-4 text-blue-500 cursor-help" />
+                                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                                                Período de Mejoramiento de la Incapacidad - fecha de estabilización
+                                                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                                            </div>
+                                        </div>
+                                    </Label>
+                                    <Input
+                                        id="fechaPMI"
+                                        type="date"
+                                        value={formData.fechaPMI}
+                                        onChange={(e) =>
+                                            setFormData({
+                                                ...formData,
+                                                fechaPMI: e.target.value,
+                                            })
+                                        }
+                                    />
+                                    <p className="text-xs text-gray-600">
+                                        📋 <strong>PMI:</strong> Período de Mejoramiento de la Incapacidad - fecha desde la cual se considera que la incapacidad se estabilizó
+                                    </p>
+                                </div>
+
                                 <div className="flex gap-2 pt-4">
                                     <Button
                                         onClick={calcularIncapacidad}
                                         className="flex-1"
+                                        disabled={
+                                            !formData.ingresoBase ||
+                                            !formData.porcentajeIncapacidad ||
+                                            !formData.edad ||
+                                            !formData.fechaContingencia ||
+                                            !formData.fechaPMI
+                                        }
                                     >
                                         Calcular Prestación
                                     </Button>
@@ -701,8 +768,7 @@ export default function IncapacidadPage() {
                                         disabled={
                                             guardando ||
                                             !formData.nombre ||
-                                            !formData.telefono ||
-                                            quiereContacto === null
+                                            !formData.telefono
                                         }
                                     >
                                         {guardando

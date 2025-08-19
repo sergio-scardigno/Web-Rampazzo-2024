@@ -108,7 +108,7 @@ function ResultadoCard({
     resultado: IndemnizacionResult; 
     formatearMoneda: (monto: number) => string;
     paso: string;
-    quiereContacto: boolean | null;
+    quiereContacto: boolean;
     limpiarFormulario: () => void;
 }) {
     const { count: totalCount, isAnimating: totalAnimating } = useCountUp(resultado.total, 4000);
@@ -361,7 +361,7 @@ export default function IndemnizacionPage() {
     const [paso, setPaso] = useState<'calculadora' | 'contacto' | 'resultado'>(
         'calculadora'
     );
-    const [quiereContacto, setQuiereContacto] = useState<boolean | null>(true);
+    const [quiereContacto, setQuiereContacto] = useState<boolean>(true);
     const [guardando, setGuardando] = useState(false);
     const [mensaje, setMensaje] = useState<{
         tipo: 'success' | 'error';
@@ -639,7 +639,7 @@ export default function IndemnizacionPage() {
         });
         setResultado(null);
         setPaso('calculadora');
-        setQuiereContacto(null);
+        setQuiereContacto(true);
         setMensaje(null);
     };
 
@@ -1211,8 +1211,7 @@ export default function IndemnizacionPage() {
                                         disabled={
                                             guardando ||
                                             !contactData.nombre ||
-                                            !contactData.telefono ||
-                                            quiereContacto === null
+                                            !contactData.telefono
                                         }
                                     >
                                         {guardando
