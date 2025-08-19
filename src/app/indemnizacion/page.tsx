@@ -361,7 +361,7 @@ export default function IndemnizacionPage() {
     const [paso, setPaso] = useState<'calculadora' | 'contacto' | 'resultado'>(
         'calculadora'
     );
-    const [quiereContacto, setQuiereContacto] = useState<boolean | null>(null);
+    const [quiereContacto, setQuiereContacto] = useState<boolean | null>(true);
     const [guardando, setGuardando] = useState(false);
     const [mensaje, setMensaje] = useState<{
         tipo: 'success' | 'error';
