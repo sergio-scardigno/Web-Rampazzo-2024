@@ -6,7 +6,7 @@ Sitio web profesional para el Estudio Jurídico Rampazzo, especializado en derec
 
 - **Calculadora de Indemnización**: Herramienta interactiva para calcular indemnizaciones laborales
 - **Formularios de Contacto**: Sistema de contacto con tracking de visitantes
-- **Analytics Integrado**: Plausible Analytics para seguimiento de visitantes
+- **Analytics Integrado**: Plausible Analytics + Matomo Analytics para seguimiento completo de visitantes
 - **Diseño Responsivo**: Optimizado para todos los dispositivos
 - **SEO Optimizado**: Metadatos y estructura optimizada para motores de búsqueda
 
@@ -17,7 +17,8 @@ Sitio web profesional para el Estudio Jurídico Rampazzo, especializado en derec
 - **Tailwind CSS** - Estilos utilitarios
 - **MongoDB** - Base de datos
 - **Nodemailer** - Envío de emails
-- **Plausible Analytics** - Analytics privado
+- **Plausible Analytics** - Analytics privado y ligero
+- **Matomo Analytics** - Analytics completo y detallado
 
 ## 📦 Instalación
 

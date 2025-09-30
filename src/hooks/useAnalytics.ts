@@ -3,10 +3,11 @@
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
-// Extender el objeto window para incluir plausible
+// Extender el objeto window para incluir plausible y matomo
 declare global {
   interface Window {
     plausible?: (event: string, options?: { props?: Record<string, any> }) => void;
+    _paq?: any[];
   }
 }
 
@@ -14,7 +15,7 @@ export function useAnalytics() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Track page views automáticamente
+    // Track page views automáticamente en Plausible
     if (typeof window !== 'undefined' && window.plausible) {
       window.plausible('pageview', {
         props: {
@@ -23,10 +24,18 @@ export function useAnalytics() {
         }
       });
     }
+
+    // Track page views automáticamente en Matomo
+    if (typeof window !== 'undefined' && window._paq) {
+      window._paq.push(['setCustomUrl', pathname]);
+      window._paq.push(['setDocumentTitle', document.title]);
+      window._paq.push(['trackPageView']);
+    }
   }, [pathname]);
 
   // Función para trackear eventos personalizados
   const trackEvent = (eventName: string, props?: Record<string, any>) => {
+    // Trackear en Plausible
     if (typeof window !== 'undefined' && window.plausible) {
       window.plausible(eventName, { 
         props: {
@@ -34,6 +43,11 @@ export function useAnalytics() {
           timestamp: new Date().toISOString(),
         }
       });
+    }
+
+    // Trackear en Matomo
+    if (typeof window !== 'undefined' && window._paq) {
+      window._paq.push(['trackEvent', eventName, JSON.stringify(props || {})]);
     }
   };
 
