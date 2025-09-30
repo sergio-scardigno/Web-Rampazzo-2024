@@ -250,7 +250,7 @@ export function formatEnhancedTrackingInfo(tracking: EnhancedTrackingData): stri
     const sections: string[] = [];
     
     // Sección de fuente de tráfico (básica)
-    const trafficInfo = tracking.utm_source ? 
+    let trafficInfo = tracking.utm_source ? 
         `Fuente: ${tracking.utm_source}` : 
         tracking.referrer ? 
             `Fuente: ${tracking.referrer}` : 
