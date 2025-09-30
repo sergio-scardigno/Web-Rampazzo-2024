@@ -1,87 +1,113 @@
-# Sitio Web Corporativo - Estudio Rampazzo
+# Estudio Rampazzo - Sitio Web
 
-Este es el repositorio del código fuente para el sitio web corporativo del Estudio Rampazzo, desarrollado por Sergio Scardigno. El sitio está diseñado para ser moderno, rápido y completamente responsivo.
+Sitio web profesional para el Estudio Jurídico Rampazzo, especializado en derecho laboral, indemnizaciones y asesoramiento legal.
 
-## 📜 Descripción General
+## 🚀 Características
 
-El proyecto es una aplicación web construida con Next.js que sirve como plataforma de presentación para los servicios legales ofrecidos por el estudio. Incluye varias secciones estáticas, páginas de servicios específicos y un formulario de contacto funcional con envío de correo electrónico.
+- **Calculadora de Indemnización**: Herramienta interactiva para calcular indemnizaciones laborales
+- **Formularios de Contacto**: Sistema de contacto con tracking de visitantes
+- **Analytics Integrado**: Plausible Analytics para seguimiento de visitantes
+- **Diseño Responsivo**: Optimizado para todos los dispositivos
+- **SEO Optimizado**: Metadatos y estructura optimizada para motores de búsqueda
 
-## ✨ Tecnologías Utilizadas
+## 🛠️ Tecnologías
 
-Este proyecto fue construido utilizando un stack de tecnologías modernas:
+- **Next.js 14** - Framework de React
+- **TypeScript** - Tipado estático
+- **Tailwind CSS** - Estilos utilitarios
+- **MongoDB** - Base de datos
+- **Nodemailer** - Envío de emails
+- **Plausible Analytics** - Analytics privado
 
-- **Framework Principal:** [Next.js](https://nextjs.org/) 14
-- **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
-- **Framework de UI:** [React](https://react.dev/) 18
-- **Estilos CSS:** [Tailwind CSS](https://tailwindcss.com/)
-- **Gestión de Formularios:** [React Hook Form](https://react-hook-form.com/)
-- **Notificaciones:** [React Hot Toast](https://react-hot-toast.com/)
-- **Envío de Correos (API):** [Resend](https://resend.com/)
-- **Linting:** [ESLint](https://eslint.org/)
-- **Dependencias Adicionales:**
-  - Material UI (`@mui/material`) para componentes específicos.
-  - `react-calendly` para incrustar agendamiento de citas.
+## 📦 Instalación
 
-## 📂 Estructura del Proyecto
+```bash
+# Instalar dependencias
+npm install
 
-El código fuente está organizado siguiendo las convenciones de Next.js con el App Router:
+# Configurar variables de entorno
+cp .env.example .env.local
 
-```
-/
-├── public/           # Archivos estáticos: imágenes, fuentes, iconos.
-├── src/
-│   ├── app/          # Lógica principal de la aplicación (App Router)
-│   │   ├── api/      # Rutas de la API (ej. /api/send para el form)
-│   │   ├── components/ # Componentes reutilizables de React (Header, Footer, etc.)
-│   │   ├── (pages)/  # Carpetas para cada ruta/página del sitio
-│   │   ├── layout.tsx  # Layout principal de la aplicación
-│   │   └── page.tsx    # Página de inicio
-│   └── ...
-├── .env              # Archivo para variables de entorno (debe ser ignorado por Git)
-├── next.config.js    # Archivo de configuración de Next.js
-├── tailwind.config.ts# Archivo de configuración de Tailwind CSS
-└── package.json      # Dependencias y scripts del proyecto
+# Ejecutar en desarrollo
+npm run dev
 ```
 
-## 🚀 Cómo Empezar
+## 🌐 Deploy
 
-Sigue estos pasos para levantar una copia local del proyecto.
+El proyecto está configurado para deploy automático en Vercel:
 
-### Prerrequisitos
+- **Producción**: https://rampazzo-2024-nc4fk2x6x-scardigno1982s-projects.vercel.app
+- **Node.js**: 22.x
+- **Build**: Automático en cada push
 
-Asegúrate de tener instalado [Node.js](https://nodejs.org/) (versión 20.x o superior).
+## 📁 Estructura del Proyecto
 
-### Instalación
+```
+src/
+├── app/                    # Páginas de Next.js
+│   ├── api/               # APIs (send, indemnizacion, incapacidad)
+│   ├── components/        # Componentes reutilizables
+│   └── [pages]/          # Páginas del sitio
+├── components/ui/         # Componentes de UI base
+├── hooks/                # Hooks personalizados
+└── lib/                  # Utilidades y configuración
+    ├── tracking.ts       # Sistema de tracking de visitantes
+    ├── mongodb.ts        # Configuración de MongoDB
+    └── utils.ts          # Utilidades generales
+```
 
-1.  **Clona el repositorio:**
-    ```bash
-    git clone https://github.com/tu-usuario/tu-repositorio.git
-    cd tu-repositorio
-    ```
+## 🔧 Configuración
 
-2.  **Instala las dependencias:**
-    ```bash
-    npm install
-    ```
+### Variables de Entorno
 
-3.  **Configura las variables de entorno:**
-    Crea un archivo `.env.local` en la raíz del proyecto y añade las variables necesarias (por ejemplo, la API key de Resend).
-    ```
-    RESEND_API_KEY=tu_api_key_aqui
-    ```
+```env
+MONGODB_URI=mongodb://...
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=tu-email@gmail.com
+EMAIL_PASS=tu-password
+```
 
-4.  **Ejecuta el servidor de desarrollo:**
-    ```bash
-    npm run dev
-    ```
+### Analytics
 
-Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver el resultado.
+- **Plausible Analytics** integrado
+- **Tracking de visitantes** con información detallada
+- **Eventos personalizados** para formularios y calculadora
 
-## 🛠️ Scripts Disponibles
+## 📊 Funcionalidades
 
-En el archivo `package.json`, encontrarás los siguientes scripts:
+### Calculadora de Indemnización
+- Cálculo automático basado en salario y antigüedad
+- Validación de datos en tiempo real
+- Envío de resultados por email
 
-- `npm run dev`: Inicia la aplicación en modo de desarrollo.
-- `npm run build`: Compila la aplicación para producción.
-- `npm run start`: Inicia un servidor de producción.
-- `npm run lint`: Ejecuta el linter (ESLint) para analizar el código en busca de errores y problemas de estilo.
+### Sistema de Tracking
+- Información de origen del visitante
+- Datos de dispositivo y navegador
+- Ubicación geográfica
+- Parámetros UTM para campañas
+
+### Formularios de Contacto
+- Validación de datos
+- Envío de emails automático
+- Almacenamiento en MongoDB
+- Tracking de conversiones
+
+## 🚀 Comandos
+
+```bash
+npm run dev          # Desarrollo
+npm run build        # Build de producción
+npm run start        # Servidor de producción
+npm run lint         # Linter
+```
+
+## 📞 Contacto
+
+**Estudio Rampazzo**
+- Email: contacto@fernandorampazzo.com.ar
+- Web: https://fernandorampazzo.com.ar
+
+---
+
+Desarrollado con ❤️ para el Estudio Rampazzo
