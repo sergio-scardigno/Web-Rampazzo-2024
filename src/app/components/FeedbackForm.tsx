@@ -6,6 +6,8 @@ import { useForm, Controller } from "react-hook-form";
 import { POST } from "../api/send/route";
 import { toast } from "react-hot-toast";
 import { usePathname } from "next/navigation";
+import { getClientTrackingData } from "@/lib/tracking";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
@@ -52,6 +54,7 @@ interface FeedbackFormProps {
 
 const FeedbackForm: React.FC<FeedbackFormProps> = ({ defaultService = 'general' }) => {
   const pathname = usePathname();
+  const { trackFormSubmission, trackContactAction } = useAnalytics();
   const {
     register,
     handleSubmit,
@@ -70,12 +73,24 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ defaultService = 'general' 
   const selectedConsultType = watch('consultType');
 
   async function onSubmit(formData: FormInput) {
+    // Trackear envío de formulario
+    trackFormSubmission('contact', {
+      consult_type: formData.consultType,
+      has_message: !!formData.consulta,
+    });
+
+    // Obtener información de tracking del cliente
+    const trackingData = getClientTrackingData();
+    
     await fetch("/api/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        ...formData,
+        tracking: trackingData,
+      }),
     }).then(() => {
       toast.success("¡Gracias! Nos comunicaremos con usted en breve.");
     });

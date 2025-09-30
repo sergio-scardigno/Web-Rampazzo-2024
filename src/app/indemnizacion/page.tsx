@@ -37,6 +37,8 @@ import {
 } from 'lucide-react';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import { getClientTrackingData } from '@/lib/tracking';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 interface IndemnizacionResult {
     indemnizacionBasica: number;
@@ -321,6 +323,13 @@ function ResultadoCard({
 }
 
 export default function IndemnizacionPage() {
+    const { trackCalculation, trackFormSubmission, trackServiceView } = useAnalytics();
+    
+    // Trackear vista de la página de indemnización
+    useEffect(() => {
+        trackServiceView('indemnizacion');
+    }, [trackServiceView]);
+
     const [formData, setFormData] = useState({
         fechaIngreso: '',
         fechaEgreso: '',
@@ -598,7 +607,7 @@ export default function IndemnizacionPage() {
             });
         }
 
-        setResultado({
+        const resultadoCalculado = {
             indemnizacionBasica: indemnizacionAntiguedad,
             indemnizacionAntiguedad: indemnizacionAntiguedad,
             indemnizacionVacaciones: vacacionesNoGozadas,
@@ -606,6 +615,19 @@ export default function IndemnizacionPage() {
             agravantes: agravantesDetalle,
             total,
             desglose,
+        };
+
+        setResultado(resultadoCalculado);
+
+        // Trackear cálculo completado
+        trackCalculation('indemnizacion', {
+            total_amount: total,
+            salary: salario,
+            years_worked: años,
+            months_worked: meses,
+            has_preaviso: preaviso,
+            has_agravantes: Object.values(agravantes).some(v => v),
+            agravantes_count: Object.values(agravantes).filter(v => v).length,
         });
 
         // Pasar al paso de contacto
@@ -650,6 +672,17 @@ export default function IndemnizacionPage() {
         setMensaje(null);
 
         try {
+            // Trackear envío de formulario de indemnización
+            trackFormSubmission('indemnizacion', {
+                indemnization_amount: resultado.total,
+                salary: parseFloat(formData.salario),
+                years_worked: Math.floor((new Date(formData.fechaEgreso).getTime() - new Date(formData.fechaIngreso).getTime()) / (1000 * 60 * 60 * 24 * 365.25)),
+                wants_contact: quiereContacto,
+            });
+
+            // Obtener información de tracking del cliente
+            const trackingData = getClientTrackingData();
+            
             const datosParaGuardar = {
                 nombre: contactData.nombre,
                 telefono: contactData.telefono,
@@ -660,6 +693,7 @@ export default function IndemnizacionPage() {
                 indemnizacionCalculada: resultado.total,
                 quiereContacto: quiereContacto,
                 agravantes: agravantes,
+                tracking: trackingData,
             };
 
             const response = await fetch('/api/indemnizacion', {

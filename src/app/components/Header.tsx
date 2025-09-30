@@ -15,10 +15,12 @@ import IconChevronDown from '../../../public/icons/iconChevronDown.svg';
 import IconChevronUp from '../../../public/icons/iconChevronUp.svg';
 import { feedbackRef } from './FeedbackForm';
 import { aboutMeRef } from './About';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 const Header = () => {
     const router = useRouter();
     const pathname = usePathname();
+    const { trackContactAction } = useAnalytics();
     // const contactPhone = "+5491121914149";
     // const contactEmail = "estudiorampazzo@gmail.com";
 
@@ -85,6 +87,7 @@ const Header = () => {
             src: IconWhatsapp,
             alt: 'Whatsapp',
             link: 'https://api.whatsapp.com/send?phone=+5491121914149&text=Contacto%20WEB%20-%20Estoy%20Interesado%20en%20las%20jubilaciones%20y%20reajustes',
+            onClick: () => trackContactAction('whatsapp_click', 'whatsapp'),
         },
     ];
     const menuArray = [
@@ -339,6 +342,7 @@ const Header = () => {
                                         <a
                                             href="mailto:estudiorampazzo@gmail.com"
                                             className="bg-[#F8F6F7] py-3 w-full justify-center flex rounded-md"
+                                            onClick={() => trackContactAction('email_click', 'email')}
                                         >
                                             <Image
                                                 src={IconMail}
@@ -349,6 +353,7 @@ const Header = () => {
                                         <a
                                             href="tel:+5491121914149"
                                             className="bg-[#F8F6F7] py-3 w-full justify-center flex rounded-md"
+                                            onClick={() => trackContactAction('phone_click', 'phone')}
                                         >
                                             <Image
                                                 src={IconPhone}
@@ -364,6 +369,7 @@ const Header = () => {
                                                 target="_blank"
                                                 key={index}
                                                 className="bg-[#F8F6F7] py-3 w-full justify-center flex rounded-md"
+                                                onClick={item.onClick}
                                             >
                                                 <Image
                                                     src={item.src}
@@ -536,6 +542,7 @@ const Header = () => {
                                         target="_blank"
                                         key={index}
                                         className="bg-[#F8F6F7] h-fit rounded-md"
+                                        onClick={item.onClick}
                                     >
                                         <Image
                                             src={item.src}

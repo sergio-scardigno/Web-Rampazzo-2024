@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import xss from 'xss';
+import { getServerTrackingData, formatDetailedTrackingInfo, TrackingData } from '@/lib/tracking';
 
 // Importar MongoDB solo si las variables de entorno están disponibles
 let clientPromise: any = null;
@@ -55,6 +56,20 @@ const contactSchema = z.object({
         .refine((val) => !val || !urlRegex.test(val), {
             message: 'No se permiten enlaces web en la consulta',
         }),
+    // Información de tracking opcional
+    tracking: z.object({
+        referrer: z.string().optional(),
+        utm_source: z.string().optional(),
+        utm_medium: z.string().optional(),
+        utm_campaign: z.string().optional(),
+        utm_term: z.string().optional(),
+        utm_content: z.string().optional(),
+        userAgent: z.string().optional(),
+        timestamp: z.string(),
+        pageUrl: z.string().optional(),
+        sessionId: z.string().optional(),
+        source: z.string().optional(),
+    }).optional(),
 });
 
 // ─── Mapeo de tipos de consulta a nombres legibles ───────────────────────────
@@ -78,6 +93,9 @@ const consultTypeLabels = {
 };
 
 export async function POST(req: NextRequest) {
+    // ─── Obtener información de tracking del servidor ─────────────────────
+    const serverTracking = getServerTrackingData(req);
+    
     // ─── Validación y sanitización ─────────────────────
     let data;
     try {
@@ -99,12 +117,19 @@ export async function POST(req: NextRequest) {
     const phone = xss(data.phone);
     const consultType = data.consultType;
     const consulta = data.consulta ? clean(data.consulta) : undefined;
+    
+    // Combinar tracking del cliente y servidor (priorizar cliente si existe)
+    const trackingData: TrackingData = {
+        ...serverTracking,
+        ...data.tracking,
+    };
 
     console.log('Datos recibidos sanitizados:', {
         name,
         phone,
         consultType,
         consulta,
+        tracking: trackingData,
     });
 
     // ─── Guarda en MongoDB ───────────────────────────────
@@ -118,6 +143,7 @@ export async function POST(req: NextRequest) {
                 phone,
                 consultType,
                 consulta,
+                tracking: trackingData,
                 createdAt: new Date(),
             });
             insertedId = result.insertedId.toString();
@@ -135,8 +161,8 @@ export async function POST(req: NextRequest) {
 
         const mailOptions = {
             from: `"Estudio Rampazzo - Contacto Web" <${process.env.GMAIL_USER}>`,
-            to: 'estudiorampazzofernando@gmail.com, sergioscardigno82@gmail.com',
-            //to: 'sergioscardigno82@gmail.com',
+            //to: 'estudiorampazzofernando@gmail.com, sergioscardigno82@gmail.com',
+            to: 'sergioscardigno82@gmail.com',
             subject: `Nuevo contacto - ${
                 consultTypeLabels[consultType] || consultType
             }`,
@@ -165,6 +191,17 @@ export async function POST(req: NextRequest) {
                       ? `<p style="font-size: 16px; margin-bottom: 8px;"><strong>Consulta adicional:</strong> <span style="color: #3b82f6;">${consulta}</span></p>`
                       : ''
               }
+            </div>
+            
+            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #3b82f6;">
+              <h2 style="color: #1e40af; margin-bottom: 15px;">📊 Información de Origen</h2>
+              <div style="font-size: 14px; color: #475569; line-height: 1.6;">
+                ${formatDetailedTrackingInfo(trackingData).split('\n').map(line => 
+                  `<p style="margin: 8px 0; font-size: 14px; color: #475569;">${line}</p>`
+                ).join('')}
+                ${trackingData.sessionId ? `<p style="margin: 8px 0; font-size: 12px; color: #64748b;"><strong>ID de sesión:</strong> ${trackingData.sessionId}</p>` : ''}
+                ${trackingData.pageUrl ? `<p style="margin: 8px 0; font-size: 12px; color: #64748b;"><strong>URL completa:</strong> ${trackingData.pageUrl}</p>` : ''}
+              </div>
             </div>
             
             <div style="background-color: #fef3c7; padding: 15px; border-radius: 8px; margin-bottom: 20px;">

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { montserrat } from "../fonts";
 import { evolventa } from "../fonts";
 import PageLayout from "../components/PageLayout";
+import { getClientTrackingData } from "@/lib/tracking";
 
 type FormInput = {
   name: string;
@@ -22,6 +23,9 @@ const Corporation = () => {
   } = useForm<FormInput>();
 
   async function onSubmit(formData: FormInput) {
+    // Obtener información de tracking del cliente
+    const trackingData = getClientTrackingData();
+    
     await fetch("/api/send", {
       method: "POST",
       headers: {
@@ -30,6 +34,8 @@ const Corporation = () => {
       body: JSON.stringify({
         name: formData.name,
         phone: formData.phone,
+        consultType: 'asesoramiento-empresas',
+        tracking: trackingData,
       }),
     }).then(() => {
       toast.success("¡Gracias! Nos comunicaremos con usted en breve.");

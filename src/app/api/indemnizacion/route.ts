@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import xss from 'xss';
 import nodemailer from 'nodemailer';
+import { getServerTrackingData, formatDetailedTrackingInfo, TrackingData } from '@/lib/tracking';
 
 // Importar MongoDB solo si las variables de entorno están disponibles
 let clientPromise: any = null;
@@ -57,10 +58,27 @@ const indemnizacionSchema = z.object({
             electo: z.boolean().optional(),
         })
         .optional(),
+    // Información de tracking opcional
+    tracking: z.object({
+        referrer: z.string().optional(),
+        utm_source: z.string().optional(),
+        utm_medium: z.string().optional(),
+        utm_campaign: z.string().optional(),
+        utm_term: z.string().optional(),
+        utm_content: z.string().optional(),
+        userAgent: z.string().optional(),
+        timestamp: z.string(),
+        pageUrl: z.string().optional(),
+        sessionId: z.string().optional(),
+        source: z.string().optional(),
+    }).optional(),
 });
 
 export async function POST(req: NextRequest) {
     try {
+        // ─── Obtener información de tracking del servidor ─────────────────────
+        const serverTracking = getServerTrackingData(req);
+        
         // Validación y sanitización
         let data;
         try {
@@ -81,6 +99,12 @@ export async function POST(req: NextRequest) {
         }
 
         const clean = (str: string) => xss(str, { whiteList: {} });
+
+        // Combinar tracking del cliente y servidor (priorizar cliente si existe)
+        const trackingData: TrackingData = {
+            ...serverTracking,
+            ...data.tracking,
+        };
 
         // Normalizar agravantes (si no vienen, setear todo en false)
         const agravantesNormalizados = {
@@ -109,6 +133,7 @@ export async function POST(req: NextRequest) {
             indemnizacionCalculada: data.indemnizacionCalculada,
             quiereContacto: data.quiereContacto,
             agravantes: agravantesNormalizados,
+            tracking: trackingData,
             createdAt: new Date(),
         };
 
@@ -174,6 +199,17 @@ export async function POST(req: NextRequest) {
               <p style="font-size: 16px; margin-bottom: 8px;">
                 <strong>Teléfono:</strong> <span style="color: #3b82f6; font-weight: bold;">${datosSanitizados.telefono}</span>
               </p>
+            </div>
+            
+            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #3b82f6;">
+              <h2 style="color: #1e40af; margin-bottom: 15px;">📊 Información de Origen</h2>
+              <div style="font-size: 14px; color: #475569; line-height: 1.6;">
+                ${formatDetailedTrackingInfo(trackingData).split('\n').map(line => 
+                  `<p style="margin: 8px 0; font-size: 14px; color: #475569;">${line}</p>`
+                ).join('')}
+                ${trackingData.sessionId ? `<p style="margin: 8px 0; font-size: 12px; color: #64748b;"><strong>ID de sesión:</strong> ${trackingData.sessionId}</p>` : ''}
+                ${trackingData.pageUrl ? `<p style="margin: 8px 0; font-size: 12px; color: #64748b;"><strong>URL completa:</strong> ${trackingData.pageUrl}</p>` : ''}
+              </div>
             </div>
 
             <div style="background-color: #fef3c7; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
