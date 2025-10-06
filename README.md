@@ -103,6 +103,76 @@ npm run start        # Servidor de producción
 npm run lint         # Linter
 ```
 
+## 🤖 MCP: Integración con ChatGPT / clientes compatibles
+
+Este proyecto incluye un servidor MCP (Model Context Protocol) que expone herramientas de cálculo para ser usadas desde ChatGPT (con soporte MCP) u otros clientes compatibles.
+
+### 1) Ejecutar el servidor MCP
+
+```bash
+npm install
+npm run mcp:calculadora
+```
+
+Esto inicia el servidor `calculadora-rampazzo` por STDIO.
+
+### 2) Registrar el servidor en tu cliente MCP
+
+Ya se incluyó en `package.json` el bloque `mcpServers`:
+
+```json
+{
+  "mcpServers": {
+    "calculadora-rampazzo": {
+      "command": "node",
+      "args": ["mcp/calculadora-server.mjs"],
+      "env": {}
+    }
+  }
+}
+```
+
+Configura tu cliente (ChatGPT con MCP u OpenAI Desktop) para leer este bloque o agrega manualmente un servidor con ese comando.
+
+### 3) Herramientas disponibles
+
+- calcular_incapacidad: Calcula prestación (Ley 26.773, Decreto 669/19)
+  - Input: `{ ingresoBase: number, porcentajeIncapacidad: number, edad: number, tipoContingencia: 'accidente_trabajo' | 'enfermedad_profesional' | 'accidente_in_itinere' | 'otro' }`
+
+- calcular_indemnizacion: Calcula indemnización (LCT)
+  - Input: `{ salario: number, fechaIngreso: string, fechaEgreso: string, preaviso: boolean, agravantes?: object }`
+
+### 4) Ejemplos de llamadas
+
+```json
+// calcular_incapacidad
+{
+  "name": "calcular_incapacidad",
+  "arguments": {
+    "ingresoBase": 800000,
+    "porcentajeIncapacidad": 55,
+    "edad": 45,
+    "tipoContingencia": "accidente_trabajo"
+  }
+}
+```
+
+```json
+// calcular_indemnizacion
+{
+  "name": "calcular_indemnizacion",
+  "arguments": {
+    "salario": 500000,
+    "fechaIngreso": "2021-01-10",
+    "fechaEgreso": "2024-08-18",
+    "preaviso": false,
+    "agravantes": { "certificadosArt80": true }
+  }
+}
+```
+
+La respuesta de cada herramienta devuelve `total` y un objeto `componentes` con los valores desglosados.
+
 ## 📞 Contacto
 
 **Estudio Rampazzo**

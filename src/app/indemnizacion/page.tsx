@@ -39,6 +39,7 @@ import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { getClientTrackingData } from '@/lib/tracking';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { calculateIndemnizacion } from '@/lib/calculators';
 
 interface IndemnizacionResult {
     indemnizacionBasica: number;
@@ -393,128 +394,13 @@ export default function IndemnizacionPage() {
             return;
         }
 
-        // Calcular antigüedad a partir de las fechas
-        const antiguedad = (fechaEgreso.getTime() - fechaIngreso.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
-        const años = Math.floor(antiguedad);
-        const meses = Math.floor((antiguedad - años) * 12);
-
-        // 1) Antigüedad Art. 245: 1 mes por año + fracción mayor a 3 meses
-        // En tu ejemplo: 1 año 7 meses = 2 meses de salario
-        let indemnizacionAntiguedad;
-        if (meses >= 3) {
-            indemnizacionAntiguedad = salario * (años + 1); // +1 por los meses
-        } else {
-            indemnizacionAntiguedad = salario * años;
-        }
-
-        // 2) Sustitutiva de Preaviso: 1 mes si no hay preaviso
-        const sustitutivaPreaviso = preaviso ? 0 : salario;
-        
-        // 3) SAC sobre Preaviso: 1/12 del preaviso
-        const sacPreaviso = sustitutivaPreaviso / 12;
-
-        // 4) Días trabajados del mes: proporcional a los días trabajados
-        // En tu ejemplo: 18 días del mes de agosto (31 días) = $464.516,13
-        const diasTrabajadosMes = fechaEgreso.getDate();
-        const diasDelMesDespido = new Date(fechaEgreso.getFullYear(), fechaEgreso.getMonth() + 1, 0).getDate();
-        const diasTrabajadosMesIndemnizacion = (salario / diasDelMesDespido) * diasTrabajadosMes;
-        
-        // 5) Integración del mes de despido: salario - días trabajados
-        const integracionMesDespido = salario - diasTrabajadosMesIndemnizacion;
-        
-        // 6) SAC sobre integración del mes: 1/12 de la integración
-        const sacIntegracionMes = integracionMesDespido / 12;
-
-		// 7) SAC proporcional: por los días trabajados en el semestre
-		// Fórmula legal: (50% del mejor salario del semestre) × (días trabajados en el semestre / días totales del semestre)
-		const year = fechaEgreso.getFullYear();
-		const isSegundoSemestre = fechaEgreso.getMonth() >= 6; // Jul (6) a Dic (11)
-		const inicioSemestre = new Date(year, isSegundoSemestre ? 6 : 0, 1);
-		const finSemestre = new Date(year, isSegundoSemestre ? 11 : 5, isSegundoSemestre ? 31 : 30);
-		const msPorDia = 1000 * 60 * 60 * 24;
-		const diasTotalesSemestre = Math.floor((finSemestre.getTime() - inicioSemestre.getTime()) / msPorDia) + 1;
-		const diasTrabajadosSemestre = Math.floor((fechaEgreso.getTime() - inicioSemestre.getTime()) / msPorDia) + 1;
-		const sacProporcional = (salario / 2) * (diasTrabajadosSemestre / diasTotalesSemestre);
-
-		// 8) Vacaciones no gozadas: proporcionales al año del despido
-		// Días de vacaciones según antigüedad (hasta 5 años: 14 días)
-		const diasVacacionesAnuales = 14;
-		const inicioAnio = new Date(year, 0, 1);
-		const finAnio = new Date(year, 11, 31);
-		const diasTotalesAnio = Math.floor((finAnio.getTime() - inicioAnio.getTime()) / msPorDia) + 1; // 365 o 366
-		const diasTrabajadosAnio = Math.floor((fechaEgreso.getTime() - inicioAnio.getTime()) / msPorDia) + 1;
-		const diasVacacionesProporcionales = diasVacacionesAnuales * (diasTrabajadosAnio / diasTotalesAnio);
-		const vacacionesNoGozadas = (salario / 25) * diasVacacionesProporcionales;
-		
-		// 9) SAC sobre vacaciones no gozadas: 1/12 de las vacaciones
-		const sacVacacionesNoGozadas = vacacionesNoGozadas / 12;
-
-        // Cálculo de agravantes
-        let agravantesTotal = 0;
-        const agravantesDetalle = {
-            trabajoNoRegistrado: 0,
-            otrasInfracciones: 0,
-            indemnizacionesAgravadas: 0,
-            estabilidadSocial: 0,
-        };
-
-        // Trabajo no registrado - Ley 24013
-        if (agravantes.ley24013_intimacion && agravantes.ley24013_art8) {
-            agravantesDetalle.trabajoNoRegistrado += salario * 0.25; // 1/4 de remuneraciones
-        }
-        if (agravantes.ley24013_intimacion && agravantes.ley24013_art9) {
-            agravantesDetalle.trabajoNoRegistrado += salario * 0.25; // 1/4 de remuneraciones
-        }
-        if (agravantes.ley24013_intimacion && agravantes.ley24013_art10) {
-            agravantesDetalle.trabajoNoRegistrado += salario * 0.25; // 1/4 de remuneraciones
-        }
-        if (agravantes.ley24013_art15) {
-            agravantesDetalle.trabajoNoRegistrado += (indemnizacionAntiguedad + sustitutivaPreaviso) * 2; // Duplicación
-        }
-        if (agravantes.ley25323_art1) {
-            agravantesDetalle.trabajoNoRegistrado += indemnizacionAntiguedad; // 100% adicional
-        }
-
-        // Otras infracciones
-        if (agravantes.intimacionPago) {
-            // Art. 2 Ley 25323: 50% de la sumatoria de Antigüedad + pre-aviso + integración del mes de despido
-            const baseParaMulta = indemnizacionAntiguedad + sustitutivaPreaviso + integracionMesDespido;
-            agravantesDetalle.otrasInfracciones += baseParaMulta * 0.5;
-        }
-        if (agravantes.certificadosArt80) {
-            // Art. 80 LCT: multiplicar por 3 el haber denunciado por la persona
-            agravantesDetalle.otrasInfracciones += salario * 3;
-        }
-
-        // Indemnizaciones agravadas
-        if (agravantes.embarazoMaternidad) {
-            agravantesDetalle.indemnizacionesAgravadas += salario * 6; // 6 meses de salario
-        }
-        if (agravantes.matrimonio) {
-            agravantesDetalle.indemnizacionesAgravadas += salario * 3; // 3 meses de salario
-        }
-
-        // Estabilidad social
-        if (agravantes.postulanteCandidato) {
-            agravantesDetalle.estabilidadSocial += salario * 12; // 12 meses de salario
-        }
-        if (agravantes.electo) {
-            agravantesDetalle.estabilidadSocial += salario * 24; // 24 meses de salario
-        }
-
-        agravantesTotal = Object.values(agravantesDetalle).reduce((sum, value) => sum + value, 0);
-
-        const total =
-            indemnizacionAntiguedad +
-            sustitutivaPreaviso +
-            sacPreaviso +
-            diasTrabajadosMesIndemnizacion +
-            integracionMesDespido +
-            sacIntegracionMes +
-            sacProporcional +
-            vacacionesNoGozadas +
-            sacVacacionesNoGozadas +
-            agravantesTotal;
+        const calc = calculateIndemnizacion({
+            salario,
+            fechaIngreso,
+            fechaEgreso,
+            preaviso,
+            agravantes,
+        });
 
 		console.log('DEBUG conceptos', {
 			antiguedad: indemnizacionAntiguedad,
@@ -529,20 +415,48 @@ export default function IndemnizacionPage() {
 			total: total,
 		});
 
+        // Calcular nuevamente años/meses solo para mostrar en la descripción
+        const antiguedad = (fechaEgreso.getTime() - fechaIngreso.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+        const años = Math.floor(antiguedad);
+        const meses = Math.floor((antiguedad - años) * 12);
+
+        // Reconstituir conceptos principales para UI
+        const diasTrabajadosMes = fechaEgreso.getDate();
+        const diasDelMesDespido = new Date(fechaEgreso.getFullYear(), fechaEgreso.getMonth() + 1, 0).getDate();
+        const diasTrabajadosMesIndemnizacion = (salario / diasDelMesDespido) * diasTrabajadosMes;
+        const integracionMesDespido = salario - diasTrabajadosMesIndemnizacion;
+        const sacIntegracionMes = integracionMesDespido / 12;
+        const year = fechaEgreso.getFullYear();
+        const isSegundoSemestre = fechaEgreso.getMonth() >= 6;
+        const inicioSemestre = new Date(year, isSegundoSemestre ? 6 : 0, 1);
+        const finSemestre = new Date(year, isSegundoSemestre ? 11 : 5, isSegundoSemestre ? 31 : 30);
+        const msPorDia = 1000 * 60 * 60 * 24;
+        const diasTotalesSemestre = Math.floor((finSemestre.getTime() - inicioSemestre.getTime()) / msPorDia) + 1;
+        const diasTrabajadosSemestre = Math.floor((fechaEgreso.getTime() - inicioSemestre.getTime()) / msPorDia) + 1;
+        const sacProporcional = (salario / 2) * (diasTrabajadosSemestre / diasTotalesSemestre);
+        const inicioAnio = new Date(year, 0, 1);
+        const finAnio = new Date(year, 11, 31);
+        const diasTotalesAnio = Math.floor((finAnio.getTime() - inicioAnio.getTime()) / msPorDia) + 1;
+        const diasTrabajadosAnio = Math.floor((fechaEgreso.getTime() - inicioAnio.getTime()) / msPorDia) + 1;
+        const diasVacacionesAnuales = 14;
+        const diasVacacionesProporcionales = diasVacacionesAnuales * (diasTrabajadosAnio / diasTotalesAnio);
+        const vacacionesNoGozadas = (salario / 25) * diasVacacionesProporcionales;
+        const sacVacacionesNoGozadas = vacacionesNoGozadas / 12;
+
         const desglose = [
             {
                 concepto: 'Antigüedad Art. 245',
-                monto: indemnizacionAntiguedad,
+                monto: calc.indemnizacionAntiguedad,
                 descripcion: `${años} año${años !== 1 ? 's' : ''} y ${meses} mes${meses !== 1 ? 'es' : ''} × salario`,
             },
             {
                 concepto: 'Sustitutiva de Preaviso',
-                monto: sustitutivaPreaviso,
+                monto: preaviso ? 0 : salario,
                 descripcion: preaviso ? 'Con preaviso (sin indemnización)' : 'Sin preaviso (1 mes de salario)',
             },
             {
                 concepto: 'SAC Preaviso',
-                monto: sacPreaviso,
+                monto: (preaviso ? 0 : salario) / 12,
                 descripcion: 'SAC sobre preaviso (1/12)',
             },
             {
@@ -608,12 +522,12 @@ export default function IndemnizacionPage() {
         }
 
         const resultadoCalculado = {
-            indemnizacionBasica: indemnizacionAntiguedad,
-            indemnizacionAntiguedad: indemnizacionAntiguedad,
+            indemnizacionBasica: calc.indemnizacionAntiguedad,
+            indemnizacionAntiguedad: calc.indemnizacionAntiguedad,
             indemnizacionVacaciones: vacacionesNoGozadas,
-            indemnizacionSAC: sacProporcional + sacPreaviso + sacIntegracionMes + sacVacacionesNoGozadas,
-            agravantes: agravantesDetalle,
-            total,
+            indemnizacionSAC: sacProporcional + (preaviso ? 0 : salario) / 12 + sacIntegracionMes + sacVacacionesNoGozadas,
+            agravantes: calc.agravantes,
+            total: calc.total,
             desglose,
         };
 
@@ -621,7 +535,7 @@ export default function IndemnizacionPage() {
 
         // Trackear cálculo completado
         trackCalculation('indemnizacion', {
-            total_amount: total,
+            total_amount: calc.total,
             salary: salario,
             years_worked: años,
             months_worked: meses,

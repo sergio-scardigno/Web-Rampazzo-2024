@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import { calculateIncapacidad } from '@/lib/calculators';
 
 interface IncapacidadResult {
     prestacionBasica: number;
@@ -70,10 +71,8 @@ export default function IncapacidadPage() {
         texto: string;
     } | null>(null);
 
-    // Valores actualizados según el documento (2024-2025)
+    // Valores para mostrar en el desglose (las constantes ya se usan dentro del calculador compartido)
     const PISO_MINIMO = 55699217;
-    const COMPENSACION_ADICIONAL_50_66 = 24755211;
-    const COMPENSACION_ADICIONAL_TOTAL = 30944014;
 
     const tiposContingencia = [
         { id: 'accidente_trabajo', nombre: 'Accidente de trabajo' },
@@ -84,9 +83,7 @@ export default function IncapacidadPage() {
 
     const calcularIncapacidad = () => {
         const ingresoBase = parseFloat(formData.ingresoBase);
-        const porcentajeIncapacidad = parseFloat(
-            formData.porcentajeIncapacidad
-        );
+        const porcentajeIncapacidad = parseFloat(formData.porcentajeIncapacidad);
         const edad = parseFloat(formData.edad);
 
         if (!ingresoBase || !porcentajeIncapacidad || !edad || !formData.fechaContingencia || !formData.fechaPMI) {
@@ -94,75 +91,50 @@ export default function IncapacidadPage() {
             return;
         }
 
-        // Fórmula principal: 53 × (VIB) × porcentaje × (65 / edad)
-        const prestacionBasica =
-            53 * ingresoBase * (porcentajeIncapacidad / 100) * (65 / edad);
-
-        // Piso mínimo según porcentaje
-        const pisoMinimo = PISO_MINIMO * (porcentajeIncapacidad / 100);
-
-        // Compensación adicional según el rango de incapacidad
-        let compensacionAdicional = 0;
-        if (porcentajeIncapacidad > 50 && porcentajeIncapacidad < 66) {
-            compensacionAdicional = COMPENSACION_ADICIONAL_50_66;
-        } else if (porcentajeIncapacidad >= 66) {
-            compensacionAdicional = COMPENSACION_ADICIONAL_TOTAL;
-        }
-
-        // Indemnización adicional del 20% para accidentes de trabajo y enfermedades profesionales
-        let indemnizacionAdicional = 0;
-        if (
-            (formData.tipoContingencia === 'accidente_trabajo' ||
-                formData.tipoContingencia === 'enfermedad_profesional') &&
-            porcentajeIncapacidad > 0
-        ) {
-            const baseParaIndemnizacion =
-                Math.max(prestacionBasica, pisoMinimo) + compensacionAdicional;
-            indemnizacionAdicional = baseParaIndemnizacion * 0.2;
-        }
-
-        const total =
-            Math.max(prestacionBasica, pisoMinimo) +
-            compensacionAdicional +
-            indemnizacionAdicional;
+        const calc = calculateIncapacidad({
+            ingresoBase,
+            porcentajeIncapacidad,
+            edad,
+            tipoContingencia: formData.tipoContingencia as any,
+        });
 
         const desglose = [
             {
                 concepto: 'Prestación Básica',
-                monto: prestacionBasica,
+                monto: calc.prestacionBasica,
                 descripcion: `53 × $${ingresoBase.toLocaleString()} × ${porcentajeIncapacidad}% × (65/${edad})`,
             },
             {
                 concepto: 'Piso Mínimo',
-                monto: pisoMinimo,
+                monto: calc.pisoMinimo,
                 descripcion: `$${PISO_MINIMO.toLocaleString()} × ${porcentajeIncapacidad}%`,
             },
         ];
 
-        if (compensacionAdicional > 0) {
+        if (calc.compensacionAdicional > 0) {
             desglose.push({
                 concepto: 'Compensación Adicional (CAPU)',
-                monto: compensacionAdicional,
+                monto: calc.compensacionAdicional,
                 descripcion:
                     porcentajeIncapacidad >= 66 ? 'ILP Total' : 'ILP 50-66%',
             });
         }
 
-        if (indemnizacionAdicional > 0) {
+        if (calc.indemnizacionAdicional > 0) {
             desglose.push({
                 concepto: 'Indemnización Adicional (IAPU)',
-                monto: indemnizacionAdicional,
+                monto: calc.indemnizacionAdicional,
                 descripcion:
                     '20% adicional por accidente/enfermedad profesional',
             });
         }
 
         setResultado({
-            prestacionBasica,
-            pisoMinimo,
-            compensacionAdicional,
-            indemnizacionAdicional,
-            total,
+            prestacionBasica: calc.prestacionBasica,
+            pisoMinimo: calc.pisoMinimo,
+            compensacionAdicional: calc.compensacionAdicional,
+            indemnizacionAdicional: calc.indemnizacionAdicional,
+            total: calc.total,
             desglose,
         });
 
