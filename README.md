@@ -71,9 +71,11 @@ EMAIL_PASS=tu-password
 
 ### Analytics
 
-- **Plausible Analytics** integrado
+- **Plausible Analytics** integrado (privado y ligero)
+- **Matomo Analytics** integrado (completo y detallado)
 - **Tracking de visitantes** con información detallada
 - **Eventos personalizados** para formularios y calculadora
+- **Doble capa de analytics** para máxima cobertura de datos
 
 ## 📊 Funcionalidades
 
