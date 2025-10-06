@@ -1,4 +1,5 @@
-const BASE = process.env.NEXT_PUBLIC_CALC_API_BASE || 'https://scardigno-calculadora-rampazzo.ndorzn.easypanel.host:8001';
+const DIRECT_BASE = process.env.NEXT_PUBLIC_CALC_API_BASE || 'https://scardigno-calculadora-rampazzo.ndorzn.easypanel.host:8001';
+const USE_PROXY = (process.env.NEXT_PUBLIC_CALC_API_USE_PROXY || '0') === '1';
 
 export type AgravantesPayload = {
 	ley24013_intimacion?: boolean;
@@ -24,7 +25,22 @@ export type IndemnizacionRequestPayload = {
 };
 
 export async function calcularIndemnizacion(payload: IndemnizacionRequestPayload) {
-	const resp = await fetch(`${BASE}/calculate/indemnizacion`, {
+	if (USE_PROXY) {
+		const resp = await fetch(`/api/calc/indemnizacion`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(payload),
+			cache: 'no-store',
+		});
+		if (!resp.ok) {
+			let detail = '';
+			try { detail = await resp.text(); } catch {}
+			throw new Error(`Error cálculo vía proxy (${resp.status}): ${detail}`);
+		}
+		return resp.json();
+	}
+
+	const resp = await fetch(`${DIRECT_BASE}/calculate/indemnizacion`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(payload),
