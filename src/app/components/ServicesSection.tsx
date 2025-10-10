@@ -8,32 +8,38 @@ const services = [
   {
     icon: FaBalanceScale,
     title: "Despidos",
-    description: "Asesoramos y representamos a trabajadores despedidos injustamente. Evaluamos tu caso, reclamamos indemnizaciones, sueldos adeudados, diferencias salariales y todos los derechos que te correspondan."
+    description: "Asesoramos y representamos a trabajadores despedidos injustamente. Evaluamos tu caso, reclamamos indemnizaciones, sueldos adeudados, diferencias salariales y todos los derechos que te correspondan.",
+    href: "/servicios/despidos",
   },
   {
     icon: FaUserTie,
     title: "Accidentes y enfermedades laborales",
-    description: "Reclamamos ante la ART por accidentes de trabajo, enfermedades profesionales, secuelas físicas o psicológicas. También iniciamos juicios por incapacidad y buscamos la máxima indemnización posible."
+    description: "Reclamamos ante la ART por accidentes de trabajo, enfermedades profesionales, secuelas físicas o psicológicas. También iniciamos juicios por incapacidad y buscamos la máxima indemnización posible.",
+    href: "/servicios/accidentes-laborales",
   },
   {
     icon: FaCarCrash,
     title: "Accidente de tránsito",
-    description: "Si sufriste un accidente de tránsito como conductor, acompañante o peatón, gestionamos tu indemnización ante la aseguradora. Nos ocupamos de todo: daños físicos, materiales y pérdida de ingresos."
+    description: "Si sufriste un accidente de tránsito como conductor, acompañante o peatón, gestionamos tu indemnización ante la aseguradora. Nos ocupamos de todo: daños físicos, materiales y pérdida de ingresos.",
+    href: "/servicios/accidentes-transito",
   },
   {
     icon: FaLandmark,
     title: "Defensas penales",
-    description: "Brindamos defensa penal en todas las instancias: denuncias, detenciones, causas judiciales. Intervenimos con rapidez, seriedad y estrategia para proteger tus derechos y garantizar una defensa efectiva."
+    description: "Brindamos defensa penal en todas las instancias: denuncias, detenciones, causas judiciales. Intervenimos con rapidez, seriedad y estrategia para proteger tus derechos y garantizar una defensa efectiva.",
+    href: "/servicios/defensas-penales",
   },
   {
     icon: FaPassport,
     title: "Ciudadanía argentina",
-    description: "Tramitamos la ciudadanía argentina para extranjeros de forma completa. Te acompañamos en cada paso: documentación, presentación judicial, seguimiento del expediente y obtención de la sentencia."
+    description: "Tramitamos la ciudadanía argentina para extranjeros de forma completa. Te acompañamos en cada paso: documentación, presentación judicial, seguimiento del expediente y obtención de la sentencia.",
+    href: "/servicios/ciudadania",
   },
   {
     icon: FaHandshake,
     title: "Sucesiones",
-    description: "Realizamos sucesiones en todo el país, de forma simple y rápida. Regularizamos bienes, propiedades y cuentas bancarias para que los herederos puedan disponer de su parte legal sin demoras."
+    description: "Realizamos sucesiones en todo el país, de forma simple y rápida. Regularizamos bienes, propiedades y cuentas bancarias para que los herederos puedan disponer de su parte legal sin demoras.",
+    href: "/servicios/sucesiones",
   }
 ];
 
@@ -67,9 +73,10 @@ const ServicesSection = () => {
             const isHovered = hoveredIndex === index;
             
             return (
-              <div 
-                key={index}
-                className="p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#962C52]"
+              <Link 
+                key={service.href}
+                href={service.href}
+                className="block p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-[#962C52]"
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
@@ -88,7 +95,7 @@ const ServicesSection = () => {
                   <h3 className="text-xl font-semibold text-black mb-3">{service.title}</h3>
                   <p className="text-gray-600">{service.description}</p>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
