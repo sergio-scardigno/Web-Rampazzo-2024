@@ -38,7 +38,12 @@ export const feedbackRef: RefObject<HTMLDivElement> = createRef();
 
 const socialArray = [
   // { src: IconTelegram, alt: "Telegram", link: "https://t.me/olga_drapeko" },
-  { src: IconWhatsapp, alt: "Whatsapp", link: "https://api.whatsapp.com/send?phone=+5491121914149&text=Contacto%20WEB%20-%20Estoy%20Interesado%20en%20las%20jubilaciones%20y%20reajustes" },
+  { 
+    src: IconWhatsapp, 
+    alt: "Whatsapp", 
+    link: "https://api.whatsapp.com/send?phone=+5491121914149&text=Contacto%20WEB%20-%20Estoy%20Interesado%20en%20las%20jubilaciones%20y%20reajustes",
+    action: 'whatsapp_click'
+  },
 ];
 
 type FormInput = {
@@ -54,7 +59,7 @@ interface FeedbackFormProps {
 
 const FeedbackForm: React.FC<FeedbackFormProps> = ({ defaultService = 'general' }) => {
   const pathname = usePathname();
-  const { trackFormSubmission, trackContactAction } = useAnalytics();
+  const { trackFormSubmission, trackContactAction, trackEvent } = useAnalytics();
   const {
     register,
     handleSubmit,
@@ -102,6 +107,42 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ defaultService = 'general' 
       consulta: '',
     });
   }
+
+  const handleWhatsAppClick = async () => {
+    // Trackear el click de WhatsApp
+    trackEvent('whatsapp_button_clicked', {
+      source: 'footer_form',
+      has_form_data: false
+    });
+
+    // Registrar en la base de datos
+    const trackingData = getClientTrackingData();
+    
+    try {
+      await fetch("/api/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: 'Usuario WhatsApp',
+          phone: '+5491121914149',
+          consultType: 'jubilacion',
+          source: 'footer_whatsapp_button',
+          action: 'whatsapp_click',
+          tracking: trackingData,
+        }),
+      });
+    } catch (error) {
+      console.error('Error registrando WhatsApp click:', error);
+    }
+
+    // Abrir WhatsApp
+    const message = "Contacto WEB - Estoy Interesado en las jubilaciones y reajustes";
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=+5491121914149&text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   return (
     <section id="feedback" ref={feedbackRef}>
@@ -257,11 +298,10 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ defaultService = 'general' 
             </h3>
             <div className="flex items-center p-3 md:p-[1.11vh] bg-white rounded-lg border border-gray-200 hover:border-[#962C52] transition-colors duration-300">
               {socialArray.map((item, index) => (
-                <Link
-                  href={item.link}
-                  target="_blank"
+                <button
+                  onClick={handleWhatsAppClick}
                   key={index}
-                  className="flex items-center gap-3 md:gap-[0.83vw] w-full"
+                  className="flex items-center gap-3 md:gap-[0.83vw] w-full text-left"
                 >
                   <div className="bg-[#25D366] p-2 md:p-[0.74vh] rounded-full">
                     <Image
@@ -272,7 +312,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({ defaultService = 'general' 
                     />
                   </div>
                   <span className="text-[#1B1743] font-medium">Chatear por WhatsApp</span>
-                </Link>
+                </button>
               ))}
             </div>
           </div>

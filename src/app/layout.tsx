@@ -5,6 +5,8 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import { Toaster } from 'react-hot-toast';
 import { evolventa } from './fonts';
+import ExitIntentProvider from './components/ExitIntentProvider';
+import LeadCaptureBanner from './components/LeadCaptureBanner';
 
 export const metadata: Metadata = {
     title: 'Estudio Rampazzo',
@@ -67,10 +69,17 @@ export default function RootLayout({
             </head>
             <body className={`select-none ${evolventa.className} h-screen`}>
                 <Toaster position="bottom-right" />
-                <Header />
-                {children}
-
-                <Footer />
+                <ExitIntentProvider>
+                    <LeadCaptureBanner 
+                        variant="top" 
+                        message="¿Necesitas ayuda con tu jubilación? Consulta gratuita disponible"
+                        autoHide={true}
+                        hideDelay={8000}
+                    />
+                    <Header />
+                    {children}
+                    <Footer />
+                </ExitIntentProvider>
             </body>
         </html>
     );

@@ -2,6 +2,9 @@ import React from "react";
 import { montserrat } from "../fonts";
 import { evolventa } from "../fonts";
 import PageLayout from "../components/PageLayout";
+import Testimonials from "../components/Testimonials";
+import SeniorOptimizedForm from "../components/SeniorOptimizedForm";
+import Credentials from "../components/Credentials";
 
 const services = [
   {
@@ -100,29 +103,29 @@ export default function JubilacionesPage() {
     >
       <div className="grid md:grid-cols-6 md:gap-x-[1.25vw] text-[#1B1743]">
         <div className="md:col-span-4">
-          <h1 className={`pb-4 md:pb-[2.59vh] text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] font-bold ${evolventa.className}`}>
+          <h1 className={`senior-heading text-[#1B1743] ${evolventa.className}`}>
             Asesoramiento Integral en Derecho Previsional
           </h1>
           
-          <p className="pb-[60px] md:pb-[5.55vh] text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">
+          <p className="senior-text text-gray-700 senior-spacing-lg">
             En Estudio Rampazzo nos especializamos en derecho previsional, acompañándote en cada paso del proceso para que puedas acceder a tu jubilación o pensión de manera segura y con el mejor asesoramiento legal.
           </p>
 
-          <div className="h-fit px-4 py-4 md:px-[1.25vw] md:py-[2.22vh] bg-[#F8F6F7] border-[0.09vh] border-[#F0F0F5] rounded-md shadow-md mb-[60px] md:mb-[5.55vh]">
-            <p className="font-medium text-[#962C52]">
+          <div className="senior-card bg-gradient-to-r from-[#F8F6F7] to-[#F0F0F5] border-[#962C52] senior-spacing-lg">
+            <p className="senior-text font-semibold text-[#962C52] text-center">
               Más de 15 años de experiencia en el rubro nos permiten ofrecerte el mejor asesoramiento para que accedas a tus derechos previsionales de la manera más beneficiosa.
             </p>
           </div>
 
-          <h1 className={`pb-4 md:pb-[2.59vh] text-[24px] md:text-[3.33vh] leading-[26px] md:leading-[3.51vh] font-bold ${evolventa.className}`}>
+          <h2 className={`senior-heading text-[#1B1743] ${evolventa.className}`}>
             Nuestros Servicios
-          </h1>
+          </h2>
           
-          <div className="grid md:grid-cols-2 gap-6 pb-[60px] md:pb-[5.55vh]">
+          <div className="grid md:grid-cols-2 gap-6 senior-spacing-lg">
             {services.map((service, index) => (
-              <div key={index} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                <h4 className="font-semibold text-[#1B1743] mb-2">{service.title}</h4>
-                <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">{service.description}</p>
+              <div key={index} className="senior-card hover:shadow-lg transition-all duration-300">
+                <h4 className="senior-text font-semibold text-[#1B1743] mb-3">{service.title}</h4>
+                <p className="senior-text text-gray-700">{service.description}</p>
               </div>
             ))}
           </div>
@@ -169,10 +172,32 @@ export default function JubilacionesPage() {
           <div className="space-y-6">
             {faqItems.map((faq, index) => (
               <div key={index} className="border-b border-gray-100 pb-4">
-                <h2 className="font-medium text-[#1B1743] mb-2">{faq.question}</h2>
-                <p className="text-sm md:text-[1.48vh] leading-5 md:leading-[2.22vh] font-medium">{faq.answer}</p>
+                <h2 className="senior-text font-semibold text-[#1B1743] mb-2">{faq.question}</h2>
+                <p className="senior-text text-gray-700">{faq.answer}</p>
               </div>
             ))}
+          </div>
+
+          {/* Credenciales */}
+          <div className="mt-16">
+            <Credentials />
+          </div>
+
+          {/* Testimonios */}
+          <div className="mt-16">
+            <Testimonials />
+          </div>
+        </div>
+
+        {/* Sidebar con formulario optimizado */}
+        <div className="md:col-span-2 mt-8 md:mt-0">
+          <div className="sticky top-8">
+            <SeniorOptimizedForm
+              defaultService="jubilacion"
+              title="Consulta Gratuita"
+              description="Complete el formulario y nos comunicaremos con usted en menos de 24 horas para una consulta gratuita sobre su situación previsional."
+              className="shadow-xl"
+            />
           </div>
         </div>
       </div>

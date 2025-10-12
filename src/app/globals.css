@@ -44,6 +44,18 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    
+    /* Variables para accesibilidad de personas mayores */
+    --senior-text-size: 18px;
+    --senior-text-size-mobile: 16px;
+    --senior-line-height: 1.6;
+    --senior-button-height: 48px;
+    --senior-button-padding: 16px 24px;
+    --senior-input-height: 48px;
+    --senior-input-padding: 16px;
+    --senior-spacing: 24px;
+    --senior-border-radius: 8px;
+    --senior-focus-ring: 0 0 0 3px rgba(59, 130, 246, 0.5);
   }
   .dark {
     --background: 222.2 84% 4.9%;
@@ -106,6 +118,37 @@
 }
 .phone-input-custom .PhoneInputCountryIcon {
   box-shadow: none;
+}
+
+/* ==== ESTILOS PARA INPUT DE TELÉFONO EN SIDEBAR (FONDO BLANCO) ==== */
+.phone-input-sidebar .PhoneInputInput {
+  background-color: white;
+  color: #374151;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  height: 3rem;
+  width: 100%;
+  transition: all 0.3s ease;
+  font-size: 1.125rem;
+}
+.phone-input-sidebar .PhoneInputInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+.phone-input-sidebar .PhoneInputCountry {
+  background-color: white;
+  border: 2px solid #d1d5db;
+  border-right: none;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+.phone-input-sidebar .PhoneInputCountrySelect {
+  color: #374151;
+  font-size: 1.125rem;
+}
+.phone-input-sidebar .PhoneInputCountryIcon {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 .PhoneInputCountrySelect-menu {
   background-color: #18181b;
@@ -319,4 +362,195 @@ select:focus {
 .animate-bell {
   animation: bell 3s ease-in-out infinite;
   transform-origin: top center;
+}
+
+/* ==== ESTILOS DE ACCESIBILIDAD PARA PERSONAS MAYORES ==== */
+@layer utilities {
+  /* Tipografía optimizada para personas mayores */
+  .senior-text {
+    font-size: var(--senior-text-size);
+    line-height: var(--senior-line-height);
+    font-weight: 400;
+  }
+  
+  .senior-text-mobile {
+    font-size: var(--senior-text-size-mobile);
+    line-height: var(--senior-line-height);
+    font-weight: 400;
+  }
+  
+  .senior-heading {
+    font-size: calc(var(--senior-text-size) * 1.5);
+    line-height: 1.3;
+    font-weight: 700;
+    margin-bottom: var(--senior-spacing);
+  }
+  
+  .senior-heading-mobile {
+    font-size: calc(var(--senior-text-size-mobile) * 1.4);
+    line-height: 1.3;
+    font-weight: 700;
+    margin-bottom: var(--senior-spacing);
+  }
+  
+  /* Botones optimizados para personas mayores */
+  .senior-button {
+    min-height: var(--senior-button-height);
+    padding: var(--senior-button-padding);
+    font-size: var(--senior-text-size);
+    font-weight: 600;
+    border-radius: var(--senior-border-radius);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    gap: 8px;
+  }
+  
+  .senior-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .senior-button:focus {
+    outline: none;
+    box-shadow: var(--senior-focus-ring);
+  }
+  
+  .senior-button:active {
+    transform: translateY(0);
+  }
+  
+  /* Inputs optimizados para personas mayores */
+  .senior-input {
+    min-height: var(--senior-input-height);
+    padding: var(--senior-input-padding);
+    font-size: var(--senior-text-size);
+    border: 2px solid #d1d5db;
+    border-radius: var(--senior-border-radius);
+    transition: all 0.3s ease;
+    background-color: white;
+  }
+  
+  .senior-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: var(--senior-focus-ring);
+  }
+  
+  .senior-input::placeholder {
+    font-size: var(--senior-text-size);
+    color: #6b7280;
+  }
+  
+  /* Labels optimizados */
+  .senior-label {
+    font-size: var(--senior-text-size);
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  /* Espaciado optimizado */
+  .senior-spacing {
+    margin-bottom: var(--senior-spacing);
+  }
+  
+  .senior-spacing-sm {
+    margin-bottom: calc(var(--senior-spacing) / 2);
+  }
+  
+  .senior-spacing-lg {
+    margin-bottom: calc(var(--senior-spacing) * 1.5);
+  }
+  
+  /* Contraste mejorado */
+  .senior-high-contrast {
+    color: #000000;
+    background-color: #ffffff;
+  }
+  
+  .senior-high-contrast-dark {
+    color: #ffffff;
+    background-color: #000000;
+  }
+  
+  /* Navegación simplificada */
+  .senior-nav-link {
+    font-size: var(--senior-text-size);
+    font-weight: 500;
+    padding: 12px 16px;
+    border-radius: var(--senior-border-radius);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .senior-nav-link:hover {
+    background-color: #f3f4f6;
+    transform: translateY(-1px);
+  }
+  
+  /* Mensajes de error y validación */
+  .senior-error {
+    color: #dc2626;
+    font-size: var(--senior-text-size);
+    font-weight: 500;
+    margin-top: 4px;
+    display: block;
+  }
+  
+  .senior-success {
+    color: #059669;
+    font-size: var(--senior-text-size);
+    font-weight: 500;
+    margin-top: 4px;
+    display: block;
+  }
+  
+  /* Cards y contenedores */
+  .senior-card {
+    background-color: white;
+    border: 2px solid #e5e7eb;
+    border-radius: var(--senior-border-radius);
+    padding: var(--senior-spacing);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+  
+  .senior-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  /* Responsive para móviles */
+  @media (max-width: 768px) {
+    .senior-text {
+      font-size: var(--senior-text-size-mobile);
+    }
+    
+    .senior-heading {
+      font-size: calc(var(--senior-text-size-mobile) * 1.4);
+    }
+    
+    .senior-button {
+      min-height: 44px;
+      padding: 12px 20px;
+      font-size: var(--senior-text-size-mobile);
+    }
+    
+    .senior-input {
+      min-height: 44px;
+      padding: 12px 16px;
+      font-size: var(--senior-text-size-mobile);
+    }
+    
+    .senior-label {
+      font-size: var(--senior-text-size-mobile);
+    }
+  }
 }

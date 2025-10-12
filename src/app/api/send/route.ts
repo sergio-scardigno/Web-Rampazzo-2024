@@ -30,7 +30,7 @@ const urlRegex = /(https?:\/\/|www\.)[\w\-]+(\.[\w\-]+)+\S*/i;
 // ─── Schema de validación actualizado ───────────────────────────
 const contactSchema = z.object({
     name: z.string().min(1).max(100),
-    phone: z.string().regex(/^\+?\d{7,15}$/),
+    phone: z.string().regex(/^\+?[\d\s\-\(\)]{7,20}$/),
     consultType: z.enum([
         'general',
         'asesoramiento',
@@ -70,6 +70,7 @@ const contactSchema = z.object({
         sessionId: z.string().optional(),
         source: z.string().optional(),
     }).optional(),
+    action: z.string().optional(),
 });
 
 // ─── Mapeo de tipos de consulta a nombres legibles ───────────────────────────
@@ -117,6 +118,7 @@ export async function POST(req: NextRequest) {
     const phone = xss(data.phone);
     const consultType = data.consultType;
     const consulta = data.consulta ? clean(data.consulta) : undefined;
+    const action = data.action;
     
     // Combinar tracking del cliente y servidor (priorizar cliente si existe)
     const trackingData: TrackingData = {
@@ -129,6 +131,7 @@ export async function POST(req: NextRequest) {
         phone,
         consultType,
         consulta,
+        action,
         tracking: trackingData,
     });
 
@@ -138,16 +141,51 @@ export async function POST(req: NextRequest) {
         try {
             const client = await clientPromise;
             const db = client.db(process.env.MONGODB_DB);
-            const result = await db.collection('contacts').insertOne({
+            
+            // Determinar en qué colección guardar según el tipo de acción
+            const isClickAction = action === 'whatsapp_click' || action === 'phone_click';
+            const collectionName = isClickAction ? 'clicks' : 'contacts';
+            
+            // Preparar datos según el tipo de acción
+            const documentData = isClickAction ? {
+                // Para clicks, guardar toda la información de tracking
+                action,
+                source: (data as any).source || 'unknown',
+                consultType,
+                tracking: {
+                    ...trackingData,
+                    // Información adicional específica del click
+                    clickTimestamp: new Date().toISOString(),
+                    userAgent: trackingData.userAgent,
+                    referrer: trackingData.referrer,
+                    pageUrl: trackingData.pageUrl,
+                    sessionId: trackingData.sessionId,
+                    utmData: {
+                        utm_source: trackingData.utm_source,
+                        utm_medium: trackingData.utm_medium,
+                        utm_campaign: trackingData.utm_campaign,
+                        utm_term: trackingData.utm_term,
+                        utm_content: trackingData.utm_content,
+                    },
+                    // Información del usuario si está disponible
+                    userName: name !== 'Usuario WhatsApp' && name !== 'Usuario Llamada' ? name : null,
+                    userPhone: phone !== '+5491121914149' ? phone : null,
+                },
+                createdAt: new Date(),
+            } : {
+                // Para formularios, mantener estructura original
                 name,
                 phone,
                 consultType,
                 consulta,
+                action,
                 tracking: trackingData,
                 createdAt: new Date(),
-            });
+            };
+            
+            const result = await db.collection(collectionName).insertOne(documentData);
             insertedId = result.insertedId.toString();
-            console.log('Documento insertado con _id:', insertedId);
+            console.log(`Documento insertado en ${collectionName} con _id:`, insertedId);
         } catch (dbErr) {
             console.error('Error guardando en MongoDB:', dbErr);
         }
@@ -156,8 +194,10 @@ export async function POST(req: NextRequest) {
         insertedId = 'simulated';
     }
 
-    try {
-        const transporter = createTransporter();
+    // Solo enviar email si no es una acción de click (whatsapp_click o phone_click)
+    if (!action || action === 'form_submit') {
+        try {
+            const transporter = createTransporter();
 
         const mailOptions = {
             from: `"Estudio Rampazzo - Contacto Web" <${process.env.GMAIL_USER}>`,
@@ -186,6 +226,11 @@ export async function POST(req: NextRequest) {
                     consultTypeLabels[consultType] || consultType
                 }</span>
               </p>
+              ${
+                  action
+                      ? `<p style="font-size: 16px; margin-bottom: 8px;"><strong>Acción realizada:</strong> <span style="color: #3b82f6; font-weight: bold;">${action}</span></p>`
+                      : ''
+              }
               ${
                   consulta
                       ? `<p style="font-size: 16px; margin-bottom: 8px;"><strong>Consulta adicional:</strong> <span style="color: #3b82f6;">${consulta}</span></p>`
@@ -230,22 +275,32 @@ export async function POST(req: NextRequest) {
         };
 
         const info = await transporter.sendMail(mailOptions);
-        console.log('Email enviado exitosamente:', info.messageId);
+            console.log('Email enviado exitosamente:', info.messageId);
+            return Response.json({
+                success: true,
+                messageId: info.messageId,
+                insertedId,
+            });
+        } catch (error) {
+            console.error('Error enviando email:', error);
+            const errorMessage =
+                error instanceof Error ? error.message : 'Error desconocido';
+            return Response.json(
+                {
+                    error: errorMessage,
+                    details: error instanceof Error ? error.stack : null,
+                },
+                { status: 500 }
+            );
+        }
+    } else {
+        // Para acciones de click (whatsapp_click, phone_click), solo registrar en BD
+        console.log(`Acción ${action} registrada en colección 'clicks', sin envío de email`);
         return Response.json({
             success: true,
-            messageId: info.messageId,
+            message: `Click ${action} registrado exitosamente en colección 'clicks'`,
             insertedId,
+            collection: 'clicks',
         });
-    } catch (error) {
-        console.error('Error enviando email:', error);
-        const errorMessage =
-            error instanceof Error ? error.message : 'Error desconocido';
-        return Response.json(
-            {
-                error: errorMessage,
-                details: error instanceof Error ? error.stack : null,
-            },
-            { status: 500 }
-        );
     }
 }
