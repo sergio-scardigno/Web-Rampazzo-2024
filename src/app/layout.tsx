@@ -46,6 +46,9 @@ export default function RootLayout({
                     data-domain="fernandorampazzo.com.ar" 
                     src="https://rampazzo-plausible.ndorzn.easypanel.host/js/script.js"
                 ></script>
+
+                {/* Contentsquare Analytics */}
+                <script src="https://t.contentsquare.net/uxa/d3a8da4a12c5b.js"></script>
                 
                 {/* Matomo Analytics */}
                 <script
