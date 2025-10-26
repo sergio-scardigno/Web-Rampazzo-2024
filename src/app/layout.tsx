@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
+import Script from 'next/script';
 import './globals.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -41,17 +41,22 @@ export default function RootLayout({
                 <link rel="manifest" href="/site.webmanifest" />
                 
                 {/* Plausible Analytics */}
-                <script 
-                    defer 
-                    data-domain="fernandorampazzo.com.ar" 
+                <Script
+                    strategy="afterInteractive"
+                    data-domain="fernandorampazzo.com.ar"
                     src="https://rampazzo-plausible.ndorzn.easypanel.host/js/script.js"
-                ></script>
+                />
 
                 {/* Contentsquare Analytics */}
-                <script src="https://t.contentsquare.net/uxa/d3a8da4a12c5b.js"></script>
-                
+                <Script
+                    strategy="afterInteractive"
+                    src="https://t.contentsquare.net/uxa/d3a8da4a12c5b.js"
+                />
+
                 {/* Matomo Analytics */}
-                <script
+                <Script
+                    id="matomo-analytics"
+                    strategy="afterInteractive"
                     dangerouslySetInnerHTML={{
                         __html: `
                             var _paq = window._paq = window._paq || [];
