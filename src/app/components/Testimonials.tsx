@@ -144,9 +144,9 @@ const Testimonials: React.FC<TestimonialsProps> = ({
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative overflow-hidden ${className}`}>
       {/* Header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 px-4 md:px-0">
         <h2 className="text-3xl font-bold text-[#1B1743] mb-4">
           Lo que dicen nuestros clientes
         </h2>
@@ -155,15 +155,59 @@ const Testimonials: React.FC<TestimonialsProps> = ({
         </p>
       </div>
 
-      {/* Testimonials Container */}
-      <div className="relative overflow-hidden">
+      {/* Testimonials - Mobile (stacked) */}
+      <div className="space-y-6 px-3 sm:px-4 md:hidden">
+        {displayedTestimonials.map((testimonial) => (
+          <div key={testimonial.id} className="bg-white border-2 border-gray-100 rounded-xl p-6 shadow-lg">
+            {/* Quote Icon */}
+            <div className="flex justify-center mb-6">
+              <Quote className="w-12 h-12 text-[#962C52] opacity-20" />
+            </div>
+
+            {/* Content */}
+            <blockquote className="text-lg text-gray-700 italic text-center mb-6 leading-relaxed">
+              &ldquo;{testimonial.content}&rdquo;
+            </blockquote>
+
+            {/* Rating */}
+            <div className="flex justify-center mb-4">
+              <div className="flex space-x-1">
+                {renderStars(testimonial.rating)}
+              </div>
+            </div>
+
+            {/* Author Info */}
+            <div className="text-center">
+              <div className="flex flex-col items-center justify-center space-y-2 mb-2">
+                <h4 className="font-semibold text-[#1B1743] text-lg">
+                  {testimonial.name}
+                </h4>
+                {testimonial.verified && (
+                  <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-medium">
+                    ✓ Verificado
+                  </span>
+                )}
+              </div>
+              <p className="text-gray-600">
+                {testimonial.age} años • {testimonial.location}
+              </p>
+              <p className="text-[#962C52] font-medium">
+                {testimonial.service}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Testimonials Container - Desktop */}
+      <div className="hidden md:block relative overflow-hidden">
         <div 
           className="flex transition-transform duration-500 ease-in-out"
           style={{ transform: `translateX(-${currentIndex * 100}%)` }}
         >
           {displayedTestimonials.map((testimonial) => (
-            <div key={testimonial.id} className="w-full flex-shrink-0 px-4">
-              <div className="bg-white border-2 border-gray-100 rounded-xl p-8 shadow-lg max-w-4xl mx-auto">
+            <div key={testimonial.id} className="w-full flex-shrink-0 px-3 sm:px-4">
+              <div className="bg-white border-2 border-gray-100 rounded-xl p-6 md:p-8 shadow-lg max-w-full md:max-w-4xl mx-auto">
                 {/* Quote Icon */}
                 <div className="flex justify-center mb-6">
                   <Quote className="w-12 h-12 text-[#962C52] opacity-20" />
@@ -228,7 +272,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({
 
       {/* Dots Indicator */}
       {displayedTestimonials.length > 1 && (
-        <div className="flex justify-center space-x-2 mt-8">
+        <div className="hidden md:flex justify-center space-x-2 mt-8 px-4 md:px-0">
           {displayedTestimonials.map((_, index) => (
             <button
               key={index}
@@ -246,7 +290,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({
 
       {/* Play/Pause Button */}
       {autoPlay && displayedTestimonials.length > 1 && (
-        <div className="flex justify-center mt-4">
+        <div className="hidden md:flex justify-center mt-4">
           <button
             onClick={togglePlayPause}
             className="bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-lg transition-colors"
@@ -258,7 +302,7 @@ const Testimonials: React.FC<TestimonialsProps> = ({
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-12 px-4 md:px-0">
         <div className="text-center">
           <div className="text-3xl font-bold text-[#962C52] mb-2">500+</div>
           <div className="text-gray-600">Clientes satisfechos</div>

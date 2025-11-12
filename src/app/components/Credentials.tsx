@@ -103,7 +103,7 @@ const Credentials: React.FC<CredentialsProps> = ({
   // Variant 'grid' (default)
   return (
     <div className={`${className}`}>
-      <div className="text-center mb-8">
+      <div className="text-center mb-8 px-4 md:px-0">
         <h3 className="text-2xl font-bold text-[#1B1743] mb-4">
           Credenciales Profesionales
         </h3>
@@ -112,7 +112,7 @@ const Credentials: React.FC<CredentialsProps> = ({
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 px-4 md:px-0">
         {credentials.map((credential, index) => (
           <div key={index} className="text-center p-6 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
             <div className="flex justify-center mb-4">
@@ -130,11 +130,11 @@ const Credentials: React.FC<CredentialsProps> = ({
       </div>
 
       {showStats && (
-        <div className="bg-gradient-to-r from-[#962C52] to-[#7a2342] text-white rounded-lg p-8">
+        <div className="bg-gradient-to-r from-[#962C52] to-[#7a2342] text-white rounded-lg p-6 md:p-8 mx-4 md:mx-0">
           <h4 className="text-xl font-semibold text-center mb-6">
             Nuestros Números
           </h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
                 <div className="text-3xl font-bold text-yellow-300 mb-1">

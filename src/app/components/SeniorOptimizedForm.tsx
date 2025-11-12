@@ -211,27 +211,47 @@ const SeniorOptimizedForm: React.FC<SeniorOptimizedFormProps> = ({
         </p>
         
         {/* Botones de contacto directo */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6">
           <button
             type="button"
-            className="senior-button bg-green-600 text-white hover:bg-green-700 text-center"
+            className="senior-button flex items-center justify-center gap-3 bg-green-600 text-white hover:bg-green-700 text-center !py-3 sm:!py-4"
             onClick={handlePhoneClick}
           >
-            📞 Llamar ahora
+            <span className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/15 border border-white/30">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-white"
+              >
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.11 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+              </svg>
+            </span>
+            <span className="flex flex-col text-left">
+              <span className="text-sm sm:text-base font-semibold uppercase tracking-wide">Llamar ahora</span>
+              <span className="text-xs sm:text-sm font-medium text-white/80">Atención inmediata</span>
+            </span>
           </button>
           <button
             type="button"
-            className="senior-button bg-[#25D366] text-white hover:bg-[#20b358] text-center"
+            className="senior-button flex items-center justify-center gap-3 bg-[#25D366] text-white hover:bg-[#20b358] text-center !py-3 sm:!py-4"
             onClick={handleWhatsAppClick}
           >
-            <Image
-              src={IconWhatsapp}
-              alt="WhatsApp"
-              width={24}
-              height={24}
-              className="object-contain"
-            />
-            Chatear por WhatsApp
+            <span className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/15 border border-white/30">
+              <Image
+                src={IconWhatsapp}
+                alt="WhatsApp"
+                width={24}
+                height={24}
+                className="h-5 w-5 sm:h-6 sm:w-6 object-contain"
+              />
+            </span>
+            <span className="flex flex-col text-left">
+              <span className="text-sm sm:text-base font-semibold uppercase tracking-wide">Chatear por WhatsApp</span>
+              <span className="text-xs sm:text-sm font-medium text-white/80">Respuesta en minutos</span>
+            </span>
           </button>
         </div>
       </div>
